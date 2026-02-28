@@ -47,24 +47,37 @@ if (autoPrompt && aiModel) {
 
 
 // ── 2. INITIALIZATION ──
+// Get the specific container for the 3D view
+const container = document.getElementById('canvas-wrapper');
+
 let genAI = null;
 let aiModel = null;
+
 if (API_KEY) {
   genAI = new GoogleGenerativeAI(API_KEY);
   aiModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 }
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xFDFBF7);
+scene.background = new THREE.Color(0x262018); // Matching your new dark aesthetic
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+// Calculate aspect ratio based on the container, not the window
+const camera = new THREE.PerspectiveCamera(
+    75, 
+    container.clientWidth / container.clientHeight, 
+    0.1, 
+    100
+);
 camera.position.set(8, 8, 8);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+// Set size to fit the container
+renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
-document.body.appendChild(renderer.domElement);
+
+// Append the canvas to the WRAPPER, not the body
+container.appendChild(renderer.domElement);
 
 const loader = new GLTFLoader();
 const raycaster = new THREE.Raycaster();
@@ -296,7 +309,11 @@ function animate() {
 animate();
 
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  
+  renderer.setSize(width, height);
 });

@@ -3,122 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architectural Interior Editor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>RoomAI | Architectural Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="instructions">
-        G: Move • R: Rotate • S: Scale • Esc: Deselect
-    </div>
 
-    <div id="props-panel" class="panel">
-        <h3>Properties</h3>
-        <p id="obj-name">Selection: None</p>
-        <label>Material Color</label>
-        <input type="color" id="color-picker">
-        <button id="del-btn">Remove Item</button>
-    </div>
+    <header class="topbar">
+        <div class="logo">
+            <div class="logo-mark">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            RoomAI
+        </div>
+        <div id="instructions">G: Move • R: Rotate • S: Scale • Esc: Deselect</div>
+    </header>
 
-    <div id="bottom-container">
-        
-        <div id="ai-designer-shelf">
-            <div class="ai-input-wrapper">
-                <input type="text" id="ai-prompt" placeholder="Describe a room style (e.g., 'A modern bedroom')...">
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <h1 class="hero-text">Furnish any room, <em>instantly.</em></h1>
+            <p class="hero-sub">Adjust your dimensions and describe your vision. AI handles the placement.</p>
+
+            <div class="section-label">Room Dimensions</div>
+            
+            <div class="dim-row">
+                <div class="dim-header">
+                    <span class="dim-label">Width</span>
+                    <span><span class="dim-value" id="wVal">10.0</span><span class="dim-unit">m</span></span>
+                </div>
+                <input type="range" id="widthSlider" min="2" max="20" step="0.5" value="10">
+            </div>
+
+            <div class="dim-row">
+                <div class="dim-header">
+                    <span class="dim-label">Length</span>
+                    <span><span class="dim-value" id="lVal">10.0</span><span class="dim-unit">m</span></span>
+                </div>
+                <input type="range" id="lengthSlider" min="2" max="20" step="0.5" value="10">
+            </div>
+
+            <div class="section-label">AI Designer</div>
+            <div class="ai-box">
+                <textarea id="ai-prompt" placeholder="e.g., 'A cozy scandinavian living room with a large sofa and a bookshelf'"></textarea>
                 <button id="ai-generate-btn">Generate Layout</button>
             </div>
-        </div>
 
-        <div id="model-panel">
-            <div class="library-header">Select furniture to start planning</div>
-            <div class="scroll-container">
-                
+            <div class="section-label">Furniture Library</div>
+            <div class="model-grid" id="model-panel">
                 <div class="model-card model-load-btn" data-path="../furniture_models/Bed King.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg>
-                    </div>
+                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg></div>
                     <span>King Bed</span>
                 </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Bed Twin Old.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9"/></svg>
-                    </div>
-                    <span>Twin Bed</span>
-                </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Bunk Bed.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2v20M22 2v20M2 6h20M2 14h20M2 18h20"/></svg>
-                    </div>
-                    <span>Bunk Bed</span>
-                </div>
-
                 <div class="model-card model-load-btn" data-path="../furniture_models/Couch Large.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 11v5a2 2 0 002 2h16a2 2 0 002-2v-5M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2"/></svg>
-                    </div>
+                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 11v5a2 2 0 002 2h16a2 2 0 002-2v-5M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2"/></svg></div>
                     <span>Large Sofa</span>
                 </div>
-
                 <div class="model-card model-load-btn" data-path="../furniture_models/Desk.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M6 17v2M18 17v2"/></svg>
-                    </div>
-                    <span>Desk</span>
+                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M6 17v2M18 17v2"/></svg></div>
+                    <span>Work Desk</span>
                 </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M5 20v-1a7 7 0 0114 0v1"/></svg>
-                    </div>
-                    <span>Chair</span>
-                </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair (2).glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10V3m0 0l-3 3m3-3l3 3M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/></svg>
-                    </div>
-                    <span>Exec Chair</span>
-                </div>
-
                 <div class="model-card model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16"/></svg>
-                    </div>
+                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16"/></svg></div>
                     <span>Bookcase</span>
                 </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Drawer.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 16h16"/></svg>
-                    </div>
-                    <span>Drawer</span>
-                </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Dining Set.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v4H3zM7 7v14M17 7v14"/></svg>
-                    </div>
-                    <span>Dining Set</span>
-                </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Kitchen.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 10h18M10 10v11"/></svg>
-                    </div>
-                    <span>Kitchen</span>
-                </div>
-
-                <div class="model-card model-load-btn" data-path="../furniture_models/Night Stand.glb">
-                    <div class="icon-box">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 12h12"/></svg>
-                    </div>
-                    <span>Night Stand</span>
-                </div>
-
             </div>
-        </div>
+        </aside>
+
+        <main id="canvas-wrapper">
+            <div id="props-panel">
+                <h3>Object Details</h3>
+                <p id="obj-name">Selection: None</p>
+                <div class="prop-group">
+                    <label>Material Color</label>
+                    <input type="color" id="color-picker">
+                </div>
+                <button id="del-btn">Remove Item</button>
+            </div>
+        </main>
     </div>
 
     <script type="importmap">
@@ -130,7 +91,6 @@
         }
     }
     </script>
-
     <script type="module" src="main.js"></script>
 </body>
 </html>
