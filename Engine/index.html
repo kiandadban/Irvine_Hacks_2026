@@ -21,9 +21,10 @@
     </div>
 
     <div id="bottom-container">
+        
         <div id="ai-designer-shelf">
             <div class="ai-input-wrapper">
-                <input type="text" id="ai-prompt" placeholder="Describe a room style (e.g., 'A modern bedroom with a king bed and desk')...">
+                <input type="text" id="ai-prompt" placeholder="Describe a room style (e.g., 'A modern bedroom')...">
                 <button id="ai-generate-btn">Generate Layout</button>
             </div>
         </div>
@@ -31,70 +32,91 @@
         <div id="model-panel">
             <div class="library-header">Select furniture to start planning</div>
             <div class="scroll-container">
+                
                 <div class="model-card model-load-btn" data-path="../furniture_models/Bed King.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg>
+                    </div>
                     <span>King Bed</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Bed Twin Old.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9"/></svg>
+                    </div>
                     <span>Twin Bed</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Bunk Bed.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2v20M22 2v20M2 6h20M2 14h20M2 18h20"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2v20M22 2v20M2 6h20M2 14h20M2 18h20"/></svg>
+                    </div>
                     <span>Bunk Bed</span>
                 </div>
 
                 <div class="model-card model-load-btn" data-path="../furniture_models/Couch Large.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 11v5a2 2 0 002 2h16a2 2 0 002-2v-5M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 11v5a2 2 0 002 2h16a2 2 0 002-2v-5M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2"/></svg>
+                    </div>
                     <span>Large Sofa</span>
-                </div>
-                <div class="model-card model-load-btn" data-path="../furniture_models/Couch Medium.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11v5a2 2 0 002 2h12a2 2 0 002-2v-5M4 9V7a2 2 0 012-2h12a2 2 0 012 2v2"/></svg></div>
-                    <span>Sofa</span>
-                </div>
-                <div class="model-card model-load-btn" data-path="../furniture_models/Armchair.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11v6m10-6v6M5 9V7a2 2 0 012-2h10a2 2 0 012 2v2M5 11h14v5a2 2 0 01-2 2H7a2 2 0 01-2-2v-5z"/></svg></div>
-                    <span>Armchair</span>
                 </div>
 
                 <div class="model-card model-load-btn" data-path="../furniture_models/Desk.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M6 17v2M18 17v2"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M6 17v2M18 17v2"/></svg>
+                    </div>
                     <span>Desk</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M5 20v-1a7 7 0 0114 0v1"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M5 20v-1a7 7 0 0114 0v1"/></svg>
+                    </div>
                     <span>Chair</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair (2).glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10V3m0 0l-3 3m3-3l3 3M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10V3m0 0l-3 3m3-3l3 3M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/></svg>
+                    </div>
                     <span>Exec Chair</span>
                 </div>
 
                 <div class="model-card model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16"/></svg>
+                    </div>
                     <span>Bookcase</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Drawer.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 16h16"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 16h16"/></svg>
+                    </div>
                     <span>Drawer</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Dining Set.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v4H3zM7 7v14M17 7v14"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v4H3zM7 7v14M17 7v14"/></svg>
+                    </div>
                     <span>Dining Set</span>
                 </div>
 
                 <div class="model-card model-load-btn" data-path="../furniture_models/Kitchen.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 10h18M10 10v11"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 10h18M10 10v11"/></svg>
+                    </div>
                     <span>Kitchen</span>
                 </div>
+
                 <div class="model-card model-load-btn" data-path="../furniture_models/Night Stand.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 12h12"/></svg></div>
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 12h12"/></svg>
+                    </div>
                     <span>Night Stand</span>
                 </div>
-                <div class="model-card model-load-btn" data-path="../furniture_models/Futuristic Shelf.glb">
-                    <div class="icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16l-2 16H6L4 4zM4 10h16"/></svg></div>
-                    <span>Shelf</span>
-                </div>
+
             </div>
         </div>
     </div>
@@ -108,6 +130,7 @@
         }
     }
     </script>
+
     <script type="module" src="main.js"></script>
 </body>
 </html>

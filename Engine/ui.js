@@ -4,7 +4,7 @@
 export function initUI(onSpawn, onColor, onDelete, onLoad) {
     const aiBtn = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
-    const deleteBtn = document.getElementById('delete-btn');
+    const deleteBtn = document.getElementById('del-btn');
     const propsPanel = document.getElementById('props-panel');
     const colorInput = document.getElementById('color-picker');
     
@@ -12,6 +12,15 @@ export function initUI(onSpawn, onColor, onDelete, onLoad) {
     // Looks for buttons with data-type="box" or "sphere"
     document.querySelectorAll('.spawn-btn').forEach(btn => {
         btn.onclick = () => onSpawn(btn.dataset.type);
+    });
+
+    // ── Model Library Loading ──
+    // Buttons with class .model-load-btn should provide a data-path attribute
+    document.querySelectorAll('.model-load-btn').forEach(btn => {
+        btn.onclick = () => {
+            const path = btn.dataset.path;
+            if (path && onLoad) onLoad(path);
+        };
     });
 
     // ── Color Change ──
