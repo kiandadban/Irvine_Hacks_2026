@@ -3,18 +3,6 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
 const loader = new FBXLoader();
 
-/**
- * Creates a placement system for loading and positioning furniture models.
- *
- * @param {THREE.Scene}       scene
- * @param {THREE.Object3D[]}  spawnedFurniture  - shared mutable array
- * @param {CollisionEngine}   collisionEngine
- * @param {Object}            assetMap          - filename → asset record
- * @param {Object}            roomManager       - { roomWidth, roomDepth, roomFloor }
- * @param {Function}          selectObject
- * @param {Function}          updateCollisionVisuals
- * @returns {{ placeModel(itemConfig): Promise<THREE.Object3D|null> }}
- */
 export function createPlacer(
     scene, spawnedFurniture, collisionEngine,
     assetMap, roomManager, selectObject, updateCollisionVisuals
@@ -30,6 +18,11 @@ export function createPlacer(
 
         return new Promise((resolve) => {
             loader.load(path, (model) => {
+                
+                // ─── NEW: ATTACH ATTRIBUTES FOR POP-UP ───
+                // This allows the info panel to read the JSON data later
+                model.userData.attributes = asset; 
+
                 // Scale to declared physical width
                 const rawBox  = new THREE.Box3().setFromObject(model);
                 const rawSize = rawBox.getSize(new THREE.Vector3());
@@ -38,7 +31,7 @@ export function createPlacer(
 
                 model.rotation.y = itemConfig.rotate ?? 0;
 
-                // Physics nudge: find a collision-free spot
+                // Physics nudge logic
                 const snap    = 0.5;
                 const halfW   = roomManager.roomWidth  / 2 - 0.5;
                 const halfD   = roomManager.roomDepth  / 2 - 0.5;
@@ -72,7 +65,6 @@ export function createPlacer(
                 }
 
                 if (isValid) {
-                    // Final snap
                     model.position.x = Math.round(model.position.x / snap) * snap;
                     model.position.z = Math.round(model.position.z / snap) * snap;
                     const finalBox = new THREE.Box3().setFromObject(model);
@@ -93,5 +85,5 @@ export function createPlacer(
         });
     }
 
-    return { placeModel };
+   return { placeModel };
 }
