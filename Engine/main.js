@@ -254,6 +254,7 @@ async function initApp() {
 
     const aiBtn = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
+    const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
 
     if (aiBtn) {
         // Slider wiring
@@ -331,6 +332,11 @@ async function initApp() {
                 aiBtn.innerText = "Generate Layout";
             }
         };
+
+        if (autoPrompt && aiInput) {
+            aiInput.value = autoPrompt;
+            aiBtn.click();
+        }
     }
 
     // ── 8. EVENTS ──
