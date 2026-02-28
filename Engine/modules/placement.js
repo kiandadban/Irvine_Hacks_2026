@@ -9,91 +9,91 @@ export function createPlacer(
 ) {
     async function placeModel(itemConfig) {
         const asset = assetMap[itemConfig.file];
-        if (!asset) {
-            console.warn(`[Placer] Unknown asset: "${itemConfig.file}"`);
-            return null;
-        }
+        if (!asset) return null;
 
         const path = `../models/${asset.category}/${asset.file}`;
 
         return new Promise((resolve) => {
             loader.load(path, (model) => {
-                // 1. Attach metadata for the UI
                 model.userData.attributes = asset; 
 
-                // 2. Initial Scaling
-                const rawBox  = new THREE.Box3().setFromObject(model);
+                // 1. Scaling
+                const rawBox = new THREE.Box3().setFromObject(model);
                 const rawSize = rawBox.getSize(new THREE.Vector3());
                 const targetW = asset.dimensions?.width ?? 1.0;
                 if (rawSize.x > 0) model.scale.setScalar(targetW / rawSize.x);
-
                 model.rotation.y = itemConfig.rotate ?? 0;
 
-                // 3. Positioning & Stacking Logic
-                const snap    = 0.5;
-                const halfW   = roomManager.roomWidth  / 2 - 0.5;
-                const halfD   = roomManager.roomDepth  / 2 - 0.5;
-                
-                // Use AI-provided coordinates
-                let posX      = itemConfig.x ?? 0;
-                let posZ      = itemConfig.z ?? 0;
-                let targetY   = itemConfig.y ?? 0; // AI now provides the stacking height
-                
-                let isValid   = false;
-                let attempts  = 0;
+                // 2. SURFACE DETECTION WITH TOLERANCE
+                let targetY = itemConfig.y ?? 0;
+                const TOLERANCE = 0.6; // Allow the item to snap to furniture within 60cm
 
-                // [Image of a 3D bounding box surrounding a mesh with X, Y, and Z dimension labels]
+                if (asset.placeable) {
+                    // Find the best supporting furniture nearby
+                    let bestSurface = null;
+                    let minDistance = TOLERANCE;
 
-                while (!isValid && attempts < 15) {
-                    const testX = Math.round(posX / snap) * snap;
-                    const testZ = Math.round(posZ / snap) * snap;
+                    spawnedFurniture.forEach(f => {
+                        const fAttrs = f.userData.attributes;
+                        if (fAttrs.placeable) return; // Ignore other small items
 
-                    // Set horizontal position
-                    model.position.set(testX, 0, testZ);
-                    model.updateMatrixWorld(true);
+                        const fBox = new THREE.Box3().setFromObject(f);
+                        const center = fBox.getCenter(new THREE.Vector3());
+                        
+                        // Calculate horizontal distance from AI point to furniture center
+                        const dist = new THREE.Vector2(itemConfig.x, itemConfig.z)
+                                        .distanceTo(new THREE.Vector2(center.x, center.z));
 
-                    // 4. THE GROUNDING FIX: 
-                    // Calculate current bounding box to find the bottom pivot
-                    const currentBox = new THREE.Box3().setFromObject(model);
-                    const floorLevel = roomManager.roomFloor?.position.y ?? 0;
-                    
-                    // Logic: Move model to (Floor + AI Height) then subtract the model's own bottom offset
-                    // This ensures y=0 is the floor, and y=0.75 is exactly the desk surface.
-                    const bottomOffset = currentBox.min.y - model.position.y;
-                    model.position.y = (floorLevel + targetY) - bottomOffset;
-                    
-                    model.updateMatrixWorld(true);
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            bestSurface = f;
+                        }
+                    });
 
-                    // Check for collisions
-                    if (!collisionEngine.checkCollision(model).isColliding) {
-                        isValid = true;
-                    } else {
-                        // Nudge if clipping
-                        posX += (Math.random() - 0.5) * 1.0;
-                        posZ += (Math.random() - 0.5) * 1.0;
-                        posX = Math.max(-halfW, Math.min(halfW, posX));
-                        posZ = Math.max(-halfD, Math.min(halfD, posZ));
-                        attempts++;
+                    if (bestSurface) {
+                        const sBox = new THREE.Box3().setFromObject(bestSurface);
+                        targetY = sBox.max.y; 
+                        // Snap the item's X/Z slightly toward the surface center if it's hanging off
+                        // (Optional: keeps things looking centered on the desk)
+                    } else if (targetY === 0) {
+                        // If no surface is found nearby and Y is 0, we give it a default "Table Height" 
+                        // rather than rejecting it, just in case.
+                        targetY = 0.75; 
+                        console.warn(`[Placer] ${asset.name} found no surface, using default height.`);
                     }
                 }
 
-                // [Image of 3D model pivot point adjustment from center to base]
+                // 3. Grounding Math
+                model.position.set(itemConfig.x, 0, itemConfig.z);
+                model.updateMatrixWorld(true);
+                const currentBox = new THREE.Box3().setFromObject(model);
+                const bottomOffset = currentBox.min.y - model.position.y;
+                
+                const floorLevel = roomManager.roomFloor?.position.y ?? 0;
+                model.position.y = (floorLevel + targetY) - bottomOffset;
+                model.updateMatrixWorld(true);
 
-                if (isValid) {
+                // 4. Collision Softening
+                const check = collisionEngine.checkCollision(model);
+                let collisionDetected = check.isColliding;
+
+                // If it's a placeable item, we effectively ignore collisions 
+                // so it doesn't get "nudged" off the desk by the desk itself.
+                if (asset.placeable) collisionDetected = false;
+
+                if (!collisionDetected) {
                     scene.add(model);
                     spawnedFurniture.push(model);
                     collisionEngine.updateObstacles();
                     updateCollisionVisuals(model);
                     selectObject(model);
+                    resolve(model);
+                } else {
+                    resolve(null);
                 }
-
-                resolve(isValid ? model : null);
-            }, undefined, (err) => {
-                console.error(`[Placer] Failed to load "${path}"`, err);
-                resolve(null);
-            });
+            }, undefined, (err) => resolve(null));
         });
     }
 
-   return { placeModel };
+    return { placeModel };
 }
