@@ -2,20 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Three.js Engine</title>
+    <title>Three.js Professional Editor</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #050505; }
-        #instructions {
-            position: absolute; top: 10px; left: 10px; color: #00ff88;
-            font-family: monospace; background: rgba(0,0,0,0.8);
-            padding: 10px; border: 1px solid #00ff88; z-index: 10;
-        }
+        body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
+        .panel { position: absolute; background: rgba(0,0,0,0.85); padding: 15px; border: 1px solid #444; color: #eee; }
+        
+        #spawn-panel { top: 10px; left: 10px; border-color: #00ff88; }
+        #props-panel { top: 10px; right: 10px; width: 180px; border-color: #00aaff; display: none; }
+        
+        button { cursor: pointer; background: #333; color: white; border: 1px solid #666; padding: 5px 10px; }
+        button:hover { background: #444; }
+        input[type="color"] { width: 100%; height: 30px; cursor: pointer; border: none; background: none; }
     </style>
 </head>
 <body>
-    <div id="instructions">
+  <div id="instructions">
         G: Move | R: Rotate | S: Scale <br>
         L: Local/World | X: Snap
+  </div>
+    <div id="spawn-panel" class="panel">
+        <strong>Create</strong><br><br>
+        <select id="shape-type">
+            <option value="box">Cube</option>
+            <option value="sphere">Sphere</option>
+            <option value="cone">Cone</option>
+        </select>
+        <button id="add-btn">Add</button>
+    </div>
+
+    <div id="props-panel" class="panel">
+        <strong>Properties</strong><hr>
+        <p id="obj-name">Type: None</p>
+        <label>Color</label>
+        <input type="color" id="color-picker">
+        <br><br>
+        <button id="del-btn" style="color: #ff4444; border-color: #ff4444;">Delete Object</button>
     </div>
 
     <script type="importmap">
@@ -26,7 +47,6 @@
             }
         }
     </script>
-
     <script type="module" src="main.js"></script>
 </body>
 </html>
