@@ -1,191 +1,564 @@
 {
-    "furniture_library": [
-      {
-        "name": "King Bed",
-        "file": "Bed King.glb",
-        "category": "sleeping",
-        "dimensions": { "width": 2.0, "depth": 2.1, "height": 1.2 },
-        "placement": {
-          "tag": "primary",
-          "must_touch_wall": true,
-          "clearance": { "sides": 0.6, "front": 0.8 },
-          "pairs_with": ["Night Stand.glb"]
-        }
-      },
-      {
-        "name": "Twin Bed (Old)",
-        "file": "Bed Twin Old.glb",
-        "category": "sleeping",
-        "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.0 },
-        "placement": {
-          "tag": "secondary",
-          "must_touch_wall": true,
-          "clearance": { "side_left": 0.6, "front": 0.6 }
-        }
-      },
-      {
-        "name": "Bunk Bed",
-        "file": "Bunk Bed.glb",
-        "category": "sleeping",
-        "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.8 },
-        "placement": {
-          "tag": "kids",
-          "corner_optimized": true,
-          "clearance": { "front": 1.0 }
-        }
-      },
-      {
-        "name": "Large Couch",
-        "file": "Couch Large.glb",
-        "category": "seating",
-        "dimensions": { "width": 2.4, "depth": 1.0, "height": 0.8 },
-        "placement": {
-          "tag": "living_room",
-          "is_focal_point": true,
-          "clearance": { "front": 1.2 }
-        }
-      },
-      {
-        "name": "Medium Couch",
-        "file": "Couch Medium.glb",
-        "category": "seating",
-        "dimensions": { "width": 1.8, "depth": 0.9, "height": 0.8 },
-        "placement": {
-          "tag": "living_room",
-          "clearance": { "front": 1.0 }
-        }
-      },
-      {
-        "name": "Armchair",
-        "file": "Armchair.glb",
-        "category": "seating",
-        "dimensions": { "width": 0.9, "depth": 0.8, "height": 0.9 },
-        "placement": {
-          "tag": "accent",
-          "can_rotate_freely": true
-        }
-      },
-      {
-        "name": "Desk",
-        "file": "Desk.glb",
-        "category": "workspace",
-        "dimensions": { "width": 1.4, "depth": 0.7, "height": 0.75 },
-        "placement": {
-          "must_touch_wall": true,
-          "pairs_with": ["Desk Chair.glb", "Desk Chair (2).glb"],
-          "clearance": { "back": 0.8 }
-        }
-      },
-      {
-        "name": "Standard Desk Chair",
-        "file": "Desk Chair.glb",
-        "category": "workspace_seating",
-        "dimensions": { "width": 0.6, "depth": 0.6, "height": 1.0 },
-        "placement": {
-          "parent_dependency": "Desk.glb",
-          "is_mobile": true
-        }
-      },
-      {
-        "name": "Executive Desk Chair",
-        "file": "Desk Chair (2).glb",
-        "category": "workspace_seating",
-        "dimensions": { "width": 0.7, "depth": 0.7, "height": 1.1 },
-        "placement": {
-          "parent_dependency": "Desk.glb",
-          "is_mobile": true
-        }
-      },
-      {
-        "name": "Bookcase with Books",
-        "file": "Bookcase with Books.glb",
-        "category": "storage",
-        "dimensions": { "width": 0.9, "depth": 0.35, "height": 2.0 },
-        "placement": {
-          "must_touch_wall": true,
-          "snap_to_wall": true
-        }
-      },
-      {
-        "name": "Dining Set",
-        "file": "Dining Set.glb",
-        "category": "dining",
-        "type": "furniture_group",
-        "dimensions": { "width": 1.6, "depth": 1.6, "height": 0.75 },
-        "placement": {
-          "is_focal_point": true,
-          "clearance": { "all_sides": 0.9 },
-          "ideal_room": "dining_room"
-        }
-      },
-      {
-        "name": "Kitchen Unit",
-        "file": "Kitchen.glb",
-        "category": "cooking",
-        "type": "structural",
-        "dimensions": { "width": 3.0, "depth": 0.6, "height": 2.1 },
-        "placement": {
-          "must_touch_wall": true,
-          "fixed_position": true,
-          "clearance": { "front": 1.2 }
-        }
-      },
-      {
-        "name": "Brown Door",
-        "file": "Door_brown.glb",
-        "category": "architectural",
-        "type": "fixed_path",
-        "dimensions": { "width": 0.9, "depth": 0.1, "height": 2.0 },
-        "placement": {
-          "is_portal": true,
-          "swing_radius": 0.9,
-          "avoid_collision": true
-        }
-      },
-      {
-        "name": "White Door",
-        "file": "Door_white.glb",
-        "category": "architectural",
-        "type": "fixed_path",
-        "dimensions": { "width": 0.9, "depth": 0.1, "height": 2.0 },
-        "placement": {
-          "is_portal": true,
-          "swing_radius": 0.9,
-          "avoid_collision": true
-        }
-      },
-      {
-        "name": "Drawer Unit",
-        "file": "Drawer.glb",
-        "category": "storage",
-        "type": "furniture",
-        "dimensions": { "width": 0.8, "depth": 0.45, "height": 1.0 },
-        "placement": {
-          "must_touch_wall": true,
-          "clearance": { "front": 0.7 }
-        }
-      },
-      {
-        "name": "Futuristic Shelf",
-        "file": "Futuristic Shelf.glb",
-        "category": "decor",
-        "type": "furniture",
-        "dimensions": { "width": 1.2, "depth": 0.3, "height": 1.8 },
-        "placement": {
-          "must_touch_wall": true,
-          "snap_to_wall": true
-        }
-      },
-      {
-        "name": "Night Stand",
-        "file": "Night Stand.glb",
-        "category": "accessory",
-        "type": "furniture",
-        "dimensions": { "width": 0.45, "depth": 0.4, "height": 0.5 },
-        "placement": {
-          "parent_dependency": ["Bed King.glb", "Bed Twin Old.glb"],
-          "alignment": "side_aligned"
-        }
-      }
-    ]
-  }
+  "furniture_library": [
+    {
+      "name": "Bath",
+      "file": "Bath.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Shower",
+      "file": "Shower.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Sink",
+      "file": "Sink.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Toilet Roll Holder",
+      "file": "Toilet Roll Holder.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Toilet Rolls",
+      "file": "Toilet Rolls.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Toilet",
+      "file": "Toilet.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Towel Holder",
+      "file": "Towel Holder.fbx",
+      "category": "Bathroom"
+    },
+    {
+      "name": "Bed Double",
+      "file": "Bed Double.fbx",
+      "category": "Beds"
+    },
+    {
+      "name": "Bed Single",
+      "file": "Bed Single.fbx",
+      "category": "Beds"
+    },
+    {
+      "name": "Bunk Bed",
+      "file": "Bunk Bed.fbx",
+      "category": "Beds"
+    },
+    {
+      "name": "Triple Bunk Bed",
+      "file": "Triple Bunk Bed.fbx",
+      "category": "Beds"
+    },
+    {
+      "name": "Carpet A",
+      "file": "Carpet A.fbx",
+      "category": "Carpets"
+    },
+    {
+      "name": "Carpet B",
+      "file": "Carpet B.fbx",
+      "category": "Carpets"
+    },
+    {
+      "name": "Carpet C",
+      "file": "Carpet C.fbx",
+      "category": "Carpets"
+    },
+    {
+      "name": "Chair A",
+      "file": "Chair A.fbx",
+      "category": "Chairs"
+    },
+    {
+      "name": "Chair B",
+      "file": "Chair B.fbx",
+      "category": "Chairs"
+    },
+    {
+      "name": "Chair C",
+      "file": "Chair C.fbx",
+      "category": "Chairs"
+    },
+    {
+      "name": "Chair D",
+      "file": "Chair D.fbx",
+      "category": "Chairs"
+    },
+    {
+      "name": "Chair E",
+      "file": "Chair E.fbx",
+      "category": "Chairs"
+    },
+    {
+      "name": "Door A",
+      "file": "Door A.fbx",
+      "category": "Doors"
+    },
+    {
+      "name": "Door B",
+      "file": "Door B.fbx",
+      "category": "Doors"
+    },
+    {
+      "name": "Door C",
+      "file": "Door C.fbx",
+      "category": "Doors"
+    },
+    {
+      "name": "Drawer A",
+      "file": "Drawer A.fbx",
+      "category": "Drawers"
+    },
+    {
+      "name": "Drawer B",
+      "file": "Drawer B.fbx",
+      "category": "Drawers"
+    },
+    {
+      "name": "Console A",
+      "file": "Console A.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Console B",
+      "file": "Console B.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Console C",
+      "file": "Console C.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Console D",
+      "file": "Console D.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Keyboard",
+      "file": "Keyboard.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Laptop",
+      "file": "Laptop.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Monitor",
+      "file": "Monitor.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Pc",
+      "file": "Pc.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Phone",
+      "file": "Phone.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Tablet",
+      "file": "Tablet.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "TV A",
+      "file": "TV A.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "TV B",
+      "file": "TV B.fbx",
+      "category": "Electronics"
+    },
+    {
+      "name": "Blender",
+      "file": "Blender.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard A",
+      "file": "Cupboard A.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard B",
+      "file": "Cupboard B.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard C",
+      "file": "Cupboard C.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard D",
+      "file": "Cupboard D.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard E",
+      "file": "Cupboard E.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard F",
+      "file": "Cupboard F.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Cupboard Sink",
+      "file": "Cupboard Sink.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Dishwasher",
+      "file": "Dishwasher.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Fridge A",
+      "file": "Fridge A.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Fridge B",
+      "file": "Fridge B.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Kettle",
+      "file": "Kettle.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Kitchen Roll",
+      "file": "Kitchen Roll.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Knife Block",
+      "file": "Knife Block.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Microwave",
+      "file": "Microwave.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Oven",
+      "file": "Oven.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Toaster",
+      "file": "Toaster.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Washing Machine",
+      "file": "Washing Machine.fbx",
+      "category": "Kitchen"
+    },
+    {
+      "name": "Ceiling Light",
+      "file": "Ceiling Light.fbx",
+      "category": "Lights"
+    },
+    {
+      "name": "Lamp A",
+      "file": "Lamp A.fbx",
+      "category": "Lights"
+    },
+    {
+      "name": "Lamp B",
+      "file": "Lamp B.fbx",
+      "category": "Lights"
+    },
+    {
+      "name": "Lamp C",
+      "file": "Lamp C.fbx",
+      "category": "Lights"
+    },
+    {
+      "name": "Wall Light",
+      "file": "Wall Light.fbx",
+      "category": "Lights"
+    },
+    {
+      "name": "Alarm Clock",
+      "file": "Alarm Clock.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Bin",
+      "file": "Bin.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Books A",
+      "file": "Books A.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Books B",
+      "file": "Books B.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Bowl",
+      "file": "Bowl.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Broom",
+      "file": "Broom.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Ceiling Fan",
+      "file": "Ceiling Fan.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Clock",
+      "file": "Clock.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Curtains",
+      "file": "Curtains.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Fan",
+      "file": "Fan.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Glass",
+      "file": "Glass.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Globe",
+      "file": "Globe.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Hoover",
+      "file": "Hoover.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Ladder",
+      "file": "Ladder.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Light Switch",
+      "file": "Light Switch.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Mirror A",
+      "file": "Mirror A.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Mirror B",
+      "file": "Mirror B.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Mug",
+      "file": "Mug.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Pan",
+      "file": "Pan.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Plant A",
+      "file": "Plant A.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Plant B",
+      "file": "Plant B.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Plate",
+      "file": "Plate.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Pot",
+      "file": "Pot.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Radiator A",
+      "file": "Radiator A.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Radiator B",
+      "file": "Radiator B.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Safe A",
+      "file": "Safe A.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Safe B",
+      "file": "Safe B.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Socket",
+      "file": "Socket.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Speaker",
+      "file": "Speaker.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Vase",
+      "file": "Vase.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Vent",
+      "file": "Vent.fbx",
+      "category": "Miscellaneous"
+    },
+    {
+      "name": "Shelf A",
+      "file": "Shelf A.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Shelf B",
+      "file": "Shelf B.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Shelf C",
+      "file": "Shelf C.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Shelf D",
+      "file": "Shelf D.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Shelf E",
+      "file": "Shelf E.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Wall Shelf A",
+      "file": "Wall Shelf A.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Wall Shelf B",
+      "file": "Wall Shelf B.fbx",
+      "category": "Shelves"
+    },
+    {
+      "name": "Sofa A",
+      "file": "Sofa A.fbx",
+      "category": "Sofas"
+    },
+    {
+      "name": "Sofa B",
+      "file": "Sofa B.fbx",
+      "category": "Sofas"
+    },
+    {
+      "name": "Sofa C",
+      "file": "Sofa C.fbx",
+      "category": "Sofas"
+    },
+    {
+      "name": "Sofa D",
+      "file": "Sofa D.fbx",
+      "category": "Sofas"
+    },
+    {
+      "name": "Desk",
+      "file": "Desk.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Rounded Table A",
+      "file": "Rounded Table A.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Rounded Table B",
+      "file": "Rounded Table B.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Rounded Table C",
+      "file": "Rounded Table C.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Table A",
+      "file": "Table A.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Table B",
+      "file": "Table B.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Table C",
+      "file": "Table C.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Table D",
+      "file": "Table D.fbx",
+      "category": "Tables"
+    },
+    {
+      "name": "Window A",
+      "file": "Window A.fbx",
+      "category": "Windows"
+    },
+    {
+      "name": "Window B",
+      "file": "Window B.fbx",
+      "category": "Windows"
+    },
+    {
+      "name": "Window C",
+      "file": "Window C.fbx",
+      "category": "Windows"
+    }
+  ]
+} Unfortunately the content exceeded token limit!
