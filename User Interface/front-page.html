@@ -110,21 +110,10 @@
             landing.style.transition = 'opacity 0.5s ease';
 
             setTimeout(() => {
-                // 2. Swap sections
-                landing.classList.add('hidden');
-                dashboard.classList.remove('hidden');
-                
-                console.log("Starting AI generation for:", prompt);
-                
-                // 3. Initialize Three.js (if your main.js is loaded)
-                if (typeof initThreeJS === "function") {
-                    initThreeJS(prompt);
-                    // Hide the "Loading..." text once the engine starts
-                    document.getElementById('loading-text').classList.add('hidden');
-                } else {
-                    console.error("Three.js engine (initThreeJS) not found. Is main.js loaded?");
-                }
-            }, 500);
+                // Redirect to the engine page which bootstraps Three.js
+                const target = `../Engine/index.html?prompt=${encodeURIComponent(prompt)}`;
+                window.location.href = target;
+            }, 300);
         }
     </script>
 </body>

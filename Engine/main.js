@@ -37,15 +37,6 @@ const furnitureLibrary = {
   ]
 };
 
-const urlParams = new URLSearchParams(window.location.search);
-const autoPrompt = urlParams.get('prompt');
-
-if (autoPrompt && aiModel) {
-    aiInput.value = autoPrompt;
-    aiBtn.click(); // triggers the existing AI handler
-}
-
-
 // ── 2. INITIALIZATION ──
 let genAI = null;
 let aiModel = null;
@@ -210,6 +201,12 @@ const ui = initUI(
 const aiBtn = document.getElementById('ai-generate-btn');
 const aiInput = document.getElementById('ai-prompt');
 
+// Auto-trigger generation when arriving from the front page
+const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
+if (autoPrompt && aiInput) {
+  aiInput.value = autoPrompt;
+}
+
 if (aiBtn) {
   aiBtn.onclick = async () => {
     if (!aiModel) return alert("AI Key not found.");
@@ -250,6 +247,9 @@ if (aiBtn) {
       aiBtn.innerText = "Generate Layout";
     }
   };
+
+  // Fire automatically if a prompt was passed in the URL
+  if (autoPrompt) aiBtn.click();
 }
 
 // ── 9. MOUSE & KBD INTERACTION ──
