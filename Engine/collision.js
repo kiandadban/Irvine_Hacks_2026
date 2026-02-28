@@ -15,6 +15,11 @@ export class CollisionEngine {
     });
   }
 
+  updateWalls(newWalls) {
+    this.walls = newWalls;
+    this.updateObstacles();
+  }
+
   checkCollision(movingObject) {
     // 1. Force update the moving object AND all its children
     movingObject.updateMatrixWorld(true);

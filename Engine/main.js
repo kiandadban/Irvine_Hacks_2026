@@ -105,15 +105,38 @@ const mouse = new THREE.Vector2();
 // ── 3. ROOM & PHYSICS ──
 const spawnedFurniture = [];
 let selectedObject = null;
-const roomWidth = 10;
-const roomDepth = 10;
+let roomWidth = 10;
+let roomDepth = 10;
 
-const walls = createRoom(scene, roomWidth, roomDepth);
-const collisionEngine = new CollisionEngine(walls, spawnedFurniture);
+let { walls, floor: roomFloor } = createRoom(scene, roomWidth, roomDepth);
+let currentWalls = walls;
+const collisionEngine = new CollisionEngine(currentWalls, spawnedFurniture);
 
-const grid = new THREE.GridHelper(roomWidth, 10, 0xCCCCCC, 0x444444);
+let grid = new THREE.GridHelper(roomWidth, 10, 0xCCCCCC, 0x444444);
 grid.position.y = 0.01;
 scene.add(grid);
+
+function rebuildRoom(newWidth, newDepth) {
+  // Remove old walls, floor, grid
+  currentWalls.forEach(w => scene.remove(w));
+  scene.remove(roomFloor);
+  scene.remove(grid);
+
+  roomWidth = newWidth;
+  roomDepth = newDepth;
+
+  const result = createRoom(scene, roomWidth, roomDepth);
+  currentWalls = result.walls;
+  roomFloor = result.floor;
+
+  // Rebuild grid to match new size
+  grid = new THREE.GridHelper(Math.max(roomWidth, roomDepth), Math.max(roomWidth, roomDepth), 0xCCCCCC, 0x444444);
+  grid.position.y = 0.01;
+  scene.add(grid);
+
+  // Update collision engine with new walls
+  collisionEngine.updateWalls(currentWalls);
+}
 
 // ── 4. LIGHTS ──
 scene.add(new THREE.AmbientLight(0xffffff, 0.8));
@@ -216,6 +239,27 @@ const ui = initUI(
 const aiBtn = document.getElementById('ai-generate-btn');
 const aiInput = document.getElementById('ai-prompt');
 
+// Slider wiring
+const widthSlider  = document.getElementById('widthSlider');
+const lengthSlider = document.getElementById('lengthSlider');
+const wVal = document.getElementById('wVal');
+const lVal = document.getElementById('lVal');
+
+if (widthSlider) {
+    widthSlider.addEventListener('input', () => {
+        const v = parseFloat(widthSlider.value);
+        wVal.textContent = v.toFixed(1);
+        rebuildRoom(v, roomDepth);
+    });
+}
+if (lengthSlider) {
+    lengthSlider.addEventListener('input', () => {
+        const v = parseFloat(lengthSlider.value);
+        lVal.textContent = v.toFixed(1);
+        rebuildRoom(roomWidth, v);
+    });
+}
+
 // Auto-trigger generation when arriving from the front page
 const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
 
@@ -229,7 +273,7 @@ if (aiBtn) {
             // Inside aiBtn.onclick...
             const prompt = `
             ACT AS: Senior Interior Architect.
-            ROOM: 10m x 10m. Bounds: X(-5 to 5), Y(-5 to 5).
+            ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(-${roomWidth/2} to ${roomWidth/2}), Z(-${roomDepth/2} to ${roomDepth/2}).
             
             --- STRICT FILENAME MANIFEST ---
             You MUST ONLY use these exact filenames. Do not invent "bed_double" or "wardrobe":
@@ -237,7 +281,7 @@ if (aiBtn) {
           
             --- PLACEMENT RULES ---
             1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
-            2. BOUNDS: All items must stay within X(-5 to 5) and Y(-5 to 5).
+            2. BOUNDS: All items must stay within X(-${roomWidth/2} to ${roomWidth/2}) and Z(-${roomDepth/2} to ${roomDepth/2}).
             3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Y=-5) and lay it flat
             4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
             5. SLEEPING: Place beds with the headboard against a wall.
@@ -267,6 +311,26 @@ if (aiBtn) {
             aiBtn.innerText = "Generate Layout";
         }
     };
+
+    // Typewriter auto-fill when arriving from the front page via ?prompt=
+    if (autoPrompt && aiInput) {
+        setTimeout(() => {
+            aiInput.classList.add('auto-fill');
+            aiInput.focus();
+            let i = 0;
+            aiInput.value = '';
+            const type = setInterval(() => {
+                aiInput.value += autoPrompt[i++];
+                if (i >= autoPrompt.length) {
+                    clearInterval(type);
+                    setTimeout(() => {
+                        aiInput.classList.remove('auto-fill');
+                        aiBtn.click();
+                    }, 400);
+                }
+            }, 30);
+        }, 600);
+    }
 }
 
 // ── 10. FIXED MOUSE INTERACTION ──
