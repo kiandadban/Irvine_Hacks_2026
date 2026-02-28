@@ -310,19 +310,27 @@ async function initApp() {
             rebuildRoom(roomWidth, roomDepth);
         });
 
-        aiBtn.onclick = async () => {
-            if (!aiInput.value || aiBtn.disabled) return;
+        async function runGeneration(userRequest, useRoomContext = true) {
+            if (!aiModel || !userRequest || aiBtn.disabled) return;
             aiBtn.disabled = true;
             aiBtn.innerText = "Architecting...";
 
             try {
-                const prompt = `ACT AS: Senior Interior Architect.
-ROOM: ${roomWidth}m x ${roomDepth}m.
-BOUNDS: X(${(-roomWidth/2).toFixed(2)} to ${(roomWidth/2).toFixed(2)}), Z(${(-roomDepth/2).toFixed(2)} to ${(roomDepth/2).toFixed(2)}).
+                let prompt;
+
+                const safeFileList = Array.isArray(furnitureLibrary) ? furnitureLibrary.map(a => a.file).join(", ") : "";
+
+                if (useRoomContext) {
+                    const activeRoomBtn = document.querySelector('.room-type-btn.active span');
+                    const roomType = activeRoomBtn ? activeRoomBtn.innerText.trim() : 'Living Room';
+
+                    prompt = `ACT AS: Senior Interior Architect.
+ROOM TYPE: ${roomType}.
+ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(${(-roomWidth/2).toFixed(2)} to ${(roomWidth/2).toFixed(2)}), Z(${(-roomDepth/2).toFixed(2)} to ${(roomDepth/2).toFixed(2)}).
 
 STRICT FILENAME MANIFEST:
 Only use these exact filenames (case-sensitive):
-${Array.isArray(furnitureLibrary) ? furnitureLibrary.map(a => a.file).join(", ") : ""}
+${safeFileList}
 
 PLACEMENT RULES (must follow all):
 1. No overlap: bounding boxes must not intersect.
@@ -339,14 +347,39 @@ OUTPUT (strict):
 Return JSON array only. Example:
 [{"file":"Bed Double.fbx","x":2.0,"z":-4.0,"rotate":0}]
 
-USER REQUEST: "${aiInput.value}"
+USER REQUEST: "${userRequest}"
 `;
+                } else {
+                    prompt = `ACT AS: Senior Interior Architect.
+ROOM: 10m x 10m. Bounds: X(-5 to 5), Z(-5 to 5).
+
+STRICT FILENAME MANIFEST:
+Only use these exact filenames (case-sensitive):
+${safeFileList}
+
+PLACEMENT RULES (must follow all):
+1. No overlap: bounding boxes must not intersect.
+2. Minimum separation: maintain at least 2.0 meters between items.
+3. Bounds: all items must be within the room bounds above.
+4. Doors: if present, place flush against the room edge and flat on the floor (Y=0).
+5. Desk requirement: placing "Desk.fbx" requires a desk chair ("Desk Chair.fbx" or "Desk Chair (2).fbx") within 0.8m.
+6. Beds: place with headboard against a wall.
+7. Avoid placing any item at (0, 0).
+8. Vertical: all objects must sit on floor (Y=0); do not stack objects.
+9. Limit total items to 15.
+
+OUTPUT (strict):
+Return JSON array only. Example:
+[{"file":"Bed Double.fbx","x":2.0,"z":-4.0,"rotate":0}]
+
+USER REQUEST: "${userRequest}"
+`;
+                }
 
                 const result = await aiModel.generateContent(prompt);
                 const rawText = result.response.text();
                 console.log("Raw AI response:", rawText);
                 const layout = JSON.parse(rawText.replace(/```json|```/g, "").trim());
-
 
                 deselectObject();
                 spawnedFurniture.forEach(obj => scene.remove(obj));
@@ -357,13 +390,10 @@ USER REQUEST: "${aiInput.value}"
                 }
             } catch (e) {
                 console.error("AI Error:", e);
-                // Show the actual error so we can diagnose it
                 const msg = e?.message || String(e);
-                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401') || msg.includes('API key')) {
+                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401')) {
                     alert(`API key error: ${msg}`);
                 } else if (msg.includes('JSON') || msg.includes('parse') || msg.includes('SyntaxError')) {
-                    // Log the raw response so we can see what the model actually returned
-                    console.error("Raw response that failed to parse:", e);
                     alert(`JSON parse failed — check console for raw model output.\n\n${msg}`);
                 } else {
                     alert(`AI Error: ${msg}`);
@@ -372,11 +402,13 @@ USER REQUEST: "${aiInput.value}"
                 aiBtn.disabled = false;
                 aiBtn.innerText = "Generate Layout";
             }
-        };
+        }
+
+        aiBtn.addEventListener('click', () => runGeneration(aiInput.value, true));
 
         if (autoPrompt && aiInput) {
             aiInput.value = autoPrompt;
-            aiBtn.click();
+            runGeneration(autoPrompt, false);
         }
     }
 
