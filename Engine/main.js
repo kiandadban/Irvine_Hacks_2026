@@ -23,6 +23,15 @@ const furnitureLibrary = {
     ]
 };
 
+const urlParams = new URLSearchParams(window.location.search);
+const autoPrompt = urlParams.get('prompt');
+
+if (autoPrompt && aiModel) {
+    aiInput.value = autoPrompt;
+    aiBtn.click(); // triggers the existing AI handler
+}
+
+
 // ── 2. INITIALIZATION ──
 let genAI = null;
 let aiModel = null;
@@ -235,6 +244,13 @@ window.addEventListener('keydown', (e) => {
     if (key === 'r') transform.setMode('rotate'); 
     if (key === 's') transform.setMode('scale'); 
     if (key === 'l') transform.setSpace(transform.space === 'local' ? 'world' : 'local');
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoPrompt = urlParams.get('prompt');
+    if (autoPrompt && aiModel) {
+    aiInput.value = autoPrompt;
+    aiBtn.click();
+    }
 });
 
 // ── 10. RENDER LOOP ──
