@@ -1,50 +1,39 @@
 import * as THREE from 'three';
 
 export class CollisionEngine {
-  constructor(walls, furnitureArray) {
-    this.walls = walls; // Array of meshes from walls.js
-    this.furniture = furnitureArray; // Reference to spawnedFurniture in main.js
-    this.obstacles = [];
+  constructor(walls, spawnedFurniture) {
+    this.walls = walls; 
+    this.furniture = spawnedFurniture; // This must be the SAME array used in main.js
+    this.wallBoxes = [];
     this.updateObstacles();
   }
 
-  /**
-   * Refreshes the internal list of bounding boxes for all static obstacles.
-   */
   updateObstacles() {
-    this.obstacles = [];
-    
-    // Add walls to obstacles
+    this.wallBoxes = [];
     this.walls.forEach(wall => {
-      const box = new THREE.Box3().setFromObject(wall);
-      this.obstacles.push(box);
+      this.wallBoxes.push(new THREE.Box3().setFromObject(wall));
     });
-
-    // Add other furniture (excluding the one currently being moved)
-    // Note: In a real-time drag, we filter the "active" object out inside checkCollision
   }
 
-  /**
-   * Checks if a specific object is hitting walls or other furniture.
-   * @param {THREE.Object3D} movingObject 
-   * @returns {Object} { isColliding: boolean, collidedWith: object }
-   */
   checkCollision(movingObject) {
+    // 1. Force update the moving object AND all its children
     movingObject.updateMatrixWorld(true);
     const movingBox = new THREE.Box3().setFromObject(movingObject);
 
-    // 1. Check against Walls
-    for (let wallBox of this.obstacles) {
-      if (movingBox.intersectsBox(wallBox)) {
-        return { isColliding: true, type: 'wall' };
-      }
+    // 2. Check Walls
+    for (let wallBox of this.wallBoxes) {
+      if (movingBox.intersectsBox(wallBox)) return { isColliding: true, type: 'wall' };
     }
 
-    // 2. Check against other Furniture
+    // 3. Check Other Furniture
     for (let item of this.furniture) {
-      if (item === movingObject) continue; // Don't collide with self
+      // Check UUID to be 100% sure we aren't colliding with ourselves
+      if (item === movingObject || item.uuid === movingObject.uuid) continue;
 
+      // Force update the other item's position in the world
+      item.updateMatrixWorld(true);
       const itemBox = new THREE.Box3().setFromObject(item);
+
       if (movingBox.intersectsBox(itemBox)) {
         return { isColliding: true, type: 'furniture' };
       }

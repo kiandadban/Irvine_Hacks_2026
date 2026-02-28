@@ -63,12 +63,12 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 // ── 3. WALLS & PHYSICS SETUP ──
-let spawnedFurniture = [];
+// Use 'const' for the array so the reference never changes
+const spawnedFurniture = []; 
 let selectedObject = null;
 
 const roomWidth = 10;
 const roomDepth = 10;
-// Create physical wall meshes
 const walls = createRoom(scene, roomWidth, roomDepth); 
 
 // Initialize collision engine
@@ -95,10 +95,9 @@ scene.add(transform);
 // COLLISION DETECTION DURING MANUAL DRAG
 transform.addEventListener('change', () => {
   if (transform.object && transform.mode === 'translate') {
-    transform.object.updateMatrixWorld(true);
     const check = collisionEngine.checkCollision(transform.object);
     
-    // Visual feedback: Tint red if colliding
+    // Visual feedback: Tint red if colliding with WALLS or OTHER FURNITURE
     transform.object.traverse(n => {
       if (n.isMesh) {
         if (check.isColliding) {
@@ -114,9 +113,9 @@ transform.addEventListener('change', () => {
 
 transform.addEventListener('dragging-changed', (e) => {
   orbit.enabled = !e.value;
-  // Update collision map when user releases the object
+  // Update collision engine when drag stops
   if (!e.value) {
-    collisionEngine.updateObstacles(walls, spawnedFurniture);
+    collisionEngine.updateObstacles();
   }
 });
 
@@ -151,16 +150,10 @@ function loadModel(path, config = {}) {
     model.rotation.y = config.rotate || 0;
     model.updateMatrixWorld(true);
 
-    // Initial Collision Check
-    const check = collisionEngine.checkCollision(model);
-    if (check.isColliding) console.warn("Spawned inside obstacle!");
-
     scene.add(model);
-    spawnedFurniture.push(model);
+    spawnedFurniture.push(model); // Engine is automatically watching this array
     
-    // Update engine with new obstacle
-    collisionEngine.updateObstacles(walls, spawnedFurniture);
-    
+    collisionEngine.updateObstacles(); 
     selectObject(model);
   }, undefined, (err) => console.error("Failed to load model:", path, err));
 }
@@ -176,7 +169,7 @@ function spawnPrimitive(type) {
 
   scene.add(mesh);
   spawnedFurniture.push(mesh);
-  collisionEngine.updateObstacles(walls, spawnedFurniture);
+  collisionEngine.updateObstacles();
   selectObject(mesh);
 }
 
@@ -193,8 +186,11 @@ const ui = initUI(
   () => {
     if (selectedObject) {
       scene.remove(selectedObject);
-      spawnedFurniture = spawnedFurniture.filter(o => o !== selectedObject);
-      collisionEngine.updateObstacles(walls, spawnedFurniture);
+      // FIX: Use splice to keep the array reference same for CollisionEngine
+      const index = spawnedFurniture.indexOf(selectedObject);
+      if (index > -1) spawnedFurniture.splice(index, 1);
+      
+      collisionEngine.updateObstacles();
       deselectObject();
     }
   },
@@ -229,7 +225,9 @@ if (aiBtn) {
       // Clear current scene
       deselectObject();
       spawnedFurniture.forEach(obj => scene.remove(obj));
-      spawnedFurniture = [];
+      
+      // FIX: Use length = 0 to clear array without losing reference
+      spawnedFurniture.length = 0; 
 
       layout.forEach(item => {
         const path = `../furniture_models/${item.file}`;
