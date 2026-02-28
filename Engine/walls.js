@@ -28,5 +28,5 @@ export function createRoom(scene, width, depth) {
     wallGroup.push(wall);
   });
 
-  return wallGroup;
+  return { walls: wallGroup, floor };
 }
