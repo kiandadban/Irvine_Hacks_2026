@@ -12,7 +12,7 @@ import { createRoom } from './walls.js';
 import { CollisionEngine } from './collision.js';
 
 if (!API_KEY) {
-    console.error("API_KEY missing! Check your config.js file.");
+    console.error("API_KEY missing.");
 }
 
 // wrap initialization in async function so we can await fetching the JSON
