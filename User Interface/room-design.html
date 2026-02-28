@@ -761,5 +761,10 @@
     s.style.setProperty('--pct', pct + '%');
   });
 </script>
+<script>
+        const params = new URLSearchParams(window.location.search);
+        const prompt = params.get('prompt');
+        if (prompt) initThreeJS(prompt);
+    </script>
 </body>
 </html>
