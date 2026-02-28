@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/kiandadban/Irvine_Hacks_2026#readme",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "three": "^0.183.1"
   },
   "devDependencies": {

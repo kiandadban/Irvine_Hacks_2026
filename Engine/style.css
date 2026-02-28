@@ -1,0 +1,45 @@
+
+    body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
+    
+    .panel { 
+        position: absolute; 
+        background: rgba(0,0,0,0.85); 
+        padding: 15px; 
+        border: 1px solid #444; 
+        color: #eee; 
+        z-index: 10; /* Ensures buttons stay above the 3D scene */
+    }
+
+    /* Moved from 10px to 40px to give some breathing room */
+    #spawn-panel { 
+        top: 40px; 
+        left: 20px; 
+        border-color: #00ff88; 
+    }
+
+    /* Positioned below the spawn panel */
+    #model-panel { 
+        top: 140px; 
+        left: 20px; 
+        border-color: #ff00ff; 
+    }
+
+    /* Properties panel on the right, also moved down */
+    #props-panel { 
+        top: 40px; 
+        right: 20px; 
+        width: 180px; 
+        border-color: #00aaff; 
+        display: none; 
+    }
+
+    button { 
+        cursor: pointer; 
+        background: #333; 
+        color: white; 
+        border: 1px solid #666; 
+        padding: 8px 12px; 
+        margin-top: 5px; /* Adds space between buttons */
+    }
+    
+    button:hover { background: #444; border-color: #999; }

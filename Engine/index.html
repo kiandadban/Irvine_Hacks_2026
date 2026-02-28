@@ -5,21 +5,51 @@
     <title>Three.js Professional Editor</title>
     <style>
         body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
-        .panel { position: absolute; background: rgba(0,0,0,0.85); padding: 15px; border: 1px solid #444; color: #eee; }
+        .panel { position: absolute; background: rgba(0,0,0,0.85); padding: 15px; border: 1px solid #444; color: #eee; z-index: 10; }
         
+        #instructions { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); color: #888; text-align: center; pointer-events: none; }
+
         #spawn-panel { top: 10px; left: 10px; border-color: #00ff88; }
         #props-panel { top: 10px; right: 10px; width: 180px; border-color: #00aaff; display: none; }
         
+        /* ── Horizontal Bottom Panel ── */
+        #model-panel { 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: 80px; 
+            border-top: 1px solid #ff00ff; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            overflow-x: auto; 
+            padding: 0 20px;
+            white-space: nowrap;
+        }
+
+        .model-load-btn { 
+            flex: 0 0 auto; 
+            height: 50px; 
+            min-width: 100px;
+            background: #222;
+            border: 1px solid #666;
+            transition: all 0.2s;
+        }
+
         button { cursor: pointer; background: #333; color: white; border: 1px solid #666; padding: 5px 10px; }
-        button:hover { background: #444; }
+        button:hover { background: #444; border-color: #00ff88; }
         input[type="color"] { width: 100%; height: 30px; cursor: pointer; border: none; background: none; }
+
+        /* Custom Scrollbar for the bottom panel */
+        #model-panel::-webkit-scrollbar { height: 6px; }
+        #model-panel::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
     </style>
 </head>
 <body>
-  <div id="instructions">
-        G: Move | R: Rotate | S: Scale <br>
-        L: Local/World | X: Snap
-  </div>
+    <div id="instructions">
+        G: Move | R: Rotate | S: Scale | L: Local/World | X: Snap
+    </div>
+
     <div id="spawn-panel" class="panel">
         <strong>Create</strong><br><br>
         <select id="shape-type">
@@ -28,6 +58,18 @@
             <option value="cone">Cone</option>
         </select>
         <button id="add-btn">Add</button>
+    </div>
+
+    <div id="model-panel" class="panel">
+        <strong style="color: #ff00ff; margin-right: 10px;">Library</strong>
+        <button class="model-load-btn" data-path="../furniture_models/Bed King.glb">King Bed</button>
+        <button class="model-load-btn" data-path="../furniture_models/Bunk Bed.glb">Bunk Bed</button>
+        <button class="model-load-btn" data-path="../furniture_models/Couch Large.glb">Large Couch</button>
+        <button class="model-load-btn" data-path="../furniture_models/Couch Medium.glb">Medium Couch</button>
+        <button class="model-load-btn" data-path="../furniture_models/Desk.glb">Desk</button>
+        <button class="model-load-btn" data-path="../furniture_models/Night Stand.glb">Night Stand</button>
+        <button class="model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">Bookcase</button>
+        <button class="model-load-btn" data-path="../furniture_models/Drawer.glb">Drawer</button>
     </div>
 
     <div id="props-panel" class="panel">
