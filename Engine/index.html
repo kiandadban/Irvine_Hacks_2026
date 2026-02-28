@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Three.js Professional Editor</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
         .panel { position: absolute; background: rgba(0,0,0,0.85); padding: 15px; border: 1px solid #444; color: #eee; }
@@ -29,6 +30,12 @@
         </select>
         <button id="add-btn">Add</button>
     </div>
+    <div id="model-panel" class="panel">
+    <strong>Furniture Library</strong><br><br>
+    <button class="model-load-btn" data-path="../furniture_models/desk.glb">Spawn desk</button>
+    <button class="model-load-btn" data-path="../furniture_models/drawer.glb">Spawn drawer</button>
+    <button class="model-load-btn" data-path="../furniture_models/Couch Large.glb">Spawn Sofa</button>
+</div>
 
     <div id="props-panel" class="panel">
         <strong>Properties</strong><hr>
