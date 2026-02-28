@@ -186,9 +186,6 @@ const aiInput = document.getElementById('ai-prompt');
 
 // Auto-trigger generation when arriving from the front page
 const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
-if (autoPrompt && aiInput) {
-  aiInput.value = autoPrompt;
-}
 
 if (aiBtn) {
   aiBtn.onclick = async () => {
@@ -269,7 +266,28 @@ if (aiBtn) {
   };
 
   // Fire automatically if a prompt was passed in the URL
-  if (autoPrompt) aiBtn.click();
+  if (autoPrompt && aiInput) {
+    // Wait one frame for the scene to render, then type the prompt in
+    setTimeout(() => {
+      aiInput.classList.add('auto-fill');
+      aiInput.focus();
+
+      // Typewriter effect so the user can see the prompt arrive
+      let i = 0;
+      aiInput.value = '';
+      const type = setInterval(() => {
+        aiInput.value += autoPrompt[i++];
+        if (i >= autoPrompt.length) {
+          clearInterval(type);
+          // Small pause after typing finishes, then generate
+          setTimeout(() => {
+            aiInput.classList.remove('auto-fill');
+            aiBtn.click();
+          }, 400);
+        }
+      }, 30);
+    }, 600); // give the Three.js scene ~600 ms to initialise
+  }
 }
 
 // ── 10. MOUSE INTERACTION & LOOP ──

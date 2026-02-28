@@ -103,6 +103,12 @@ input[type=range] {
     resize: none; outline: none; transition: border-color 0.2s;
 }
 #ai-prompt:focus { border-color: var(--teal); background: var(--white); }
+#ai-prompt.auto-fill {
+    border-color: var(--teal);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(22, 93, 90, 0.15);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
 
 #ai-generate-btn {
     background: var(--teal); color: #fff; border: none;
