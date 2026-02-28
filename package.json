@@ -1,0 +1,27 @@
+{
+  "name": "irvine_hacks_2026",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiandadban/Irvine_Hacks_2026.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kiandadban/Irvine_Hacks_2026/issues"
+  },
+  "homepage": "https://github.com/kiandadban/Irvine_Hacks_2026#readme",
+  "dependencies": {
+    "three": "^0.183.1"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}
