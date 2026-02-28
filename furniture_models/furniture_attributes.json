@@ -1,86 +1,190 @@
 {
-    "furniture_assets": [
+    "furniture_library": [
       {
-        "id": "bed_king_001",
+        "name": "King Bed",
         "file": "Bed King.glb",
         "category": "sleeping",
-        "dimensions": { "width": 2.0, "depth": 2.1, "height": 0.9 },
-        "placement_rules": {
-          "alignment": "back_to_wall",
-          "required_clearance": { "left": 0.6, "right": 0.6, "front": 0.8 },
-          "can_support": ["Night Stand.glb"]
+        "dimensions": { "width": 2.0, "depth": 2.1, "height": 1.2 },
+        "placement": {
+          "tag": "primary",
+          "must_touch_wall": true,
+          "clearance": { "sides": 0.6, "front": 0.8 },
+          "pairs_with": ["Night Stand.glb"]
         }
       },
       {
-        "id": "bunk_bed_001",
+        "name": "Twin Bed (Old)",
+        "file": "Bed Twin Old.glb",
+        "category": "sleeping",
+        "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.0 },
+        "placement": {
+          "tag": "secondary",
+          "must_touch_wall": true,
+          "clearance": { "side_left": 0.6, "front": 0.6 }
+        }
+      },
+      {
+        "name": "Bunk Bed",
         "file": "Bunk Bed.glb",
         "category": "sleeping",
-        "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.7 },
-        "placement_rules": {
-          "alignment": "corner_or_wall",
-          "required_clearance": { "front": 0.8, "side": 0.4 }
+        "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.8 },
+        "placement": {
+          "tag": "kids",
+          "corner_optimized": true,
+          "clearance": { "front": 1.0 }
         }
       },
       {
-        "id": "couch_large_001",
+        "name": "Large Couch",
         "file": "Couch Large.glb",
         "category": "seating",
         "dimensions": { "width": 2.4, "depth": 1.0, "height": 0.8 },
-        "placement_rules": {
-          "alignment": "wall_or_center",
-          "focus_point": true,
-          "required_clearance": { "front": 1.0 }
+        "placement": {
+          "tag": "living_room",
+          "is_focal_point": true,
+          "clearance": { "front": 1.2 }
         }
       },
       {
-        "id": "couch_medium_001",
+        "name": "Medium Couch",
         "file": "Couch Medium.glb",
         "category": "seating",
         "dimensions": { "width": 1.8, "depth": 0.9, "height": 0.8 },
-        "placement_rules": {
-          "alignment": "wall_or_center",
-          "required_clearance": { "front": 0.8 }
+        "placement": {
+          "tag": "living_room",
+          "clearance": { "front": 1.0 }
         }
       },
       {
-        "id": "desk_001",
+        "name": "Armchair",
+        "file": "Armchair.glb",
+        "category": "seating",
+        "dimensions": { "width": 0.9, "depth": 0.8, "height": 0.9 },
+        "placement": {
+          "tag": "accent",
+          "can_rotate_freely": true
+        }
+      },
+      {
+        "name": "Desk",
         "file": "Desk.glb",
         "category": "workspace",
         "dimensions": { "width": 1.4, "depth": 0.7, "height": 0.75 },
-        "placement_rules": {
-          "alignment": "back_to_wall",
-          "required_clearance": { "front": 0.9 },
-          "paired_with": "office_chair"
+        "placement": {
+          "must_touch_wall": true,
+          "pairs_with": ["Desk Chair.glb", "Desk Chair (2).glb"],
+          "clearance": { "back": 0.8 }
         }
       },
       {
-        "id": "night_stand_001",
-        "file": "Night Stand.glb",
-        "category": "storage",
-        "dimensions": { "width": 0.5, "depth": 0.4, "height": 0.5 },
-        "placement_rules": {
-          "alignment": "side_of_bed",
-          "proximity_target": "Bed King.glb"
+        "name": "Standard Desk Chair",
+        "file": "Desk Chair.glb",
+        "category": "workspace_seating",
+        "dimensions": { "width": 0.6, "depth": 0.6, "height": 1.0 },
+        "placement": {
+          "parent_dependency": "Desk.glb",
+          "is_mobile": true
         }
       },
       {
-        "id": "bookcase_books_001",
+        "name": "Executive Desk Chair",
+        "file": "Desk Chair (2).glb",
+        "category": "workspace_seating",
+        "dimensions": { "width": 0.7, "depth": 0.7, "height": 1.1 },
+        "placement": {
+          "parent_dependency": "Desk.glb",
+          "is_mobile": true
+        }
+      },
+      {
+        "name": "Bookcase with Books",
         "file": "Bookcase with Books.glb",
         "category": "storage",
-        "dimensions": { "width": 0.8, "depth": 0.3, "height": 1.8 },
-        "placement_rules": {
-          "alignment": "flush_to_wall",
-          "required_clearance": { "front": 0.6 }
+        "dimensions": { "width": 0.9, "depth": 0.35, "height": 2.0 },
+        "placement": {
+          "must_touch_wall": true,
+          "snap_to_wall": true
         }
       },
       {
-        "id": "drawer_001",
+        "name": "Dining Set",
+        "file": "Dining Set.glb",
+        "category": "dining",
+        "type": "furniture_group",
+        "dimensions": { "width": 1.6, "depth": 1.6, "height": 0.75 },
+        "placement": {
+          "is_focal_point": true,
+          "clearance": { "all_sides": 0.9 },
+          "ideal_room": "dining_room"
+        }
+      },
+      {
+        "name": "Kitchen Unit",
+        "file": "Kitchen.glb",
+        "category": "cooking",
+        "type": "structural",
+        "dimensions": { "width": 3.0, "depth": 0.6, "height": 2.1 },
+        "placement": {
+          "must_touch_wall": true,
+          "fixed_position": true,
+          "clearance": { "front": 1.2 }
+        }
+      },
+      {
+        "name": "Brown Door",
+        "file": "Door_brown.glb",
+        "category": "architectural",
+        "type": "fixed_path",
+        "dimensions": { "width": 0.9, "depth": 0.1, "height": 2.0 },
+        "placement": {
+          "is_portal": true,
+          "swing_radius": 0.9,
+          "avoid_collision": true
+        }
+      },
+      {
+        "name": "White Door",
+        "file": "Door_white.glb",
+        "category": "architectural",
+        "type": "fixed_path",
+        "dimensions": { "width": 0.9, "depth": 0.1, "height": 2.0 },
+        "placement": {
+          "is_portal": true,
+          "swing_radius": 0.9,
+          "avoid_collision": true
+        }
+      },
+      {
+        "name": "Drawer Unit",
         "file": "Drawer.glb",
         "category": "storage",
-        "dimensions": { "width": 1.0, "depth": 0.5, "height": 1.2 },
-        "placement_rules": {
-          "alignment": "back_to_wall",
-          "required_clearance": { "front": 1.0 }
+        "type": "furniture",
+        "dimensions": { "width": 0.8, "depth": 0.45, "height": 1.0 },
+        "placement": {
+          "must_touch_wall": true,
+          "clearance": { "front": 0.7 }
+        }
+      },
+      {
+        "name": "Futuristic Shelf",
+        "file": "Futuristic Shelf.glb",
+        "category": "decor",
+        "type": "furniture",
+        "dimensions": { "width": 1.2, "depth": 0.3, "height": 1.8 },
+        "placement": {
+          "must_touch_wall": true,
+          "snap_to_wall": true
+        }
+      },
+      {
+        "name": "Night Stand",
+        "file": "Night Stand.glb",
+        "category": "accessory",
+        "type": "furniture",
+        "dimensions": { "width": 0.45, "depth": 0.4, "height": 0.5 },
+        "placement": {
+          "parent_dependency": ["Bed King.glb", "Bed Twin Old.glb"],
+          "alignment": "side_aligned"
         }
       }
     ]
