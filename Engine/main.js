@@ -41,20 +41,29 @@ transform.addEventListener('dragging-changed', (event) => {
 
 // ── 4. UI Initialization (Defined outside listeners) ──
 const ui = initUI(
-  (type) => spawnObject(type),
-  (hex) => {
-    if (!selectedObject) return;
-
-    // Use traverse to find every mesh inside the GLB group
-    selectedObject.traverse((node) => {
-      if (node.isMesh) {
-        // Apply the color to every part of the model
-        node.material.color.set(hex);
-      }
-    });
-  },
-  () => { /* delete logic */ },
-  (path) => loadModel(path)
+    (type) => spawnObject(type), 
+    (hex) => changeColor(hex),
+    () => {
+        // --- THIS IS THE ONDELETE FUNCTION ---
+        if (selectedObject) {
+            console.log("Engine: Removing object", selectedObject);
+            
+            // 1. Remove the gizmo from the object first
+            transform.detach();
+            
+            // 2. Remove the object from the 3D world
+            scene.remove(selectedObject);
+            
+            // 3. Clear the reference so we don't try to delete it again
+            selectedObject = null;
+            
+            // 4. Hide the properties panel
+            ui.hideProps();
+        } else {
+            console.warn("Engine: No object selected to delete");
+        }
+    },
+    (path) => loadModel(path)
 );
 
 // ── 5. Selection & Raycasting ──
@@ -63,15 +72,21 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 window.addEventListener('mousedown', (event) => {
+  // 1. Ignore clicks on HTML UI elements
   if (event.target !== renderer.domElement) return;
+
+  // 2. Prevent selection changes while actively dragging the gizmo
   if (transform.dragging) return;
 
+  // 3. Update mouse coordinates
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+  // 4. Perform Raycast
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(scene.children, true);
 
+  // 5. Look for a valid Mesh (excluding grid and gizmo)
   const hit = intersects.find(i => {
     let current = i.object;
     while (current.parent && current.parent !== scene) {
@@ -81,20 +96,29 @@ window.addEventListener('mousedown', (event) => {
   });
 
   if (hit) {
+    // Find the root object (crucial for GLB groups)
     let rootObject = hit.object;
     while (rootObject.parent && rootObject.parent !== scene) {
       rootObject = rootObject.parent;
     }
+
     selectedObject = rootObject;
     transform.attach(selectedObject);
     ui.showProps(selectedObject);
   } else {
-    // Deselect if clicking empty space (and not the gizmo)
-    const hitGizmo = intersects.find(i => i.object.isTransformControls || i.object.parent.isTransformControls);
+    // --- DESELECTION LOGIC ---
+
+    // Check if we accidentally hit the gizmo handles (arrows/rings)
+    const hitGizmo = intersects.find(i =>
+      i.object.isTransformControls ||
+      (i.object.parent && i.object.parent.isTransformControls)
+    );
+
+    // If we hit absolutely nothing, or anything that isn't the gizmo...
     if (!hitGizmo) {
       selectedObject = null;
-      transform.detach();
-      ui.hideProps();
+      transform.detach(); // Remove the arrows
+      ui.hideProps();     // Hide the side panel
     }
   }
 });
@@ -160,7 +184,14 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'g') transform.setMode('translate');
   if (e.key.toLowerCase() === 'r') transform.setMode('rotate');
   if (e.key.toLowerCase() === 's') transform.setMode('scale');
+  
+  if (e.key === 'Escape') {
+        selectedObject = null;
+        transform.detach();
+        ui.hideProps();
+    }
 });
+
 
 function animate() {
   requestAnimationFrame(animate);

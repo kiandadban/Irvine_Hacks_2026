@@ -6,7 +6,7 @@ export function initUI(onSpawn, onColorChange, onDelete, onModelLoad) {
     // 2. Get the elements for the properties panel
     const propsPanel = document.getElementById('props-panel');
     const colorPicker = document.getElementById('obj-color'); // Ensure this ID matches your HTML
-    const delBtn = document.getElementById('del-btn');
+
 
     // 3. Setup Basic Shape Spawning
     if (addBtn) {
@@ -25,7 +25,14 @@ export function initUI(onSpawn, onColorChange, onDelete, onModelLoad) {
 
     // 5. Setup Color and Delete
     if (colorPicker) colorPicker.oninput = (e) => onColorChange(e.target.value);
-    if (delBtn) delBtn.onclick = () => onDelete();
+    const delBtn = document.getElementById('del-btn'); // Make sure this matches your HTML ID
+
+    if (delBtn) {
+        delBtn.onclick = () => {
+            console.log("UI: Delete button clicked");
+            onDelete(); // This calls the function inside main.js
+        };
+    }
 
     // 6. Return the functions main.js needs to control the UI
     return {
