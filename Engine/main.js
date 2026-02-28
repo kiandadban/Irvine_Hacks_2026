@@ -273,39 +273,69 @@ async function initApp() {
             rebuildRoom(roomWidth, roomDepth);
         });
 
-        aiBtn.onclick = async () => {
-            if (!aiInput.value || aiBtn.disabled) return;
+        async function runGeneration(userRequest, useRoomContext = true) {
+            if (!aiModel || !userRequest || aiBtn.disabled) return;
             aiBtn.disabled = true;
             aiBtn.innerText = "Architecting...";
 
             try {
-                const prompt = `
+                let prompt;
+
+                if (useRoomContext) {
+                    const activeRoomBtn = document.querySelector('.room-type-btn.active span');
+                    const roomType = activeRoomBtn ? activeRoomBtn.innerText.trim() : 'Living Room';
+
+                    prompt = `
             ACT AS: Senior Interior Architect.
+            ROOM TYPE: ${roomType}.
             ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(-${roomWidth/2} to ${roomWidth/2}), Z(-${roomDepth/2} to ${roomDepth/2}).
-            
+
             --- STRICT FILENAME MANIFEST ---
-            You MUST ONLY use these exact filenames. Do not invent "bed_double" or "wardrobe":
+            You MUST ONLY use these exact filenames:
             ${furnitureLibrary.assets.map(a => a.file).join(", ")}
-          
+
             --- PLACEMENT RULES ---
             1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
             2. BOUNDS: All items must stay within X(-${roomWidth/2} to ${roomWidth/2}) and Z(-${roomDepth/2} to ${roomDepth/2}).
-            3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Z=-5) and lay it flat
-            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
+            3. DOORS: If using a door, place it exactly at the edge and lay it flat.
+            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" next to it.
             5. SLEEPING: Place beds with the headboard against a wall.
-            6. Don't place objects at exactly (0, 0)
-            7. Keep amount of objects spawned to 15 or under
-          
+            6. Don't place objects at exactly (0, 0).
+            7. Keep amount of objects spawned to 15 or under.
+            8. Only place furniture appropriate for a ${roomType}.
+
             --- OUTPUT FORMAT ---
-            Output JSON ONLY array: [{"file": "Bed Double.fbx", "x": 2.0, "z": -4.0, "rotate": 0}]
-            
-            USER REQUEST: "${aiInput.value}"`;
+            Output JSON ONLY array: [{"file": "name.glb", "x": 2.0, "z": -4.0, "rotate": 0}]
+
+            USER REQUEST: "${userRequest}"`;
+                } else {
+                    prompt = `
+            ACT AS: Senior Interior Architect.
+            ROOM: 10m x 10m. Bounds: X(-5 to 5), Z(-5 to 5).
+
+            --- STRICT FILENAME MANIFEST ---
+            You MUST ONLY use these exact filenames:
+            ${furnitureLibrary.assets.map(a => a.file).join(", ")}
+
+            --- PLACEMENT RULES ---
+            1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
+            2. BOUNDS: All items must stay within X(-5 to 5) and Z(-5 to 5).
+            3. DOORS: If using a door, place it exactly at the edge and lay it flat.
+            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" next to it.
+            5. SLEEPING: Place beds with the headboard against a wall.
+            6. Don't place objects at exactly (0, 0).
+            7. Keep amount of objects spawned to 15 or under.
+
+            --- OUTPUT FORMAT ---
+            Output JSON ONLY array: [{"file": "name.glb", "x": 2.0, "z": -4.0, "rotate": 0}]
+
+            USER REQUEST: "${userRequest}"`;
+                }
 
                 const result = await aiModel.generateContent(prompt);
                 const rawText = result.response.text();
                 console.log("Raw AI response:", rawText);
                 const layout = JSON.parse(rawText.replace(/```json|```/g, "").trim());
-
 
                 deselectObject();
                 spawnedFurniture.forEach(obj => scene.remove(obj));
@@ -316,13 +346,10 @@ async function initApp() {
                 }
             } catch (e) {
                 console.error("AI Error:", e);
-                // Show the actual error so we can diagnose it
                 const msg = e?.message || String(e);
-                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401') || msg.includes('API key')) {
+                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401')) {
                     alert(`API key error: ${msg}`);
                 } else if (msg.includes('JSON') || msg.includes('parse') || msg.includes('SyntaxError')) {
-                    // Log the raw response so we can see what the model actually returned
-                    console.error("Raw response that failed to parse:", e);
                     alert(`JSON parse failed — check console for raw model output.\n\n${msg}`);
                 } else {
                     alert(`AI Error: ${msg}`);
@@ -331,11 +358,13 @@ async function initApp() {
                 aiBtn.disabled = false;
                 aiBtn.innerText = "Generate Layout";
             }
-        };
+        }
+
+        aiBtn.addEventListener('click', () => runGeneration(aiInput.value, true));
 
         if (autoPrompt && aiInput) {
             aiInput.value = autoPrompt;
-            aiBtn.click();
+            runGeneration(autoPrompt, false);
         }
     }
 
