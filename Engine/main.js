@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { initUI } from './ui.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+// furniture attributes will be fetched at runtime instead of using import assertions
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { API_KEY } from './config.js';
 
@@ -11,80 +12,107 @@ import { createRoom } from './walls.js';
 import { CollisionEngine } from './collision.js';
 
 if (!API_KEY) {
-  console.error("API_KEY missing! Check your config.js file.");
+    console.error("API_KEY missing! Check your config.js file.");
 }
 
-// ── 1. FURNITURE LIBRARY ──
-const furnitureLibrary = {
-  "assets": [
-    { "file": "Bed King.glb", "id": "king_bed", "category": "sleeping" },
-    { "file": "Bed Twin Old.glb", "id": "twin_bed", "category": "sleeping" },
-    { "file": "Bunk Bed.glb", "id": "bunk_bed", "category": "sleeping" },
-    { "file": "Couch Large.glb", "id": "sofa_large", "category": "seating" },
-    { "file": "Couch Medium.glb", "id": "sofa_medium", "category": "seating" },
-    { "file": "Armchair.glb", "id": "armchair", "category": "seating" },
-    { "file": "Desk.glb", "id": "desk", "category": "workspace" },
-    { "file": "Desk Chair.glb", "id": "chair_standard", "category": "workspace_seating" },
-    { "file": "Desk Chair (2).glb", "id": "chair_exec", "category": "workspace_seating" },
-    { "file": "Bookcase with Books.glb", "id": "bookcase", "category": "storage" },
-    { "file": "Drawer.glb", "id": "drawer", "category": "storage" },
-    { "file": "Dining Set.glb", "id": "dining_set", "category": "dining" },
-    { "file": "Kitchen.glb", "id": "kitchen", "category": "cooking" },
-    { "file": "Night Stand.glb", "id": "nightstand", "category": "accessory" },
-    { "file": "Futuristic Shelf.glb", "id": "shelf_future", "category": "decor" },
-    { "file": "Door_brown.glb", "id": "door_brown", "category": "architectural" },
-    { "file": "Door_white.glb", "id": "door_white", "category": "architectural" }
-  ]
-};
+// wrap initialization in async function so we can await fetching the JSON
+async function initApp() {
+
+    // ── 1. FURNITURE LIBRARY ──
+    // will be filled after loading JSON file
+    let furnitureLibrary;
+    let assetMap;
+
+    // convert a filename to a relative path under models
+    function modelPath(filename) {
+        const asset = assetMap[filename];
+        if (asset) return `../models/${asset.category}/${asset.file}`;
+        return `../models/${filename}`; // fallback
+    }
+
+    // dynamically populate the sidebar with all models
+    function populateModelPanel() {
+        const panel = document.getElementById('model-panel');
+        if (!panel) return;
+        panel.innerHTML = ''; // clear any hardcoded cards
+        furnitureLibrary.assets.forEach(asset => {
+            const card = document.createElement('div');
+            card.className = 'model-card model-load-btn';
+            card.dataset.path = modelPath(asset.file);
+            const icon = document.createElement('div');
+            icon.className = 'icon-box';
+            icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg>';
+            const span = document.createElement('span');
+            span.textContent = asset.name;
+            card.appendChild(icon);
+            card.appendChild(span);
+            panel.appendChild(card);
+        });
+    }
+
+    // fetch attributes file and build library
+    try {
+        const resp = await fetch('../furniture_models/furniture_attributes.json');
+        const data = await resp.json();
+        furnitureLibrary = {
+            assets: data.furniture_library.map(item => ({
+                file: item.file,
+                name: item.name,
+                category: item.category,
+                id: item.name.toLowerCase().replace(/\s+/g, '_')
+            }))
+        };
+    } catch (e) {
+        console.error('Failed to load furniture attributes', e);
+        furnitureLibrary = { assets: [] };
+    }
+
+    // build lookup map and populate panel
+    assetMap = furnitureLibrary.assets.reduce((m, a) => { m[a.file] = a; return m; }, {});
+    populateModelPanel();
+
 
 // ── 2. INITIALIZATION ──
-// Get the specific container for the 3D view
 const container = document.getElementById('canvas-wrapper');
+    if (!container) {
+        console.error('canvas-wrapper element not found in DOM');
+        return;        // abort initialization
+    }
 
 let genAI = null;
 let aiModel = null;
-
 if (API_KEY) {
-  genAI = new GoogleGenerativeAI(API_KEY);
-  aiModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    genAI = new GoogleGenerativeAI(API_KEY);
+    aiModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 }
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x262018); // Matching your new dark aesthetic
+scene.background = new THREE.Color(0x262018);
 
-// Calculate aspect ratio based on the container, not the window
-const camera = new THREE.PerspectiveCamera(
-    75, 
-    container.clientWidth / container.clientHeight, 
-    0.1, 
-    100
-);
+const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 100);
 camera.position.set(8, 8, 8);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-// Set size to fit the container
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
-
-// Append the canvas to the WRAPPER, not the body
 container.appendChild(renderer.domElement);
 
-const loader = new GLTFLoader();
+const loader = new FBXLoader();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 // ── 3. ROOM & PHYSICS ──
-const spawnedFurniture = []; 
+const spawnedFurniture = [];
 let selectedObject = null;
 const roomWidth = 10;
 const roomDepth = 10;
 
-const walls = createRoom(scene, roomWidth, roomDepth); 
+const walls = createRoom(scene, roomWidth, roomDepth);
 const collisionEngine = new CollisionEngine(walls, spawnedFurniture);
 
-const grid = new THREE.GridHelper(roomWidth, 10, 0xCCCCCC, 0xE8E8E8);
-grid.position.y = 0.01; 
+const grid = new THREE.GridHelper(roomWidth, 10, 0xCCCCCC, 0x444444);
+grid.position.y = 0.01;
 scene.add(grid);
 
 // ── 4. LIGHTS ──
@@ -102,85 +130,89 @@ const transform = new TransformControls(camera, renderer.domElement);
 scene.add(transform);
 
 transform.addEventListener('change', () => {
-  if (transform.object && transform.mode === 'translate') {
-    const check = collisionEngine.checkCollision(transform.object);
-    transform.object.traverse(n => {
-      if (n.isMesh) {
-        if (check.isColliding) {
-          n.material.emissive?.set(0xff0000);
-          n.material.emissiveIntensity = 0.5;
-        } else {
-          n.material.emissive?.set(0x000000);
-        }
-      }
-    });
-  }
+    if (transform.object && transform.mode === 'translate') {
+        const check = collisionEngine.checkCollision(transform.object);
+        transform.object.traverse(n => {
+            if (n.isMesh) {
+                if (check.isColliding) {
+                    n.material.emissive?.set(0xff0000);
+                    n.material.emissiveIntensity = 0.5;
+                } else {
+                    n.material.emissive?.set(0x000000);
+                }
+            }
+        });
+    }
 });
 
 transform.addEventListener('dragging-changed', (e) => {
-  orbit.enabled = !e.value;
-  if (!e.value) collisionEngine.updateObstacles();
+    orbit.enabled = !e.value;
+    if (!e.value) collisionEngine.updateObstacles();
 });
 
 // ── 6. SELECTION HELPERS ──
 function selectObject(obj) {
-  if (selectedObject === obj) return;
-  selectedObject = obj;
-  transform.attach(selectedObject);
-  if (ui) ui.showProps(selectedObject);
+    if (selectedObject === obj) return;
+    selectedObject = obj;
+    transform.attach(selectedObject);
+    if (ui) ui.showProps(selectedObject);
 }
 
 function deselectObject() {
-  selectedObject = null;
-  transform.detach();
-  if (ui) ui.hideProps();
+    selectedObject = null;
+    transform.detach();
+    if (ui) ui.hideProps();
 }
 
 // ── 7. CORE LOADING FUNCTIONS ──
 function loadModel(path, config = {}) {
-  return new Promise((resolve) => {
-    loader.load(path, (gltf) => {
-      const model = gltf.scene;
-      
-      const box = new THREE.Box3().setFromObject(model);
-      const size = box.getSize(new THREE.Vector3());
-      const maxDim = Math.max(size.x, size.y, size.z);
-      if (maxDim > 0) model.scale.setScalar(2.5 / maxDim);
+    return new Promise((resolve) => {
+        loader.load(path, (fbx) => {
+            // FBXLoader returns the model directly
+            const model = fbx;
 
-      model.position.set(config.x || 0, 0, config.z || 0);
-      model.rotation.y = config.rotate || 0;
-      model.updateMatrixWorld(true);
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            if (maxDim > 0) model.scale.setScalar(2.5 / maxDim);
 
-      scene.add(model);
-      spawnedFurniture.push(model);
-      collisionEngine.updateObstacles();
-      selectObject(model);
-      resolve(model);
+            model.position.set(config.x || 0, 0, config.z || 0);
+            model.rotation.y = config.rotate || 0;
+            model.updateMatrixWorld(true);
+
+            scene.add(model);
+            spawnedFurniture.push(model);
+            collisionEngine.updateObstacles();
+            selectObject(model);
+            resolve(model);
+        }, undefined, (err) => {
+            console.error("Load error:", err);
+            resolve(null);
+        });
     });
-  });
 }
 
 // ── 8. UI HANDLERS ──
 const ui = initUI(
-  (type) => { /* spawnPrimitive Logic */ },
-  (hex) => {
-    if (selectedObject) {
-      selectedObject.traverse(n => { if (n.isMesh) n.material.color.set(hex); });
-    }
-  },
-  () => {
-    if (selectedObject) {
-      scene.remove(selectedObject);
-      const idx = spawnedFurniture.indexOf(selectedObject);
-      if (idx > -1) spawnedFurniture.splice(idx, 1);
-      collisionEngine.updateObstacles();
-      deselectObject();
-    }
-  },
-  (path) => loadModel(path)
+    (type) => { /* primitive logic */ },
+    (hex) => {
+        if (selectedObject) {
+            selectedObject.traverse(n => { if (n.isMesh) n.material.color.set(hex); });
+        }
+    },
+    () => {
+        if (selectedObject) {
+            scene.remove(selectedObject);
+            const idx = spawnedFurniture.indexOf(selectedObject);
+            if (idx > -1) spawnedFurniture.splice(idx, 1);
+            collisionEngine.updateObstacles();
+            deselectObject();
+        }
+    },
+    (path) => loadModel(path)
 );
 
-// ── 9. AI GENERATION WITH COLLISION PREVENTION ──
+// ── 9. AI GENERATION ──
 const aiBtn = document.getElementById('ai-generate-btn');
 const aiInput = document.getElementById('ai-prompt');
 
@@ -188,150 +220,111 @@ const aiInput = document.getElementById('ai-prompt');
 const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
 
 if (aiBtn) {
-  aiBtn.onclick = async () => {
-    if (!aiModel || !aiInput.value) return;
-    aiBtn.disabled = true;
-    aiBtn.innerText = "Simulating Physics...";
+    aiBtn.onclick = async () => {
+        if (!aiModel || !aiInput.value) return;
+        aiBtn.disabled = true;
+        aiBtn.innerText = "Simulating Physics...";
 
-    try {
-      const prompt = `
-        ACT AS: Senior Interior Architect.
-        ROOM: 10m x 10m. Coordinates: -5 to 5 on X and Z.
-        ASSETS: ${JSON.stringify(furnitureLibrary.assets)}
-        TASK: Layout furniture based on: "${aiInput.value}". 
-        RULES: 
-        1. Give items space (approx 2m apart). 
-        2. Don't place items at exactly (0,0). 
-        3. Output JSON ONLY: [{"file": "name.glb", "x": 1.2, "z": -2.5, "rotate": 1.57}]
-      `;
-
-      const result = await aiModel.generateContent(prompt);
-      const layout = JSON.parse(result.response.text().replace(/```json|```/g, ""));
-
-      // Clean scene
-      deselectObject();
-      spawnedFurniture.forEach(obj => scene.remove(obj));
-      spawnedFurniture.length = 0; 
-
-      // Sequential placement with Nudge logic
-      for (const item of layout) {
-        const path = `../furniture_models/${item.file}`;
-        
-        await new Promise((resolve) => {
-          loader.load(path, (gltf) => {
-            const model = gltf.scene;
+        try {
+            // Inside aiBtn.onclick...
+            const prompt = `
+            ACT AS: Senior Interior Architect.
+            ROOM: 10m x 10m. Bounds: X(-5 to 5), Y(-5 to 5).
             
-            // Normalize Size
-            const box = new THREE.Box3().setFromObject(model);
-            const size = box.getSize(new THREE.Vector3());
-            const maxDim = Math.max(size.x, size.y, size.z);
-            if (maxDim > 0) model.scale.setScalar(2.5 / maxDim);
+            --- STRICT FILENAME MANIFEST ---
+            You MUST ONLY use these exact filenames. Do not invent "bed_double" or "wardrobe":
+            ${furnitureLibrary.assets.map(a => a.file).join(", ")}
+          
+            --- PLACEMENT RULES ---
+            1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
+            2. BOUNDS: All items must stay within X(-5 to 5) and Y(-5 to 5).
+            3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Y=-5) and lay it flat
+            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
+            5. SLEEPING: Place beds with the headboard against a wall.
+          
+            --- OUTPUT FORMAT ---
+            Output JSON ONLY array: [{"file": "Bed Double.fbx", "x": 2.0, "y": -4.0, "rotate": 0}]
             
-            model.rotation.y = item.rotate || 0;
+            USER REQUEST: "${aiInput.value}"
 
-            // Collision Check & Nudge
-            let posX = item.x;
-            let posZ = item.z;
-            let valid = false;
-            let tries = 0;
+  
+`;
+            const result = await aiModel.generateContent(prompt);
+            const layout = JSON.parse(result.response.text().replace(/```json|```/g, ""));
 
-            while (!valid && tries < 10) {
-              model.position.set(posX, 0, posZ);
-              model.updateMatrixWorld(true);
-              
-              const check = collisionEngine.checkCollision(model);
-              if (!check.isColliding) {
-                valid = true;
-              } else {
-                // Nudge random direction if collision found
-                posX += (Math.random() - 0.5) * 1.0;
-                posZ += (Math.random() - 0.5) * 1.0;
-                tries++;
-              }
+            deselectObject();
+            spawnedFurniture.forEach(obj => scene.remove(obj));
+            spawnedFurniture.length = 0;
+
+            for (const item of layout) {
+                // resolve asset location using our map (category-aware)
+                const path = modelPath(item.file);
+                await loadModel(path, { x: item.x, z: item.z, rotate: item.rotate });
             }
-
-            scene.add(model);
-            spawnedFurniture.push(model);
-            collisionEngine.updateObstacles();
-            resolve();
-          });
-        });
-      }
-    } catch (e) {
-      console.error("AI Error:", e);
-    } finally {
-      aiBtn.disabled = false;
-      aiBtn.innerText = "Generate Layout";
-    }
-  };
-
-  // Fire automatically if a prompt was passed in the URL
-  if (autoPrompt && aiInput) {
-    // Wait one frame for the scene to render, then type the prompt in
-    setTimeout(() => {
-      aiInput.classList.add('auto-fill');
-      aiInput.focus();
-
-      // Typewriter effect so the user can see the prompt arrive
-      let i = 0;
-      aiInput.value = '';
-      const type = setInterval(() => {
-        aiInput.value += autoPrompt[i++];
-        if (i >= autoPrompt.length) {
-          clearInterval(type);
-          // Small pause after typing finishes, then generate
-          setTimeout(() => {
-            aiInput.classList.remove('auto-fill');
-            aiBtn.click();
-          }, 400);
+        } catch (e) { console.error(e); }
+        finally {
+            aiBtn.disabled = false;
+            aiBtn.innerText = "Generate Layout";
         }
-      }, 30);
-    }, 600); // give the Three.js scene ~600 ms to initialise
-  }
+    };
 }
 
-// ── 10. MOUSE INTERACTION & LOOP ──
+// ── 10. FIXED MOUSE INTERACTION ──
 window.addEventListener('mousedown', (e) => {
-  if (e.target !== renderer.domElement || transform.dragging) return;
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const hits = raycaster.intersectObjects(spawnedFurniture, true);
-  if (hits.length > 0) {
-    let root = hits[0].object;
-    while (root.parent && root.parent !== scene) root = root.parent;
-    selectObject(root);
-  } else {
-    deselectObject();
-  }
+    // If the user clicked a button or UI element, don't try to select 3D objects
+    if (e.target !== renderer.domElement || transform.dragging) return;
+
+    // FIX: Calculate mouse position relative to the canvas-wrapper
+    const rect = container.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    // Check all objects in the spawnedFurniture array
+    const hits = raycaster.intersectObjects(spawnedFurniture, true);
+
+    if (hits.length > 0) {
+        let clickedObject = hits[0].object;
+
+        // FIND THE ROOT: Move up the parent chain until we find the object in spawnedFurniture
+        let root = clickedObject;
+        while (root.parent && !spawnedFurniture.includes(root)) {
+            root = root.parent;
+        }
+
+        if (spawnedFurniture.includes(root)) {
+            selectObject(root);
+        }
+    } else {
+        deselectObject();
+    }
 });
 
+// Shortcut keys
 window.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
-    if (e.key === 'Escape') deselectObject();
+    if (key === 'escape') deselectObject();
     if (!selectedObject) return;
 
     if (key === 'g') transform.setMode('translate');
-    if (key === 'r') transform.setMode('rotate'); 
-    if (key === 's') transform.setMode('scale'); 
-    if (key === 'l') transform.setSpace(transform.space === 'local' ? 'world' : 'local');
+    if (key === 'r') transform.setMode('rotate');
+    if (key === 's') transform.setMode('scale');
 });
 
-// ── 10. RENDER LOOP ──
-
 function animate() {
-  requestAnimationFrame(animate);
-  orbit.update();
-  renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    orbit.update();
+    renderer.render(scene, camera);
 }
 animate();
 
 window.addEventListener('resize', () => {
-  const width = container.clientWidth;
-  const height = container.clientHeight;
-
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-  
-  renderer.setSize(width, height);
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
 });
+
+} // end initApp
+
+initApp().catch(err => console.error('initApp error', err));
