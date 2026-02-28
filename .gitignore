@@ -2,8 +2,12 @@
 .env.local
 node_modules/
 dist/
+<<<<<<< Updated upstream
 config.js
 
 .env
 .env.local
 dist/
+=======
+config.js
+>>>>>>> Stashed changes
