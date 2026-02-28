@@ -55,41 +55,38 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
         const rd = roomManager.roomDepth;
         const hw = (rw / 2).toFixed(2);
         const hd = (rd / 2).toFixed(2);
-        const prompt = `ACT AS: Senior Interior Architect & CAD Expert.
+const prompt = `ACT AS: Master Interior Architect & CAD Expert.
 ROOM SIZE: ${rw}m x ${rd}m. Bounds: X(-${hw} to ${hw}), Z(-${hd} to ${hd}).
 ROOM TYPE: ${roomType || 'General'}
 
 --- ASSET LIBRARY ---
 ${fileList}
 
---- STRICT PLACEMENT & STACKING RULES ---
-1. NO DOORS: Never place door assets. Doors are already part of the room structure.
+--- DESIGN PHILOSOPHY: SIMPLE & ELEGANT ---
+1. INTENTIONALITY: Every object must serve a purpose. Avoid clutter. If an item doesn't add to the function or elegance of the room, exclude it.
+2. ZONING: Divide the room into logical zones (e.g., Workspace, Relaxation, Sleeping). Do not mix unrelated furniture (e.g., don't put a Desk next to a Toilet).
+3. PROPORTION: Ensure large items (Sofa, Bed) have enough breathing room.
 
-2. GROUNDING (Y=0): 
-   - Items with "placeable": false (Beds, Desks, Sofas, Tables, TV Stands) MUST have Y=0.
-   - These are your "Base Furniture."
+--- STRICT RELATIONSHIP LOGIC (Surface Pairing) ---
+Only place accessories on logical surfaces. If a required surface is missing, do not place the accessory.
+1. DESK/OFFICE: Monitor, Keyboard, Mouse, Laptop, Pc, Desk Lamps.
+2. TV STANDS/CONSOLES: TV A, TV B, Speakers, Game Consoles.
+3. NIGHTSTANDS/SIDE TABLES: Alarm Clocks, Small Lamps, Tablets, Mugs.
+4. SHELVES: Books, Vases, small Plants.
+5. DINING TABLES: Plates, Glasses, Pans.
+6. PROHIBITED: NEVER place Electronics/Lamps on Beds, Sofas, or the Floor. NEVER stack heavy furniture.
 
-3. SURFACE STACKING (Y > 0):
-   - Items with "placeable": true (Keyboards, Laptops, Monitors, Speakers, Lamps, Books) MUST be placed on a Base item.
-   - Set the accessory's (X, Z) to overlap with the Base item's coordinates.
-   - Set the accessory's Y value to the EXACT Height (H) of the furniture it is sitting on.
-   - Example: If a Desk (H: 0.75m) is at (X: 2, Z: 3), then a Keyboard MUST be at (X: 2.2, Y: 0.75, Z: 3).
+--- COORDINATE PRECISION (10cm Tolerance) ---
+1. PARENT-CHILD ALIGNMENT: accessories (placeable: true) MUST use the EXACT same (X, Z) as their base furniture to ensure successful snapping.
+2. Y-VALUE: Must equal the exact Height (H) of the base item.
+3. WALL SNAPPING: Large furniture (Beds, Wardrobes, Desks) backs must be flush against walls (X or Z near room bounds).
 
-4. COMMON SENSE LOGIC:
-   - Televisions go on TV Stands or Media Consoles.
-   - Monitors, Keyboards, and Mice go on Desks.
-   - Lamps and Alarm Clocks go on Nightstands or Side Tables.
-   - Do not place random items in the center of the floor.
+--- ORIENTATION & FLOW ---
+1. SOCIAL FOCUS: Seating and Media MUST face each other. Point the "front" of chairs toward the focal point (TV or Desk).
+2. CLEARANCE: Maintain at least a 1.2m clear walking path through the center. No "islands" of furniture blocking movement.
+3. SYMMETRY: Aim for balanced layouts (e.g., centered beds, paired nightstands).
 
-5. SOCIAL & VISUAL ORIENTATION:
-   - Seating (Chairs, Sofas) and Televisions MUST face each other.
-   - Rotate items using Radians (0 to 6.28). Point the "front" of chairs toward the "front" of desks or TVs.
-
-6. SPATIAL AESTHETICS:
-   - Keep a 1.2m clear path for walking. 
-   - Snap large furniture backs against walls (coordinates near the Bounds).
-
-OUTPUT: Return a JSON array ONLY. No markdown, no prose.
+OUTPUT: Return a JSON array ONLY.
 Format: [{"file":"name.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":0.0}]
 
 USER REQUEST: "${userText}"`;

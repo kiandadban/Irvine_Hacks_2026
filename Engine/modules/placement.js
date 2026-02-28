@@ -17,55 +17,58 @@ export function createPlacer(
             loader.load(path, (model) => {
                 model.userData.attributes = asset; 
 
-                // 1. Scaling
+                // 1. PHYSICAL SCALING & ROTATION
                 const rawBox = new THREE.Box3().setFromObject(model);
                 const rawSize = rawBox.getSize(new THREE.Vector3());
                 const targetW = asset.dimensions?.width ?? 1.0;
                 if (rawSize.x > 0) model.scale.setScalar(targetW / rawSize.x);
                 model.rotation.y = itemConfig.rotate ?? 0;
 
-                // 2. SURFACE DETECTION WITH TOLERANCE
-                let targetY = itemConfig.y ?? 0;
-                const TOLERANCE = 0.6; // Allow the item to snap to furniture within 60cm
+                // 2. PRECISION SURFACE DETECTION
+                let targetY = 0; 
+                // Reduced from 0.8 to 0.1 (10cm) for strict precision
+                const PRECISION_TOLERANCE = 0.1; 
 
                 if (asset.placeable) {
-                    // Find the best supporting furniture nearby
                     let bestSurface = null;
-                    let minDistance = TOLERANCE;
+                    const surfaceCategories = ['Tables', 'Drawers', 'Shelves', 'Electronics'];
 
                     spawnedFurniture.forEach(f => {
                         const fAttrs = f.userData.attributes;
-                        if (fAttrs.placeable) return; // Ignore other small items
+                        if (fAttrs.placeable || !surfaceCategories.includes(fAttrs.category)) return;
 
+                        // Create a bounding box for the surface item
                         const fBox = new THREE.Box3().setFromObject(f);
-                        const center = fBox.getCenter(new THREE.Vector3());
                         
-                        // Calculate horizontal distance from AI point to furniture center
-                        const dist = new THREE.Vector2(itemConfig.x, itemConfig.z)
-                                        .distanceTo(new THREE.Vector2(center.x, center.z));
+                        // Check if the coordinate is WITHIN the furniture's horizontal area
+                        // We add a tiny 10cm "padding" so it doesn't have to be pixel-perfect
+                        const isOver = (
+                            itemConfig.x >= (fBox.min.x - PRECISION_TOLERANCE) &&
+                            itemConfig.x <= (fBox.max.x + PRECISION_TOLERANCE) &&
+                            itemConfig.z >= (fBox.min.z - PRECISION_TOLERANCE) &&
+                            itemConfig.z <= (fBox.max.z + PRECISION_TOLERANCE)
+                        );
 
-                        if (dist < minDistance) {
-                            minDistance = dist;
-                            bestSurface = f;
+                        if (isOver) {
+                            // If multiple surfaces overlap, pick the highest one (stacking logic)
+                            if (!bestSurface || fBox.max.y > bestSurface.max.y) {
+                                bestSurface = { obj: f, max: fBox.max.y };
+                            }
                         }
                     });
 
                     if (bestSurface) {
-                        const sBox = new THREE.Box3().setFromObject(bestSurface);
-                        targetY = sBox.max.y; 
-                        // Snap the item's X/Z slightly toward the surface center if it's hanging off
-                        // (Optional: keeps things looking centered on the desk)
-                    } else if (targetY === 0) {
-                        // If no surface is found nearby and Y is 0, we give it a default "Table Height" 
-                        // rather than rejecting it, just in case.
-                        targetY = 0.75; 
-                        console.warn(`[Placer] ${asset.name} found no surface, using default height.`);
+                        targetY = bestSurface.max; 
+                    } else {
+                        // If not over furniture, place on floor
+                        targetY = 0; 
                     }
                 }
 
-                // 3. Grounding Math
+                // 3. APPLY POSITION WITH PIVOT CORRECTION
                 model.position.set(itemConfig.x, 0, itemConfig.z);
                 model.updateMatrixWorld(true);
+
                 const currentBox = new THREE.Box3().setFromObject(model);
                 const bottomOffset = currentBox.min.y - model.position.y;
                 
@@ -73,15 +76,21 @@ export function createPlacer(
                 model.position.y = (floorLevel + targetY) - bottomOffset;
                 model.updateMatrixWorld(true);
 
-                // 4. Collision Softening
+                // 4. PHYSICS VALIDATION
                 const check = collisionEngine.checkCollision(model);
-                let collisionDetected = check.isColliding;
+                let isBlocked = check.isColliding;
 
-                // If it's a placeable item, we effectively ignore collisions 
-                // so it doesn't get "nudged" off the desk by the desk itself.
-                if (asset.placeable) collisionDetected = false;
+                // Only allow overlap with the "Base" furniture, not other placeable items
+                if (asset.placeable) {
+                    // Check if we hit another small object
+                    if (check.collider?.userData?.attributes?.placeable) {
+                        isBlocked = true;
+                    } else {
+                        isBlocked = false;
+                    }
+                }
 
-                if (!collisionDetected) {
+                if (!isBlocked) {
                     scene.add(model);
                     spawnedFurniture.push(model);
                     collisionEngine.updateObstacles();
