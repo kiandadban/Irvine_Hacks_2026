@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Three.js Scene</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+    canvas { display: block; }
+
+    #ui {
+      position: fixed;
+      top: 32px;
+      left: 32px;
+      color: rgba(255,255,255,0.5);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      line-height: 2;
+      pointer-events: none;
+    }
+    #ui span {
+      display: block;
+      color: rgba(255,255,255,0.2);
+    }
+
+    #crosshair {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+    }
+    #crosshair::before, #crosshair::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.15);
+    }
+    #crosshair::before { width: 1px; height: 100%; left: 50%; }
+    #crosshair::after  { height: 1px; width: 100%; top: 50%; }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    Three.js — Basic Scene
+    <span>Drag to orbit &nbsp;·&nbsp; Scroll to zoom</span>
+  </div>
+  <div id="crosshair"></div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js"
+      }
+    }
+  </script>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
