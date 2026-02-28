@@ -462,7 +462,7 @@
       "name": "Lamp B",
       "file": "Lamp B.fbx",
       "category": "Lights",
-      "placeable": false,
+      "placeable": true,
       "dimensions": { "width": 0.3, "depth": 0.3, "height": 1.6 },
       "shopping": { "store": "IKEA", "price": 60.00, "url": "https://www.ikea.com/us/en/p/hektar-floor-lamp-with-led-bulb-dark-gray-70416276/" }
     },
