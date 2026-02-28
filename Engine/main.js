@@ -16,7 +16,8 @@ async function initApp() {
     let assetMap;
     const spawnedFurniture = [];
     let selectedObject = null;
-    const roomSize = 10;
+    let roomWidth = 10;
+    let roomDepth = 10;
 
     const modelPath = (filename) => {
         const asset = assetMap[filename];
@@ -52,9 +53,28 @@ async function initApp() {
     const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 100);
     camera.position.set(8, 8, 8);
 
-    const walls = createRoom(scene, roomSize, roomSize);
-    const collisionEngine = new CollisionEngine(walls, spawnedFurniture, roomSize);
-    scene.add(new THREE.GridHelper(roomSize, 10, 0xCCCCCC, 0x444444));
+    let { walls: currentWalls, floor: roomFloor } = createRoom(scene, roomWidth, roomDepth);
+    const collisionEngine = new CollisionEngine(currentWalls, spawnedFurniture, roomWidth, roomDepth);
+    let grid = new THREE.GridHelper(roomWidth, roomWidth, 0xCCCCCC, 0x444444);
+    grid.scale.z = roomDepth / roomWidth;
+    grid.position.y = 0.01;
+    scene.add(grid);
+
+    function rebuildRoom(newWidth, newDepth) {
+        currentWalls.forEach(w => scene.remove(w));
+        scene.remove(roomFloor);
+        scene.remove(grid);
+        roomWidth = newWidth;
+        roomDepth = newDepth;
+        const result = createRoom(scene, roomWidth, roomDepth);
+        currentWalls = result.walls;
+        roomFloor = result.floor;
+        grid = new THREE.GridHelper(roomWidth, roomWidth, 0xCCCCCC, 0x444444);
+        grid.scale.z = roomDepth / roomWidth;
+        grid.position.y = 0.01;
+        scene.add(grid);
+        collisionEngine.updateWalls(currentWalls, roomWidth, roomDepth);
+    }
 
     // Lights
     scene.add(new THREE.AmbientLight(0xffffff, 0.8));
@@ -153,8 +173,8 @@ async function initApp() {
                         // Nudge slightly and clamp to room
                         posX += (Math.random() - 0.5) * 1.5;
                         posZ += (Math.random() - 0.5) * 1.5;
-                        posX = Math.max(-4.5, Math.min(4.5, posX));
-                        posZ = Math.max(-4.5, Math.min(4.5, posZ));
+                        posX = Math.max(-(roomWidth/2 - 0.5), Math.min(roomWidth/2 - 0.5, posX));
+                        posZ = Math.max(-(roomDepth/2 - 0.5), Math.min(roomDepth/2 - 0.5, posZ));
                         attempts++;
                     }
                 }
@@ -187,6 +207,22 @@ async function initApp() {
     const aiInput = document.getElementById('ai-prompt');
 
     if (aiBtn) {
+        // Slider wiring
+        const widthSlider  = document.getElementById('widthSlider');
+        const lengthSlider = document.getElementById('lengthSlider');
+        const wValEl = document.getElementById('wVal');
+        const lValEl = document.getElementById('lVal');
+        if (widthSlider) widthSlider.addEventListener('input', () => {
+            roomWidth = parseFloat(widthSlider.value);
+            if (wValEl) wValEl.textContent = roomWidth.toFixed(1);
+            rebuildRoom(roomWidth, roomDepth);
+        });
+        if (lengthSlider) lengthSlider.addEventListener('input', () => {
+            roomDepth = parseFloat(lengthSlider.value);
+            if (lValEl) lValEl.textContent = roomDepth.toFixed(1);
+            rebuildRoom(roomWidth, roomDepth);
+        });
+
         aiBtn.onclick = async () => {
             if (!aiModel || !aiInput.value) return;
             aiBtn.disabled = true;
@@ -195,7 +231,7 @@ async function initApp() {
             try {
                 const prompt = `
             ACT AS: Senior Interior Architect.
-            ROOM: 10m x 10m. Bounds: X(-5 to 5), Z(-5 to 5).
+            ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(-${roomWidth/2} to ${roomWidth/2}), Z(-${roomDepth/2} to ${roomDepth/2}).
             
             --- STRICT FILENAME MANIFEST ---
             You MUST ONLY use these exact filenames. Do not invent "bed_double" or "wardrobe":
@@ -203,7 +239,7 @@ async function initApp() {
           
             --- PLACEMENT RULES ---
             1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
-            2. BOUNDS: All items must stay within X(-5 to 5) and Z(-5 to 5).
+            2. BOUNDS: All items must stay within X(-${roomWidth/2} to ${roomWidth/2}) and Z(-${roomDepth/2} to ${roomDepth/2}).
             3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Z=-5) and lay it flat
             4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
             5. SLEEPING: Place beds with the headboard against a wall.

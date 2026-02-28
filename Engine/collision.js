@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 
 export class CollisionEngine {
-  constructor(walls, spawnedFurniture, roomSize = 10) {
+  constructor(walls, spawnedFurniture, roomWidth = 10, roomDepth = 10) {
     this.walls = walls; 
     this.furniture = spawnedFurniture;
-    this.roomLimit = roomSize / 2; // e.g., 5 for a 10x10 room
+    this.roomLimitX = roomWidth / 2;
+    this.roomLimitZ = roomDepth / 2;
     
     // Pre-allocate objects to avoid Garbage Collection spikes
     this._movingBox = new THREE.Box3();
@@ -25,6 +26,13 @@ export class CollisionEngine {
     });
   }
 
+  updateWalls(newWalls, newRoomWidth, newRoomDepth) {
+    this.walls = newWalls;
+    this.roomLimitX = newRoomWidth / 2;
+    this.roomLimitZ = newRoomDepth / 2;
+    this.updateObstacles();
+  }
+
   /**
    * @param {THREE.Object3D} movingObject - The object being moved/placed.
    * @returns {Object} Collision status and type.
@@ -37,10 +45,10 @@ export class CollisionEngine {
     // 2. Room Boundary Check (The most reliable wall collision)
     // Checks if the object is poking outside the -5 to 5 range
     if (
-      this._movingBox.min.x < -this.roomLimit || 
-      this._movingBox.max.x > this.roomLimit ||
-      this._movingBox.min.z < -this.roomLimit || 
-      this._movingBox.max.z > this.roomLimit
+      this._movingBox.min.x < -this.roomLimitX || 
+      this._movingBox.max.x > this.roomLimitX ||
+      this._movingBox.min.z < -this.roomLimitZ || 
+      this._movingBox.max.z > this.roomLimitZ
     ) {
       return { isColliding: true, type: 'boundary' };
     }
