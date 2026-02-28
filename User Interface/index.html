@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoomAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #F7F3EE;
+    --bg2:     #EFE9E0;
+    --bg3:     #E4DDD3;
+    --ink:     #1A1815;
+    --ink2:    #3C3830;
+    --ink3:    #8A847A;
+    --teal:    #1F6060;
+    --teal-lt: #E8F2F2;
+    --teal-md: #2D7A7A;
+    --gold:    #B8853A;
+    --gold-lt: #FBF4E8;
+    --red:     #C0392B;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 50px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--bg3);
+    display: flex; align-items: center; padding: 0 24px;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600; letter-spacing: -0.2px;
+    color: var(--ink); display: flex; align-items: center; gap: 9px;
+  }
+  .logo-mark {
+    width: 22px; height: 22px; border-radius: 5px;
+    background: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-mark svg { width: 13px; height: 13px; stroke: #fff; fill: none; }
+  .nav {
+    margin-left: auto; display: flex; align-items: center; gap: 24px;
+  }
+  .nav a {
+    font-size: 12.5px; color: var(--ink3); text-decoration: none;
+    letter-spacing: 0.02em; transition: color 0.18s; cursor: pointer;
+  }
+  .nav a:hover { color: var(--ink); }
+  .nav-pill {
+    font-size: 11px; font-weight: 500;
+    background: var(--gold-lt); color: var(--gold);
+    border: 1px solid #E8CFA0;
+    padding: 3px 11px; border-radius: 20px; letter-spacing: 0.04em;
+  }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; height: 100vh; padding-top: 50px; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 360px; flex-shrink: 0;
+    background: var(--bg);
+    border-right: 1px solid var(--bg3);
+    display: flex; flex-direction: column;
+    overflow-y: auto; padding: 36px 30px 40px;
+  }
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+  .hero-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; line-height: 1.15; font-weight: 600;
+    color: var(--ink); margin-bottom: 10px;
+  }
+  .hero-text em { font-style: italic; color: var(--teal); }
+  .hero-sub {
+    font-size: 13px; color: var(--ink3); line-height: 1.65;
+    font-weight: 300; margin-bottom: 36px;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink3);
+    margin-bottom: 14px; margin-top: 28px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--bg3);
+  }
+  .section-label:first-of-type { margin-top: 0; }
+
+  /* Room type selector */
+  .room-types {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px; margin-bottom: 4px;
+  }
+  .room-type-btn {
+    padding: 10px 6px;
+    background: var(--bg2);
+    border: 1.5px solid var(--bg3);
+    border-radius: 8px;
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    cursor: pointer; transition: all 0.18s;
+  }
+  .room-type-btn:hover { border-color: var(--teal); background: var(--teal-lt); }
+  .room-type-btn.active {
+    border-color: var(--teal); background: var(--teal-lt);
+    box-shadow: 0 0 0 3px rgba(31,96,96,0.08);
+  }
+  .room-type-btn svg { width: 20px; height: 20px; stroke: var(--ink3); fill: none; stroke-width: 1.4; }
+  .room-type-btn.active svg { stroke: var(--teal); }
+  .room-type-btn span {
+    font-size: 11px; color: var(--ink3); font-weight: 400;
+  }
+  .room-type-btn.active span { color: var(--teal); font-weight: 500; }
+
+  /* Dimension sliders */
+  .dim-row {
+    margin-bottom: 18px;
+  }
+  .dim-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .dim-label {
+    font-size: 12.5px; color: var(--ink2); font-weight: 400;
+  }
+  .dim-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; font-weight: 600; color: var(--ink);
+  }
+  .dim-unit { font-size: 11px; color: var(--ink3); margin-left: 2px; }
+
+  .track-wrap { position: relative; height: 18px; display: flex; align-items: center; }
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 3px; outline: none;
+    border-radius: 2px; cursor: pointer;
+    background: linear-gradient(to right, var(--teal) 0%, var(--teal) var(--pct, 50%), var(--bg3) var(--pct, 50%), var(--bg3) 100%);
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    border-radius: 50%; background: var(--bg);
+    border: 2px solid var(--teal);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    transition: transform 0.15s;
+  }
+  input[type=range]:hover::-webkit-slider-thumb { transform: scale(1.15); }
+
+  /* Vibe input */
+  .vibe-wrap { position: relative; }
+  .vibe-textarea {
+    width: 100%; height: 72px;
+    background: var(--bg2);
+    border: 1.5px solid var(--bg3);
+    border-radius: 9px;
+    padding: 11px 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--ink); line-height: 1.5;
+    resize: none; outline: none; transition: border-color 0.18s;
+  }
+  .vibe-textarea:focus { border-color: var(--teal); background: var(--bg); }
+  .vibe-textarea::placeholder { color: var(--ink3); }
+
+  /* Vibe chips */
+  .vibe-chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+  }
+  .chip {
+    font-size: 11.5px; padding: 4px 11px;
+    background: var(--bg2); border: 1px solid var(--bg3);
+    border-radius: 20px; color: var(--ink3); cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-lt); }
+
+  /* Budget */
+  .budget-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  /* CTA */
+  .cta-btn {
+    width: 100%; margin-top: 28px;
+    padding: 13px;
+    background: var(--teal);
+    color: #fff; border: none; border-radius: 9px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px; font-weight: 500;
+    cursor: pointer; letter-spacing: 0.02em;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.18s, transform 0.12s;
+    box-shadow: 0 2px 16px rgba(31,96,96,0.22);
+  }
+  .cta-btn:hover { background: #165050; transform: translateY(-1px); }
+  .cta-btn:active { transform: translateY(0); }
+  .cta-arrow {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cta-arrow svg { width: 10px; height: 10px; stroke: #fff; fill: none; }
+
+  /* ── CANVAS ── */
+  .canvas-area {
+    flex: 1; position: relative; overflow: hidden;
+    background: #262018;
+  }
+
+  /* Subtle vignette */
+  .canvas-area::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 50%, transparent 40%, rgba(15,12,8,0.45) 100%);
+    pointer-events: none; z-index: 2;
+  }
+
+  /* Floating scene */
+  .room-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;
+  }
+  .room-float {
+    animation: float 7s ease-in-out infinite;
+    filter: drop-shadow(0 50px 100px rgba(0,0,0,0.6));
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  /* Ambient glow behind room */
+  .room-glow {
+    position: absolute;
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(31,96,96,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glowPulse 5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes glowPulse {
+    0%,100% { opacity: 0.6; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.08); }
+  }
+
+  /* Canvas UI overlays */
+  .canvas-top {
+    position: absolute; top: 20px; right: 20px;
+    display: flex; flex-direction: column; gap: 7px;
+    z-index: 10;
+  }
+  .icon-btn {
+    width: 36px; height: 36px;
+    background: rgba(247,243,238,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(247,243,238,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.18s;
+  }
+  .icon-btn:hover { background: rgba(247,243,238,0.2); }
+  .icon-btn svg { width: 14px; height: 14px; stroke: rgba(247,243,238,0.65); fill: none; stroke-width: 1.5; }
+
+  /* Bottom bar */
+  .canvas-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 20px 28px;
+    display: flex; align-items: center; gap: 14px;
+    z-index: 10;
+    background: linear-gradient(to top, rgba(15,12,8,0.5) 0%, transparent 100%);
+  }
+  .example-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(15,12,8,0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(247,243,238,0.12);
+    border-radius: 22px; padding: 8px 18px;
+    font-size: 12px; color: rgba(247,243,238,0.7);
+    letter-spacing: 0.03em; font-weight: 300;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+    animation: blink 2.5s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+  }
+
+  /* Room info tag */
+  .room-info-tags {
+    margin-left: auto; display: flex; gap: 8px;
+  }
+  .room-tag {
+    font-size: 11px; color: rgba(247,243,238,0.5);
+    background: rgba(247,243,238,0.07);
+    border: 1px solid rgba(247,243,238,0.1);
+    padding: 5px 12px; border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Furniture labels floating in scene */
+  .label-float {
+    position: absolute;
+    background: rgba(247,243,238,0.1);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(247,243,238,0.15);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 10.5px; color: rgba(247,243,238,0.6);
+    letter-spacing: 0.04em;
+    z-index: 5;
+    pointer-events: none;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .label-float::before {
+    content: '';
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); opacity: 0.8;
+  }
+
+  /* Grain texture */
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px;
+  }
+
+  /* Entrance animations */
+  .fade-up { opacity:0; transform:translateY(14px); animation: fu 0.55s ease forwards; }
+  @keyframes fu { to { opacity:1; transform:translateY(0); } }
+  .d1{animation-delay:.08s} .d2{animation-delay:.16s} .d3{animation-delay:.24s}
+  .d4{animation-delay:.34s} .d5{animation-delay:.44s} .d6{animation-delay:.56s}
+  .d7{animation-delay:.68s} .d8{animation-delay:.82s}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="logo fade-up">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <path d="M3 9h18M9 21V9"/>
+      </svg>
+    </div>
+    RoomAI
+  </div>
+  <nav class="nav fade-up d1">
+    <a>How it works</a>
+    <a>Examples</a>
+    <span class="nav-pill">Free Beta</span>
+  </nav>
+</header>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <h1 class="hero-text fade-up d1">
+      Furnish any room,<br><em>instantly.</em>
+    </h1>
+    <p class="hero-sub fade-up d2">
+      Tell us your room size, describe your style, and AI places the furniture. Shop the full look in one click.
+    </p>
+
+    <!-- Step 1: Room type -->
+    <div class="section-label fade-up d3">Room type</div>
+    <div class="room-types fade-up d3">
+      <div class="room-type-btn active" onclick="selectRoom(this)">
+        <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5V21H3V10.5z"/><rect x="9" y="15" width="6" height="6"/></svg>
+        <span>Living</span>
+      </div>
+      <div class="room-type-btn" onclick="selectRoom(this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="1"/><path d="M7 11V8a2 2 0 014 0v3M13 11V8a2 2 0 014 0v3"/></svg>
+        <span>Bedroom</span>
+      </div>
+      <div class="room-type-btn" onclick="selectRoom(this)">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        <span>Office</span>
+      </div>
+      <div class="room-type-btn" onclick="selectRoom(this)">
+        <svg viewBox="0 0 24 24"><path d="M3 20h18M5 20V10l7-7 7 7v10"/><path d="M9 20v-5h6v5"/></svg>
+        <span>Dining</span>
+      </div>
+      <div class="room-type-btn" onclick="selectRoom(this)">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg>
+        <span>Studio</span>
+      </div>
+      <div class="room-type-btn" onclick="selectRoom(this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>Other</span>
+      </div>
+    </div>
+
+    <!-- Step 2: Dimensions -->
+    <div class="section-label fade-up d4">Room dimensions</div>
+
+    <div class="dim-row fade-up d4">
+      <div class="dim-header">
+        <span class="dim-label">Width</span>
+        <span><span class="dim-value" id="wVal">4.5</span><span class="dim-unit">m</span></span>
+      </div>
+      <div class="track-wrap">
+        <input type="range" id="widthSlider" min="2" max="12" step="0.5" value="4.5"
+          oninput="updateDim('wVal',this,'width')">
+      </div>
+    </div>
+
+    <div class="dim-row fade-up d4">
+      <div class="dim-header">
+        <span class="dim-label">Length</span>
+        <span><span class="dim-value" id="lVal">5.0</span><span class="dim-unit">m</span></span>
+      </div>
+      <div class="track-wrap">
+        <input type="range" id="lengthSlider" min="2" max="14" step="0.5" value="5.0"
+          oninput="updateDim('lVal',this,'length')">
+      </div>
+    </div>
+
+    <div class="dim-row fade-up d4">
+      <div class="dim-header">
+        <span class="dim-label">Ceiling height</span>
+        <span><span class="dim-value" id="hVal">2.7</span><span class="dim-unit">m</span></span>
+      </div>
+      <div class="track-wrap">
+        <input type="range" id="heightSlider" min="2.2" max="4" step="0.1" value="2.7"
+          oninput="updateDim('hVal',this,'height')">
+      </div>
+    </div>
+
+    <!-- Step 3: Vibe -->
+    <div class="section-label fade-up d5">Style &amp; vibe</div>
+    <div class="vibe-wrap fade-up d5">
+      <textarea class="vibe-textarea" id="vibeInput"
+        placeholder="cozy scandinavian, lots of natural light, cat owner…"></textarea>
+    </div>
+    <div class="vibe-chips fade-up d6">
+      <span class="chip" onclick="addChip(this)">Scandinavian</span>
+      <span class="chip" onclick="addChip(this)">Industrial</span>
+      <span class="chip" onclick="addChip(this)">Japandi</span>
+      <span class="chip" onclick="addChip(this)">Mid-century</span>
+      <span class="chip" onclick="addChip(this)">Maximalist</span>
+      <span class="chip" onclick="addChip(this)">Boho</span>
+    </div>
+
+    <!-- Step 4: Budget -->
+    <div class="section-label fade-up d6">Budget</div>
+    <div class="dim-row fade-up d6">
+      <div class="dim-header">
+        <span class="dim-label">Total spend</span>
+        <span><span class="dim-value" id="bVal">$1,500</span></span>
+      </div>
+      <div class="track-wrap">
+        <input type="range" id="budgetSlider" min="500" max="10000" step="100" value="1500"
+          oninput="updateBudget(this)">
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <button class="cta-btn fade-up d7">
+      Furnish my room
+      <div class="cta-arrow">
+        <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </button>
+
+  </aside>
+
+  <!-- ── CANVAS ── -->
+  <main class="canvas-area">
+
+    <div class="room-glow" style="top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+
+    <div class="room-wrap fade-up d2">
+      <div class="room-float">
+        <svg width="640" height="500" viewBox="0 0 640 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="fl" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#CEC3AF"/>
+              <stop offset="100%" stop-color="#B8AC98"/>
+            </linearGradient>
+            <linearGradient id="wb" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3A3530"/>
+              <stop offset="100%" stop-color="#2E2A25"/>
+            </linearGradient>
+            <linearGradient id="wl" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#302C28"/>
+              <stop offset="100%" stop-color="#252220"/>
+            </linearGradient>
+            <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#6B9AB8"/>
+              <stop offset="60%" stop-color="#9DC4D8"/>
+              <stop offset="100%" stop-color="#B8D8E8"/>
+            </linearGradient>
+            <linearGradient id="wglow" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="rgba(180,220,240,0)" />
+              <stop offset="100%" stop-color="rgba(180,220,240,0.18)"/>
+            </linearGradient>
+            <linearGradient id="sofaBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6E8B6E"/>
+              <stop offset="100%" stop-color="#5A7A5A"/>
+            </linearGradient>
+            <linearGradient id="sofaBack" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#587058"/>
+              <stop offset="100%" stop-color="#486048"/>
+            </linearGradient>
+            <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(232,210,140,0.35)"/>
+              <stop offset="100%" stop-color="rgba(232,210,140,0)"/>
+            </radialGradient>
+            <radialGradient id="winGlow" cx="50%" cy="0%" r="100%">
+              <stop offset="0%" stop-color="rgba(157,196,216,0.18)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+            <filter id="sofaShadow">
+              <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="rgba(0,0,0,0.4)"/>
+            </filter>
+            <filter id="shelfShadow">
+              <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(0,0,0,0.35)"/>
+            </filter>
+            <pattern id="grid" width="42" height="38" patternUnits="userSpaceOnUse">
+              <path d="M42 0 L0 0 0 38" fill="none" stroke="rgba(160,150,135,0.25)" stroke-width="0.7"/>
+            </pattern>
+          </defs>
+
+          <!-- Left wall (dark) -->
+          <polygon points="60,110 60,400 300,472 300,182" fill="url(#wl)"/>
+          <polygon points="60,110 60,400 300,472 300,182" fill="rgba(255,255,255,0.02)"/>
+
+          <!-- Back wall (slightly lighter dark) -->
+          <polygon points="60,110 300,38 540,110 300,182" fill="url(#wb)"/>
+
+          <!-- Floor -->
+          <polygon points="60,400 300,472 540,400 300,328" fill="url(#fl)"/>
+          <polygon points="60,400 300,472 540,400 300,328" fill="url(#grid)" opacity="0.8"/>
+
+          <!-- Window on back wall -->
+          <polygon points="170,85 256,58 256,148 170,175" fill="url(#sky)"/>
+          <line x1="213" y1="58" x2="213" y2="148" stroke="rgba(80,70,60,0.6)" stroke-width="1.8"/>
+          <line x1="170" y1="117" x2="256" y2="103" stroke="rgba(80,70,60,0.6)" stroke-width="1.8"/>
+          <!-- Window frame -->
+          <polygon points="170,85 256,58 256,148 170,175" fill="none" stroke="rgba(90,80,68,0.8)" stroke-width="2.5"/>
+          <!-- Window light spill on floor -->
+          <polygon points="145,400 200,340 310,368 240,430" fill="url(#winGlow)"/>
+
+          <!-- Wall sconce / art  -->
+          <polygon points="338,72 416,96 416,156 338,132" fill="#2A2520" stroke="rgba(90,80,68,0.6)" stroke-width="1.5"/>
+          <polygon points="344,78 410,100 410,150 344,128" fill="#3A3020" opacity="0.9"/>
+          <!-- Abstract art marks -->
+          <line x1="355" y1="110" x2="400" y2="122" stroke="#B8853A" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="368" cy="105" r="8" fill="none" stroke="#8A6A3A" stroke-width="1.2" opacity="0.6"/>
+          <line x1="380" y1="128" x2="402" y2="118" stroke="#6E8B6E" stroke-width="1.5" opacity="0.6"/>
+
+          <!-- Baseboard -->
+          <polygon points="62,398 300,470 538,398 540,402 300,475 60,403" fill="rgba(255,255,255,0.04)"/>
+
+          <!-- RUG -->
+          <polygon points="120,416 200,440 420,406 340,382" fill="#7A3A18" opacity="0.7"/>
+          <polygon points="128,414 204,437 412,405 338,384" fill="none" stroke="rgba(200,160,100,0.18)" stroke-width="1.2"/>
+          <polygon points="136,412 208,434 404,404 336,386" fill="none" stroke="rgba(200,160,100,0.1)" stroke-width="0.8"/>
+
+          <!-- SOFA (sage green) -->
+          <g filter="url(#sofaShadow)">
+            <!-- Sofa body/seat -->
+            <polygon points="108,358 222,326 222,298 108,330" fill="url(#sofaBody)"/>
+            <!-- Sofa back -->
+            <polygon points="108,330 222,298 222,272 108,304" fill="url(#sofaBack)"/>
+            <!-- Left arm -->
+            <polygon points="108,358 126,352 126,298 108,304" fill="#486048"/>
+            <!-- Right arm -->
+            <polygon points="204,334 222,328 222,272 204,278" fill="#486048"/>
+            <!-- Cushions -->
+            <polygon points="113,325 156,312 156,300 113,313" fill="#7A9A7A" stroke="#5A7A5A" stroke-width="0.6"/>
+            <polygon points="160,316 203,303 203,291 160,304" fill="#7A9A7A" stroke="#5A7A5A" stroke-width="0.6"/>
+            <!-- Cushion highlight -->
+            <polygon points="115,318 155,307 155,304 115,315" fill="rgba(255,255,255,0.06)"/>
+            <polygon points="162,309 201,298 201,295 162,306" fill="rgba(255,255,255,0.06)"/>
+            <!-- Pillow on sofa -->
+            <polygon points="115,298 140,290 140,282 115,290" fill="#C8956A" stroke="#A87848" stroke-width="0.5" opacity="0.9"/>
+            <!-- Sofa legs -->
+            <line x1="116" y1="358" x2="114" y2="367" stroke="#3A2A18" stroke-width="2.5"/>
+            <line x1="218" y1="328" x2="216" y2="337" stroke="#3A2A18" stroke-width="2.5"/>
+          </g>
+
+          <!-- COFFEE TABLE (marble top) -->
+          <g>
+            <polygon points="155,383 218,364 218,356 155,375" fill="#D0C8B8" stroke="#B8B0A0" stroke-width="0.8"/>
+            <!-- Marble veins -->
+            <line x1="162" y1="371" x2="210" y2="360" stroke="rgba(180,175,168,0.5)" stroke-width="0.6"/>
+            <line x1="168" y1="373" x2="195" y2="365" stroke="rgba(180,175,168,0.3)" stroke-width="0.5"/>
+            <!-- Legs -->
+            <line x1="160" y1="375" x2="158" y2="388" stroke="#5C5040" stroke-width="2"/>
+            <line x1="213" y1="362" x2="211" y2="375" stroke="#5C5040" stroke-width="2"/>
+            <line x1="178" y1="370" x2="176" y2="383" stroke="#5C5040" stroke-width="2"/>
+            <line x1="198" y1="365" x2="196" y2="378" stroke="#5C5040" stroke-width="2"/>
+            <!-- Coffee mug on table -->
+            <ellipse cx="180" cy="367" rx="8" ry="3" fill="#3A3028" opacity="0.8"/>
+            <ellipse cx="180" cy="365" rx="7" ry="2.5" fill="#5A5040" opacity="0.9"/>
+          </g>
+
+          <!-- BOOKSHELF (tall, dark wood) -->
+          <g filter="url(#shelfShadow)">
+            <polygon points="448,296 502,278 502,420 448,438" fill="#3A2E22"/>
+            <!-- Shelf boards -->
+            <polygon points="450,320 500,304 500,309 450,325" fill="#2A2018"/>
+            <polygon points="450,354 500,338 500,343 450,359" fill="#2A2018"/>
+            <polygon points="450,388 500,372 500,377 450,393" fill="#2A2018"/>
+            <!-- Back panel highlight -->
+            <polygon points="452,298 498,282 498,418 452,434" fill="rgba(255,255,255,0.02)"/>
+            <!-- Books row 1 -->
+            <rect x="453" y="310" width="7" height="10" fill="#8B3A1A" rx="1" transform="skewY(-4)"/>
+            <rect x="462" y="308" width="5" height="11" fill="#1F6060" rx="1" transform="skewY(-4)"/>
+            <rect x="469" y="306" width="8" height="12" fill="#B8853A" rx="1" transform="skewY(-4)"/>
+            <rect x="479" y="304" width="6" height="13" fill="#5A5A8A" rx="1" transform="skewY(-4)"/>
+            <rect x="487" y="305" width="5" height="12" fill="#6E8B6E" rx="1" transform="skewY(-4)"/>
+            <!-- Books row 2 -->
+            <rect x="453" y="344" width="6" height="10" fill="#4A3828" rx="1" transform="skewY(-4)"/>
+            <rect x="461" y="342" width="8" height="11" fill="#B8853A" rx="1" transform="skewY(-4)"/>
+            <rect x="471" y="340" width="5" height="12" fill="#8B3A1A" rx="1" transform="skewY(-4)"/>
+            <rect x="478" y="338" width="7" height="13" fill="#2D6B6B" rx="1" transform="skewY(-4)"/>
+            <!-- Small object on shelf -->
+            <ellipse cx="492" cy="345" rx="6" ry="5" fill="#C8956A" opacity="0.8"/>
+            <!-- Books row 3 (sparse) -->
+            <rect x="453" y="378" width="5" height="10" fill="#6E5A4A" rx="1" transform="skewY(-4)"/>
+            <rect x="460" y="376" width="7" height="11" fill="#1F6060" rx="1" transform="skewY(-4)"/>
+            <rect x="478" y="372" width="6" height="14" fill="#5A3A2A" rx="1" transform="skewY(-4)"/>
+          </g>
+
+          <!-- FLOOR LAMP -->
+          <g>
+            <!-- Base -->
+            <ellipse cx="422" cy="400" rx="11" ry="4.5" fill="#2A2018"/>
+            <ellipse cx="422" cy="398" rx="10" ry="3.5" fill="#3A3028"/>
+            <!-- Pole -->
+            <line x1="422" y1="398" x2="420" y2="295" stroke="#4A3C2C" stroke-width="3.5"/>
+            <!-- Lamp shade -->
+            <polygon points="405,293 435,285 435,296 405,304" fill="#E8D090" opacity="0.9"/>
+            <polygon points="405,296 435,288 435,296 405,304" fill="rgba(0,0,0,0.15)"/>
+            <!-- Glow halo -->
+            <ellipse cx="420" cy="310" rx="45" ry="38" fill="url(#lampGlow)"/>
+            <!-- Light on floor -->
+            <ellipse cx="418" cy="395" rx="30" ry="12" fill="rgba(232,210,140,0.06)"/>
+          </g>
+
+          <!-- PLANT (fiddle leaf) -->
+          <g>
+            <polygon points="80,414 98,408 98,424 80,430" fill="#6B4A14"/>
+            <polygon points="82,412 96,407 96,413 82,418" fill="#7A5A1A"/>
+            <line x1="89" y1="408" x2="87" y2="352" stroke="#3A5A30" stroke-width="3.5"/>
+            <!-- Leaves -->
+            <ellipse cx="77" cy="356" rx="16" ry="10" fill="#4A7040" transform="rotate(-28,77,356)"/>
+            <ellipse cx="97" cy="350" rx="16" ry="10" fill="#3A6030" transform="rotate(22,97,350)"/>
+            <ellipse cx="84" cy="340" rx="14" ry="9" fill="#557848" transform="rotate(-8,84,340)"/>
+            <ellipse cx="74" cy="345" rx="12" ry="7" fill="#4A6838" transform="rotate(-35,74,345)"/>
+            <!-- Leaf veins -->
+            <line x1="77" y1="360" x2="72" y2="352" stroke="rgba(30,50,25,0.3)" stroke-width="0.8"/>
+            <line x1="97" y1="354" x2="102" y2="347" stroke="rgba(30,50,25,0.3)" stroke-width="0.8"/>
+          </g>
+
+          <!-- SIDE TABLE next to sofa -->
+          <g>
+            <polygon points="92,350 110,344 110,340 92,346" fill="#5C4A38" stroke="#4A3828" stroke-width="0.6"/>
+            <line x1="95" y1="346" x2="93" y2="360" stroke="#4A3828" stroke-width="2"/>
+            <line x1="107" y1="342" x2="105" y2="356" stroke="#4A3828" stroke-width="2"/>
+            <!-- Small lamp on table -->
+            <ellipse cx="100" cy="339" rx="7" ry="2.5" fill="#3A3028"/>
+            <polygon points="94,326 106,322 106,339 94,343" fill="#E8C880" opacity="0.7"/>
+            <ellipse cx="100" cy="335" rx="14" ry="12" fill="rgba(232,200,128,0.1)"/>
+          </g>
+
+        </svg>
+      </div>
+    </div>
+
+    <!-- Top right controls -->
+    <div class="canvas-top fade-up d3">
+      <div class="icon-btn" title="Top view">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+      </div>
+      <div class="icon-btn" title="Orbit">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="9" ry="4"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+      </div>
+      <div class="icon-btn" title="Reset">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="canvas-bottom fade-up d8">
+      <div class="example-badge">
+        <div class="badge-dot"></div>
+        Example room — adjust dimensions to preview your space
+      </div>
+      <div class="room-info-tags">
+        <span class="room-tag">5.0 × 4.5m</span>
+        <span class="room-tag">Scandinavian</span>
+        <span class="room-tag">$1,500</span>
+      </div>
+    </div>
+
+    <!-- Floating furniture labels -->
+    <div class="label-float fade-up d5" style="top:42%;left:38%">IKEA KIVIK sofa</div>
+    <div class="label-float fade-up d6" style="top:58%;right:16%">Hay Pyramid lamp</div>
+    <div class="label-float fade-up d7" style="top:30%;right:22%">Muuto shelf</div>
+
+  </main>
+</div>
+
+<script>
+  function selectRoom(el) {
+    document.querySelectorAll('.room-type-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function updateDim(id, input, axis) {
+    const val = parseFloat(input.value).toFixed(1);
+    document.getElementById(id).textContent = val;
+    const min = parseFloat(input.min), max = parseFloat(input.max);
+    const pct = ((input.value - min) / (max - min)) * 100;
+    input.style.setProperty('--pct', pct + '%');
+  }
+
+  function updateBudget(input) {
+    const val = parseInt(input.value);
+    document.getElementById('bVal').textContent = '$' + val.toLocaleString();
+    const min = parseFloat(input.min), max = parseFloat(input.max);
+    const pct = ((input.value - min) / (max - min)) * 100;
+    input.style.setProperty('--pct', pct + '%');
+  }
+
+  function addChip(el) {
+    const textarea = document.getElementById('vibeInput');
+    const word = el.textContent.toLowerCase();
+    if (!textarea.value.toLowerCase().includes(word)) {
+      textarea.value = textarea.value
+        ? textarea.value.trimEnd() + ', ' + word
+        : word;
+    }
+  }
+
+  // Init slider fills
+  document.querySelectorAll('input[type=range]').forEach(s => {
+    const min = parseFloat(s.min), max = parseFloat(s.max);
+    const pct = ((s.value - min) / (max - min)) * 100;
+    s.style.setProperty('--pct', pct + '%');
+  });
+</script>
+</body>
+</html>
