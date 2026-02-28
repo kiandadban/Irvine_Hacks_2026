@@ -112,7 +112,8 @@ let { walls, floor: roomFloor } = createRoom(scene, roomWidth, roomDepth);
 let currentWalls = walls;
 const collisionEngine = new CollisionEngine(currentWalls, spawnedFurniture);
 
-let grid = new THREE.GridHelper(roomWidth, 10, 0xCCCCCC, 0x444444);
+let grid = new THREE.GridHelper(roomWidth, roomWidth, 0xCCCCCC, 0x444444);
+grid.scale.z = roomDepth / roomWidth;
 grid.position.y = 0.01;
 scene.add(grid);
 
@@ -130,7 +131,8 @@ function rebuildRoom(newWidth, newDepth) {
   roomFloor = result.floor;
 
   // Rebuild grid to match new size
-  grid = new THREE.GridHelper(Math.max(roomWidth, roomDepth), Math.max(roomWidth, roomDepth), 0xCCCCCC, 0x444444);
+  grid = new THREE.GridHelper(roomWidth, roomWidth, 0xCCCCCC, 0x444444);
+  grid.scale.z = roomDepth / roomWidth;
   grid.position.y = 0.01;
   scene.add(grid);
 
