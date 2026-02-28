@@ -94,39 +94,14 @@ const wrappedDeselect = () => {
     const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
-<<<<<<< HEAD
     async function handleGenerate(userText, useRoomContext = true, roomType = null) {
-=======
-    // ── 7. UI INITIALIZATION ──
-    const ui = initUI(
-        () => {}, // Primitive spawning (disabled)
-        (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
-        () => { // Global delete handler
-            if (!transform.object) return;
-            const obj = transform.object;
-            scene.remove(obj);
-            const idx = spawnedFurniture.indexOf(obj);
-            if (idx > -1) spawnedFurniture.splice(idx, 1);
-            collisionEngine.updateObstacles();
-            wrappedDeselect();
-        },
-        (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
-    );
-
-    // ── 8. EVENT HANDLERS ──
-    async function handleGenerate(userText, useRoomContext = true) {
->>>>>>> 8595c2e133374ff17ec36068b299d25c12abc262
         if (!userText || aiBtn?.disabled) return;
         aiBtn.disabled = true;
         try {
             const layout = await ai.runGeneration(userText, {
                 useRoomContext,
-<<<<<<< HEAD
                 roomType,
                 onStatus: (s) => { if (aiBtn) aiBtn.innerText = s; },
-=======
-                onStatus: (s) => { aiBtn.innerText = s; },
->>>>>>> 8595c2e133374ff17ec36068b299d25c12abc262
             });
             if (!layout) return;
 
