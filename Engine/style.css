@@ -205,6 +205,31 @@ input[type=range] {
     border-radius: 6px; cursor: pointer; background: var(--white); 
 }
 
+#download-btn {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    background: var(--teal);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+#download-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+#download-btn:hover { opacity: 0.85; }
+
 #del-btn {
     width: 100%; padding: 10px; margin-top: 10px;
     background: var(--white); border: 1px solid var(--bg3); 
