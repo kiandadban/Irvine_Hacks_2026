@@ -4,13 +4,17 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { initUI } from './ui.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
 import { API_KEY } from './config.js';
+
+// ── NEW IMPORTS ──
+import { createRoom } from './walls.js';
+import { CollisionEngine } from './collision.js';
+
 if (!API_KEY) {
   console.error("API_KEY missing! Check your config.js file.");
 }
 
-// ── 1. COMPLETE FURNITURE LIBRARY ──
+// ── 1. FURNITURE LIBRARY ──
 const furnitureLibrary = {
   "assets": [
     { "file": "Bed King.glb", "id": "king_bed", "category": "sleeping" },
@@ -43,7 +47,7 @@ if (API_KEY) {
 }
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xFDFBF7); // Cream background matching your CSS
+scene.background = new THREE.Color(0xFDFBF7);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.set(8, 8, 8);
@@ -58,11 +62,20 @@ const loader = new GLTFLoader();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+// ── 3. WALLS & PHYSICS SETUP ──
 let spawnedFurniture = [];
 let selectedObject = null;
 
-// ── 3. HELPERS & LIGHTS ──
-const grid = new THREE.GridHelper(20, 20, 0xCCCCCC, 0xE8E8E8);
+const roomWidth = 10;
+const roomDepth = 10;
+// Create physical wall meshes
+const walls = createRoom(scene, roomWidth, roomDepth); 
+
+// Initialize collision engine
+const collisionEngine = new CollisionEngine(walls, spawnedFurniture);
+
+// ── 4. HELPERS & LIGHTS ──
+const grid = new THREE.GridHelper(10, 10, 0xCCCCCC, 0xE8E8E8);
 grid.position.y = -0.01;
 scene.add(grid);
 
@@ -72,19 +85,42 @@ sun.position.set(10, 20, 10);
 sun.castShadow = true;
 scene.add(sun);
 
-// ── 4. CONTROLS ──
+// ── 5. CONTROLS ──
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.enableDamping = true;
 
 const transform = new TransformControls(camera, renderer.domElement);
 scene.add(transform);
 
-// Prevent orbit moving while using transform gizmos
-transform.addEventListener('dragging-changed', (e) => {
-  orbit.enabled = !e.value;
+// COLLISION DETECTION DURING MANUAL DRAG
+transform.addEventListener('change', () => {
+  if (transform.object && transform.mode === 'translate') {
+    transform.object.updateMatrixWorld(true);
+    const check = collisionEngine.checkCollision(transform.object);
+    
+    // Visual feedback: Tint red if colliding
+    transform.object.traverse(n => {
+      if (n.isMesh) {
+        if (check.isColliding) {
+          n.material.emissive?.set(0xff0000);
+          n.material.emissiveIntensity = 0.5;
+        } else {
+          n.material.emissive?.set(0x000000);
+        }
+      }
+    });
+  }
 });
 
-// ── 5. SELECTION HELPERS ──
+transform.addEventListener('dragging-changed', (e) => {
+  orbit.enabled = !e.value;
+  // Update collision map when user releases the object
+  if (!e.value) {
+    collisionEngine.updateObstacles(walls, spawnedFurniture);
+  }
+});
+
+// ── 6. SELECTION HELPERS ──
 function selectObject(obj) {
   if (selectedObject === obj) return;
   selectedObject = obj;
@@ -98,7 +134,7 @@ function deselectObject() {
   if (ui) ui.hideProps();
 }
 
-// ── 6. CORE ENGINE FUNCTIONS ──
+// ── 7. CORE ENGINE FUNCTIONS ──
 function loadModel(path, config = {}) {
   loader.load(path, (gltf) => {
     const model = gltf.scene;
@@ -111,14 +147,22 @@ function loadModel(path, config = {}) {
       model.scale.setScalar(2.5 / maxDim);
     }
 
-    // Set Position and Rotation
     model.position.set(config.x || 0, 0, config.z || 0);
     model.rotation.y = config.rotate || 0;
+    model.updateMatrixWorld(true);
+
+    // Initial Collision Check
+    const check = collisionEngine.checkCollision(model);
+    if (check.isColliding) console.warn("Spawned inside obstacle!");
 
     scene.add(model);
     spawnedFurniture.push(model);
+    
+    // Update engine with new obstacle
+    collisionEngine.updateObstacles(walls, spawnedFurniture);
+    
     selectObject(model);
-  }, undefined, (err) => console.error("Failed to load model at:", path, err));
+  }, undefined, (err) => console.error("Failed to load model:", path, err));
 }
 
 function spawnPrimitive(type) {
@@ -132,10 +176,11 @@ function spawnPrimitive(type) {
 
   scene.add(mesh);
   spawnedFurniture.push(mesh);
+  collisionEngine.updateObstacles(walls, spawnedFurniture);
   selectObject(mesh);
 }
 
-// ── 7. UI LINKING & HANDLERS ──
+// ── 8. UI LINKING & HANDLERS ──
 const ui = initUI(
   (type) => spawnPrimitive(type),
   (hex) => {
@@ -149,16 +194,12 @@ const ui = initUI(
     if (selectedObject) {
       scene.remove(selectedObject);
       spawnedFurniture = spawnedFurniture.filter(o => o !== selectedObject);
+      collisionEngine.updateObstacles(walls, spawnedFurniture);
       deselectObject();
     }
   },
   (path) => loadModel(path)
 );
-
-// Manual Load Buttons (uses dataset.path from HTML)
-document.querySelectorAll('.model-load-btn').forEach(btn => {
-  btn.onclick = () => loadModel(btn.dataset.path);
-});
 
 // AI Generation Handler
 const aiBtn = document.getElementById('ai-generate-btn');
@@ -175,54 +216,28 @@ if (aiBtn) {
     try {
       const prompt = `
                 ACT AS: A Senior Interior CAD Architect.
-                ROOM DIMENSIONS: 10m x 10m. 
-                COORDINATE SYSTEM: Center of room is (0,0). X-axis is width, Z-axis is depth. 
-                WALL BOUNDARIES: X min/max: -5, 5. Z min/max: -5, 5.
-
-                FURNITURE DATA (JSON): 
-                ${JSON.stringify(furnitureLibrary.furniture_library)}
-
-                SPATIAL PLACEMENT RULES:
-                1. MAPPING: You MUST calculate (x, z) based on the "dimensions" in the library.
-                2. WALL SNAPPING: If "must_touch_wall" is true, the center coordinate (x or z) must be: (5 - HalfWidth) or (-5 + HalfWidth).
-                3. CLEARANCE: Add "clearance" values to the dimensions when checking for overlaps. No two objects can occupy the same space.
-                4. DEPENDENCIES: 
-                   - Place "Night Stand.glb" exactly 0.1m away from the side of a "Bed".
-                   - Place "Desk Chair.glb" 0.5m behind a "Desk.glb".
-                5. ORIENTATION: Rotate objects to face the center of the room. 0 = North, 1.57 = East, 3.14 = South, 4.71 = West.
-
-                TASK:
-                User wants: "${aiInput.value}"
-                Output ONLY a JSON array. No conversational text.
-                FORMAT: [{"file": "name.glb", "x": 0.0, "z": 0.0, "rotate": 0.0}]
+                ROOM: 10m x 10m. Bounds: X(-5 to 5), Z(-5 to 5).
+                FURNITURE DATA: ${JSON.stringify(furnitureLibrary.assets)}
+                RULES: Output ONLY a JSON array: [{"file": "name.glb", "x": 0.0, "z": 0.0, "rotate": 0.0}]
+                USER REQUEST: "${aiInput.value}"
             `;
 
       const result = await aiModel.generateContent(prompt);
-      let responseText = result.response.text();
-
-      // Clean AI formatting marks
-      responseText = responseText.replace(/```json|```/g, "").trim();
-
+      let responseText = result.response.text().replace(/```json|```/g, "").trim();
       const layout = JSON.parse(responseText);
 
-      // ── SCENE REFRESH ──
+      // Clear current scene
       deselectObject();
       spawnedFurniture.forEach(obj => scene.remove(obj));
       spawnedFurniture = [];
 
-      // ── PRECISE SPAWNING ──
       layout.forEach(item => {
         const path = `../furniture_models/${item.file}`;
-        loadModel(path, {
-          x: parseFloat(item.x),
-          z: parseFloat(item.z),
-          rotate: parseFloat(item.rotate)
-        });
+        loadModel(path, { x: item.x, z: item.z, rotate: item.rotate });
       });
 
     } catch (err) {
       console.error("AI Error:", err);
-      alert("Spatial Calculation Error. Try describing a simpler arrangement like 'A bedroom with two nightstands'.");
     } finally {
       aiBtn.disabled = false;
       aiBtn.innerText = "Generate Layout";
@@ -230,50 +245,27 @@ if (aiBtn) {
   };
 }
 
-// ── 8. MOUSE INTERACTION ──
+// ── 9. MOUSE & KBD INTERACTION ──
 window.addEventListener('mousedown', (e) => {
   if (e.target !== renderer.domElement || transform.dragging) return;
-
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
   raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(scene.children, true);
-
+  
+  const intersects = raycaster.intersectObjects(spawnedFurniture, true);
   if (intersects.length > 0) {
-    // Check if we hit a transform gizmo first
-    const isGizmo = intersects.some(i => {
-      let n = i.object;
-      while (n) { if (n.isTransformControls) return true; n = n.parent; }
-      return false;
-    });
-    if (isGizmo) return;
-
-    // Find the root furniture object
-    const furnitureHit = intersects.find(i => {
-      let n = i.object;
-      while (n.parent && n.parent !== scene) n = n.parent;
-      return spawnedFurniture.includes(n);
-    });
-
-    if (furnitureHit) {
-      let root = furnitureHit.object;
-      while (root.parent && root.parent !== scene) root = root.parent;
-      selectObject(root);
-    } else {
-      deselectObject();
-    }
+    let root = intersects[0].object;
+    while (root.parent && root.parent !== scene) root = root.parent;
+    selectObject(root);
   } else {
     deselectObject();
   }
 });
 
-// ── 9. KEYBOARD SHORTCUTS ──
 window.addEventListener('keydown', (e) => {
   const key = e.key.toLowerCase();
-  if (e.key === 'Escape') deselectObject();
+  if (key === 'escape') deselectObject();
   if (!selectedObject) return;
-
   if (key === 'g') transform.setMode('translate');
   if (key === 'r') transform.setMode('rotate');
   if (key === 's') transform.setMode('scale');
