@@ -2,157 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Architectural Interior Editor</title>
-    <style>
-        /* ── Redfin-Inspired Cream & Green Theme ── */
-        :root {
-            --cream-bg: #FDFBF7;
-            --forest-green: #2C4C3B;
-            --sage-green: #E8F0E6;
-            --deep-charcoal: #333333;
-            --border-light: #E0DED7;
-            --white: #FFFFFF;
-        }
-
-        body { margin: 0; overflow: hidden; background: #E0DED7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* ── Floating Panels ── */
-        .panel { 
-            position: absolute; 
-            background: var(--cream-bg); 
-            padding: 20px; 
-            border: 1px solid var(--border-light); 
-            color: var(--deep-charcoal); 
-            z-index: 10; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border-radius: 8px;
-        }
-        
-        #instructions { 
-            position: absolute; 
-            bottom: 100px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            color: var(--forest-green); 
-            background: rgba(253, 251, 247, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            pointer-events: none; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        #spawn-panel { top: 20px; left: 20px; }
-        #ai-panel { top: 160px; left: 20px; width: 220px; }
-        #props-panel { top: 20px; right: 20px; width: 200px; display: none; }
-        
-        /* ── Horizontal Bottom Library ── */
-        #model-panel { 
-            bottom: 0; left: 0; right: 0; 
-            height: 90px; 
-            background: var(--white);
-            border-top: 1px solid var(--border-light); 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            overflow-x: auto; 
-            padding: 0 30px;
-            white-space: nowrap;
-        }
-
-        .model-load-btn { 
-            flex: 0 0 auto; 
-            height: 45px; 
-            padding: 0 15px;
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            color: var(--forest-green);
-            font-weight: 500;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-        }
-
-        .model-load-btn:hover {
-            background: var(--sage-green);
-            border-color: var(--forest-green);
-        }
-
-        /* ── Typography & Inputs ── */
-        h3 { margin: 0 0 12px 0; font-size: 14px; color: var(--forest-green); text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        select, input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-light);
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button { 
-            cursor: pointer; 
-            background: var(--forest-green); 
-            color: var(--white); 
-            border: none; 
-            padding: 10px 15px; 
-            width: 100%;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-
-        button:hover { opacity: 0.9; }
-        
-        #del-btn { background: #B33F40; margin-top: 15px; }
-
-        input[type="color"] { width: 100%; height: 35px; border: 1px solid var(--border-light); padding: 2px; background: white; border-radius: 4px; }
-
-        /* Custom Scrollbar */
-        #model-panel::-webkit-scrollbar { height: 4px; }
-        #model-panel::-webkit-scrollbar-thumb { background: var(--border-light); }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="instructions">
         G: Move • R: Rotate • S: Scale • Esc: Deselect
     </div>
 
-    <div id="spawn-panel" class="panel">
-        <h3>Basic Shapes</h3>
-        <select id="shape-type">
-            <option value="box">Cube</option>
-            <option value="sphere">Sphere</option>
-            <option value="cone">Cone</option>
-        </select>
-        <button id="add-btn">Add Shape</button>
-    </div>
-
-    <div id="ai-panel" class="panel">
-        <h3>AI Interior Designer</h3>
-        <input type="text" id="ai-prompt" placeholder="Describe a room style...">
-        <button id="ai-generate-btn">Generate Layout</button>
-    </div>
-
     <div id="props-panel" class="panel">
         <h3>Properties</h3>
-        <p id="obj-name" style="font-size: 13px; color: #666;">Selection: None</p>
-        <label style="font-size: 12px; font-weight: bold;">Material Color</label>
+        <p id="obj-name">Selection: None</p>
+        <label>Material Color</label>
         <input type="color" id="color-picker">
         <button id="del-btn">Remove Item</button>
     </div>
 
-    <div id="model-panel">
-        <h3 style="margin: 0; margin-right: 20px;">Furniture</h3>
-        <button class="model-load-btn" data-path="../furniture_models/Bed King.glb">King Bed</button>
-        <button class="model-load-btn" data-path="../furniture_models/Bunk Bed.glb">Bunk Bed</button>
-        <button class="model-load-btn" data-path="../furniture_models/Couch Large.glb">Large Couch</button>
-        <button class="model-load-btn" data-path="../furniture_models/Couch Medium.glb">Medium Couch</button>
-        <button class="model-load-btn" data-path="../furniture_models/Desk.glb">Work Desk</button>
-        <button class="model-load-btn" data-path="../furniture_models/Night Stand.glb">Night Stand</button>
-        <button class="model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">Bookcase</button>
-        <button class="model-load-btn" data-path="../furniture_models/Drawer.glb">Drawer</button>
+    <div id="bottom-container">
+        
+        <div id="ai-designer-shelf">
+            <div class="ai-input-wrapper">
+                <input type="text" id="ai-prompt" placeholder="Describe a room style (e.g., 'A modern bedroom')...">
+                <button id="ai-generate-btn">Generate Layout</button>
+            </div>
+        </div>
+
+        <div id="model-panel">
+            <div class="library-header">Select furniture to start planning</div>
+            <div class="scroll-container">
+                
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bed King.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg>
+                    </div>
+                    <span>King Bed</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bed Twin Old.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9"/></svg>
+                    </div>
+                    <span>Twin Bed</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bunk Bed.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2v20M22 2v20M2 6h20M2 14h20M2 18h20"/></svg>
+                    </div>
+                    <span>Bunk Bed</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Couch Large.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 11v5a2 2 0 002 2h16a2 2 0 002-2v-5M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2"/></svg>
+                    </div>
+                    <span>Large Sofa</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Desk.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M6 17v2M18 17v2"/></svg>
+                    </div>
+                    <span>Desk</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M5 20v-1a7 7 0 0114 0v1"/></svg>
+                    </div>
+                    <span>Chair</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair (2).glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10V3m0 0l-3 3m3-3l3 3M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/></svg>
+                    </div>
+                    <span>Exec Chair</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16"/></svg>
+                    </div>
+                    <span>Bookcase</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Drawer.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 16h16"/></svg>
+                    </div>
+                    <span>Drawer</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Dining Set.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v4H3zM7 7v14M17 7v14"/></svg>
+                    </div>
+                    <span>Dining Set</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Kitchen.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 10h18M10 10v11"/></svg>
+                    </div>
+                    <span>Kitchen</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Night Stand.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 12h12"/></svg>
+                    </div>
+                    <span>Night Stand</span>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <script type="importmap">
@@ -164,6 +130,7 @@
         }
     }
     </script>
+
     <script type="module" src="main.js"></script>
 </body>
 </html>

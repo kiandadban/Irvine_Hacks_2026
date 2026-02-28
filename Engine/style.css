@@ -1,45 +1,174 @@
+:root {
+    --bg-cream: #FDFBF7;
+    --forest-green: #2C4C3B;
+    --border: #E0DED7;
+    --text-dark: #333333;
+    --white: #FFFFFF;
+}
 
-    body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
-    
-    .panel { 
-        position: absolute; 
-        background: rgba(0,0,0,0.85); 
-        padding: 15px; 
-        border: 1px solid #444; 
-        color: #eee; 
-        z-index: 10; /* Ensures buttons stay above the 3D scene */
-    }
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #E0DED7;
+    font-family: 'Inter', sans-serif;
+}
 
-    /* Moved from 10px to 40px to give some breathing room */
-    #spawn-panel { 
-        top: 40px; 
-        left: 20px; 
-        border-color: #00ff88; 
-    }
+/* ── Properties Panel (Top Right) ── */
+.panel {
+    position: absolute;
+    background: var(--bg-cream);
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    z-index: 10;
+    color: var(--text-dark);
+}
+#props-panel { top: 20px; right: 20px; width: 220px; }
 
-    /* Positioned below the spawn panel */
-    #model-panel { 
-        top: 140px; 
-        left: 20px; 
-        border-color: #ff00ff; 
-    }
+h3 {
+    margin: 0 0 15px 0;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--forest-green);
+    font-weight: 600;
+}
 
-    /* Properties panel on the right, also moved down */
-    #props-panel { 
-        top: 40px; 
-        right: 20px; 
-        width: 180px; 
-        border-color: #00aaff; 
-        display: none; 
-    }
+#instructions {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(44, 76, 59, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 500;
+    z-index: 100;
+}
 
-    button { 
-        cursor: pointer; 
-        background: #333; 
-        color: white; 
-        border: 1px solid #666; 
-        padding: 8px 12px; 
-        margin-top: 5px; /* Adds space between buttons */
-    }
-    
-    button:hover { background: #444; border-color: #999; }
+/* ── Unified Bottom UI ── */
+#bottom-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* ── AI Designer Shelf ── */
+#ai-designer-shelf {
+    background: rgba(253, 251, 247, 0.95);
+    padding: 15px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+}
+
+.ai-input-wrapper {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+}
+
+#ai-prompt {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+}
+
+#ai-generate-btn {
+    background: var(--forest-green);
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+/* ── Scrollable Furniture Library ── */
+#model-panel {
+    background: var(--forest-green);
+    padding: 20px 0 30px 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.library-header {
+    color: var(--bg-cream);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.scroll-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 0 40px;
+    width: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.scroll-container::-webkit-scrollbar { height: 4px; }
+.scroll-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+.model-card {
+    background: var(--bg-cream);
+    min-width: 110px;
+    height: 110px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+}
+
+.model-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    background: var(--white);
+}
+
+.icon-box {
+    width: 32px;
+    height: 32px;
+    color: var(--forest-green);
+    margin-bottom: 10px;
+}
+
+.model-card span {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--forest-green);
+    text-align: center;
+}
+
+/* ── UI Elements ── */
+input[type="color"] { width: 100%; height: 40px; border: none; cursor: pointer; border-radius: 8px; }
+#del-btn { 
+    background: #b91c1c; 
+    color: white; 
+    border: none; 
+    padding: 10px; 
+    width: 100%; 
+    border-radius: 8px; 
+    margin-top: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
