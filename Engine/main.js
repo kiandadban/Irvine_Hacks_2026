@@ -3,7 +3,17 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { initUI } from './ui.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// Read the key from the environment
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+if (!API_KEY) {
+    console.error("API Key missing! Check your .env file.");
+}
+
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const loader = new GLTFLoader();
 
 // ── 1. Scene Setup ──
