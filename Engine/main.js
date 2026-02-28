@@ -31,7 +31,9 @@ async function initApp() {
             assets: data.furniture_library.map(item => ({
                 file: item.file,
                 name: item.name,
-                category: item.category
+                category: item.category,
+                w: item.dimensions?.width  ?? 1.0,
+                d: item.dimensions?.depth  ?? 1.0
             }))
         };
         assetMap = furnitureLibrary.assets.reduce((m, a) => { m[a.file] = a; return m; }, {});
