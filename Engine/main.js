@@ -1,447 +1,183 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { TransformControls } from 'three/addons/controls/TransformControls.js';
-import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { API_KEY } from './config.js';
-import { initUI } from './ui.js';
-import { createRoom } from './walls.js';
-import { CollisionEngine } from './collision.js';
+import { API_KEY }            from './config.js';
+import { initUI }             from './ui.js';
+import { CollisionEngine }    from './collision.js';
+import { loadFurnitureLibrary } from './modules/loader.js';
+import { initScene }          from './modules/scene.js';
+import { createRoomManager }  from './modules/room.js';
+import { initControls }       from './modules/controls.js';
+import { createPlacer }       from './modules/placement.js';
+import { createAI }           from './modules/ai.js';
 
 async function initApp() {
-    let furnitureLibrary = [];
-    let assetMap = {};
-    const spawnedFurniture = [];
-    let selectedObject = null;
-    let roomWidth = 10;
-    let roomDepth = 10;
-
-    const modelPath = (filename) => {
-        const asset = assetMap[filename];
-        return asset ? `../models/${asset.category}/${asset.file}` : `../models/${filename}`;
-    };
-
-
-    // ── 1. ASSET DATA LOADING ──
+    // ── 1. DATA ──
+    let furnitureLibrary, assetMap;
     try {
-        const resp = await fetch('../models/furniture_attributes.json');
-        const data = await resp.json();
-        furnitureLibrary = data.furniture_library;
-        assetMap = furnitureLibrary.reduce((m, a) => { m[a.file] = a; return m; }, {});
+        ({ furnitureLibrary, assetMap } = await loadFurnitureLibrary());
     } catch (e) {
-        console.error('Failed to load library attributes', e);
+        console.error('Could not load furniture library:', e);
         return;
     }
 
-    // ── 2. RENDERER & SCENE SETUP ──
+    // ── 2. SCENE ──
     const container = document.getElementById('canvas-wrapper');
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    container.appendChild(renderer.domElement);
+    const { scene, camera, renderer } = initScene(container);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x262018); 
+    // ── 3. PHYSICS ──
+    const spawnedFurniture = [];
+    const collisionEngine  = new CollisionEngine([], spawnedFurniture, 10, 10);
 
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(8, 8, 8);
+    // ── 4. ROOM ──
+    const roomManager = createRoomManager(scene, collisionEngine);
 
-    let { walls: currentWalls, floor: roomFloor } = createRoom(scene, roomWidth, roomDepth);
-    const collisionEngine = new CollisionEngine(currentWalls, spawnedFurniture, roomWidth, roomDepth);
-
-    function makeGrid(width, depth) {
-        const pts = [];
-        const step = 1;
-        for (let z = -depth / 2; z <= depth / 2 + 0.001; z += step) {
-            pts.push(-width / 2, 0, z,  width / 2, 0, z);
-        }
-        for (let x = -width / 2; x <= width / 2 + 0.001; x += step) {
-            pts.push(x, 0, -depth / 2,  x, 0, depth / 2);
-        }
-        const geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
-        const mesh = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0xAAAAAA }));
-        mesh.position.y = 0.01;
-        return mesh;
-    }
-
-    let grid = makeGrid(roomWidth, roomDepth);
-    scene.add(grid);
-
-    // rebuildRoom will be redefined later with additional logic
-
-
-    // ── 3. VISUAL COLLISION FEEDBACK ──
-    const updateCollisionVisuals = (obj) => {
+    // ── 5. COLLISION VISUALS ──
+    function updateCollisionVisuals(obj) {
         if (!obj) return;
-        const check = collisionEngine.checkCollision(obj);
-
+        const { isColliding } = collisionEngine.checkCollision(obj);
         obj.traverse(child => {
-            if (child.isMesh && child.material) {
-                const materials = Array.isArray(child.material) ? child.material : [child.material];
-                materials.forEach(mat => {
-                    // On first encounter, store original visual properties so we can restore later
-                    if (!mat.userData._origVisual) {
-                        mat.userData._origVisual = {
-                            color: mat.color ? mat.color.clone() : null,
-                            emissive: mat.emissive ? mat.emissive.clone() : null,
-                            emissiveIntensity: typeof mat.emissiveIntensity === 'number' ? mat.emissiveIntensity : null,
-                            opacity: typeof mat.opacity === 'number' ? mat.opacity : null,
-                            transparent: typeof mat.transparent === 'boolean' ? mat.transparent : null
-                        };
-                    }
-
-                    if (check.isColliding) {
-                        if (mat.emissive) {
-                            mat.emissive.set(0xff0000);
-                            mat.emissiveIntensity = 0.5;
-                        }
-                        if (mat.color) mat.color.set(0xffaaaa);
-                    } else {
-                        // Restore original visuals exactly as they were
-                        const o = mat.userData._origVisual;
-                        if (o) {
-                            if (mat.color && o.color) mat.color.copy(o.color);
-                            if (mat.emissive && o.emissive) mat.emissive.copy(o.emissive);
-                            if (typeof o.emissiveIntensity === 'number' && mat.emissive) mat.emissiveIntensity = o.emissiveIntensity;
-                            if (typeof o.opacity === 'number') mat.opacity = o.opacity;
-                            if (typeof o.transparent === 'boolean') mat.transparent = o.transparent;
-                        }
-                    }
-                });
-            }
-        });
-    };
-
-    // ── 4. REBUILD ROOM LOGIC ──
-    function rebuildRoom(newWidth, newDepth) {
-        currentWalls.forEach(w => scene.remove(w));
-        if (roomFloor) scene.remove(roomFloor);
-        scene.remove(grid);
-
-        roomWidth = newWidth;
-        roomDepth = newDepth;
-
-        const result = createRoom(scene, roomWidth, roomDepth);
-        currentWalls = result.walls;
-        roomFloor = result.floor;
-
-        grid = makeGrid(roomWidth, roomDepth);
-        scene.add(grid);
-
-        collisionEngine.updateWalls(currentWalls, roomWidth, roomDepth);
-        
-        // Update visuals for all furniture relative to new walls
-        spawnedFurniture.forEach(item => updateCollisionVisuals(item));
-    }
-
-    // Slider Wiring
-    const widthSlider = document.getElementById('widthSlider');
-    const lengthSlider = document.getElementById('lengthSlider');
-    if (widthSlider) widthSlider.addEventListener('input', () => {
-        const val = parseFloat(widthSlider.value);
-        document.getElementById('wVal').textContent = val.toFixed(1);
-        rebuildRoom(val, roomDepth);
-    });
-    if (lengthSlider) lengthSlider.addEventListener('input', () => {
-        const val = parseFloat(lengthSlider.value);
-        document.getElementById('lVal').textContent = val.toFixed(1);
-        rebuildRoom(roomWidth, val);
-    });
-
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-    const sun = new THREE.DirectionalLight(0xffffff, 1.0);
-    sun.position.set(5, 15, 7.5);
-    scene.add(sun);
-
-    const loader = new FBXLoader();
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    const orbit = new OrbitControls(camera, renderer.domElement);
-    orbit.enableDamping = true;
-
-    // ── 5. TRANSFORM CONTROLS & SNAP ──
-    const transform = new TransformControls(camera, renderer.domElement);
-    transform.setTranslationSnap(0.5); 
-    scene.add(transform);
-
-    transform.addEventListener('change', () => {
-        if (transform.object) {
-            updateCollisionVisuals(transform.object);
-        }
-    });
-
-    transform.addEventListener('dragging-changed', (event) => {
-        orbit.enabled = !event.value;
-        if (!event.value) {
-            collisionEngine.updateObstacles();
-            updateCollisionVisuals(transform.object);
-        }
-    });
-
-    // Selection Helpers
-    const selectObject = (obj) => {
-        if (selectedObject === obj) return;
-        selectedObject = obj;
-        transform.attach(selectedObject);
-        const propsPanel = document.getElementById('props-panel');
-        if (propsPanel) propsPanel.classList.add('active');
-        if (ui) ui.showProps(selectedObject);
-    };
-
-    const deselectObject = () => {
-        selectedObject = null;
-        transform.detach();
-        const propsPanel = document.getElementById('props-panel');
-        if (propsPanel) propsPanel.classList.remove('active');
-        if (ui) ui.hideProps();
-    };
-
-    // ── 6. PLACEMENT LOGIC ──
-    async function placeModel(itemConfig) {
-        const asset = assetMap[itemConfig.file];
-        if (!asset) return;
-        const path = `../models/${asset.category}/${asset.file}`;
-
-        return new Promise((resolve) => {
-            loader.load(path, (model) => {
-                // Measure original size to compute scale
-                const rawBox = new THREE.Box3().setFromObject(model);
-                const rawSize = rawBox.getSize(new THREE.Vector3());
-                model.scale.setScalar((asset.dimensions.width || 1.0) / rawSize.x);
-
-                model.rotation.y = itemConfig.rotate || 0;
-
-                // Physics Nudge: Try to find a legal spot. Snap X/Z to grid and snap Y to floor surface.
-                const snapStep = 0.5;
-                let posX = typeof itemConfig.x === 'number' ? itemConfig.x : 0;
-                let posZ = typeof itemConfig.z === 'number' ? itemConfig.z : 0;
-                let isValid = false, attempts = 0;
-
-                while (!isValid && attempts < 15) {
-                    // Snap to grid for placement testing
-                    const testX = Math.round(posX / snapStep) * snapStep;
-                    const testZ = Math.round(posZ / snapStep) * snapStep;
-
-                    // Position at ground level first, then compute bounding box to determine bottom Y
-                    model.position.set(testX, 0, testZ);
-                    model.updateMatrixWorld(true);
-
-                    const worldBox = new THREE.Box3().setFromObject(model);
-                    const floorY = roomFloor ? roomFloor.position.y : 0;
-                    const bottomY = worldBox.min.y;
-
-                    // Lift or lower model so its bottom sits on the floor surface
-                    model.position.y = floorY - bottomY;
-                    model.updateMatrixWorld(true);
-
-                    const check = collisionEngine.checkCollision(model);
-                    if (!check.isColliding) {
-                        isValid = true;
-                    } else {
-                        // Nudge slightly and clamp to room bounds
-                        posX += (Math.random() - 0.5) * 1.5;
-                        posZ += (Math.random() - 0.5) * 1.5;
-                        posX = Math.max(-(roomWidth/2 - 0.5), Math.min(roomWidth/2 - 0.5, posX));
-                        posZ = Math.max(-(roomDepth/2 - 0.5), Math.min(roomDepth/2 - 0.5, posZ));
-                        attempts++;
-                    }
+            if (!child.isMesh || !child.material) return;
+            const mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach(mat => {
+                if (!mat.userData._orig) {
+                    mat.userData._orig = {
+                        color:             mat.color?.clone(),
+                        emissive:          mat.emissive?.clone(),
+                        emissiveIntensity: mat.emissiveIntensity,
+                    };
                 }
-
-                if (isValid) {
-                    // Ensure final snap to grid and floor
-                    model.position.x = Math.round(model.position.x / snapStep) * snapStep;
-                    model.position.z = Math.round(model.position.z / snapStep) * snapStep;
-                    const finalWorldBox = new THREE.Box3().setFromObject(model);
-                    const finalFloorY = roomFloor ? roomFloor.position.y : 0;
-                    model.position.y = finalFloorY - finalWorldBox.min.y;
-
-                    scene.add(model);
-                    spawnedFurniture.push(model);
-                    collisionEngine.updateObstacles();
+                if (isColliding) {
+                    mat.emissive?.set(0xff0000);
+                    if (mat.emissive) mat.emissiveIntensity = 0.5;
+                    mat.color?.set(0xffaaaa);
+                } else {
+                    const o = mat.userData._orig;
+                    if (o?.color)    mat.color.copy(o.color);
+                    if (o?.emissive) mat.emissive.copy(o.emissive);
+                    if (typeof o?.emissiveIntensity === 'number') mat.emissiveIntensity = o.emissiveIntensity;
                 }
-                updateCollisionVisuals(model); // Initial check
-                selectObject(model);
-                resolve(model);
-            }, undefined, () => resolve());
-
+            });
         });
     }
 
-    // ── 7. UI & AI ──
+    // ── 6. CONTROLS ──
+    // uiRef defers access to `ui` so controls.js doesn't need it at construction time
+    const uiRef = { getUI: () => ui };
+    const { orbit, transform, selectObject, deselectObject } = initControls(
+        camera, renderer, scene,
+        collisionEngine, spawnedFurniture,
+        updateCollisionVisuals, uiRef
+    );
+
+    // ── 7. PLACEMENT ──
+    const { placeModel } = createPlacer(
+        scene, spawnedFurniture, collisionEngine,
+        assetMap, roomManager, selectObject, updateCollisionVisuals
+    );
+
+    // ── 8. UI ──
     const ui = initUI(
-        () => {}, 
-        (hex) => { if (selectedObject) selectedObject.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
+        () => {},
+        (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
         () => {
-            if (selectedObject) {
-                scene.remove(selectedObject);
-                const index = spawnedFurniture.indexOf(selectedObject);
-                if (index > -1) spawnedFurniture.splice(index, 1);
-                collisionEngine.updateObstacles();
-                deselectObject();
-            }
+            const obj = uiRef.getUI && transform.object;
+            if (!transform.object) return;
+            scene.remove(transform.object);
+            const idx = spawnedFurniture.indexOf(transform.object);
+            if (idx > -1) spawnedFurniture.splice(idx, 1);
+            collisionEngine.updateObstacles();
+            deselectObject();
         },
         (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
     );
 
-    const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
-    const aiModel = genAI?.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
-
-    const aiBtn = document.getElementById('ai-generate-btn');
+    // ── 9. AI ──
+    const ai = createAI(API_KEY, furnitureLibrary, roomManager);
+    const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
-    const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
 
-    if (aiBtn) {
-        // Slider wiring
-        const widthSlider  = document.getElementById('widthSlider');
-        const lengthSlider = document.getElementById('lengthSlider');
-        const wValEl = document.getElementById('wVal');
-        const lValEl = document.getElementById('lVal');
-        if (widthSlider) widthSlider.addEventListener('input', () => {
-            roomWidth = parseFloat(widthSlider.value);
-            if (wValEl) wValEl.textContent = roomWidth.toFixed(1);
-            rebuildRoom(roomWidth, roomDepth);
-        });
-        if (lengthSlider) lengthSlider.addEventListener('input', () => {
-            roomDepth = parseFloat(lengthSlider.value);
-            if (lValEl) lValEl.textContent = roomDepth.toFixed(1);
-            rebuildRoom(roomWidth, roomDepth);
-        });
+    async function handleGenerate(userText, useRoomContext = true) {
+        if (!userText || aiBtn?.disabled) return;
+        if (aiBtn) { aiBtn.disabled = true; }
 
-        async function runGeneration(userRequest, useRoomContext = true) {
-            if (!aiModel || !userRequest || aiBtn.disabled) return;
-            aiBtn.disabled = true;
-            aiBtn.innerText = "Architecting...";
+        try {
+            const layout = await ai.runGeneration(userText, {
+                useRoomContext,
+                onStatus: (s) => { if (aiBtn) aiBtn.innerText = s; },
+            });
+            if (!layout) return;
 
-            try {
-                let prompt;
+            deselectObject();
+            spawnedFurniture.forEach(o => scene.remove(o));
+            spawnedFurniture.length = 0;
+            collisionEngine.updateObstacles();
 
-                const safeFileList = Array.isArray(furnitureLibrary) ? furnitureLibrary.map(a => a.file).join(", ") : "";
-
-                if (useRoomContext) {
-                    const activeRoomBtn = document.querySelector('.room-type-btn.active span');
-                    const roomType = activeRoomBtn ? activeRoomBtn.innerText.trim() : 'Living Room';
-
-                    prompt = `ACT AS: Senior Interior Architect.
-ROOM TYPE: ${roomType}.
-ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(${(-roomWidth/2).toFixed(2)} to ${(roomWidth/2).toFixed(2)}), Z(${(-roomDepth/2).toFixed(2)} to ${(roomDepth/2).toFixed(2)}).
-
-STRICT FILENAME MANIFEST:
-Only use these exact filenames (case-sensitive):
-${safeFileList}
-
-PLACEMENT RULES (must follow all):
-1. No overlap: bounding boxes must not intersect.
-2. Minimum separation: maintain at least 2.0 meters between items.
-3. Bounds: all items must be within the room bounds above.
-4. Doors: if present, place flush against the room edge and flat on the floor (Y=0).
-5. Desk requirement: placing "Desk.fbx" requires a desk chair ("Desk Chair.fbx" or "Desk Chair (2).fbx") within 0.8m.
-6. Beds: place with headboard against a wall.
-7. Avoid placing any item at (0, 0).
-8. Vertical: all objects must sit on floor (Y=0); do not stack objects.
-9. Limit total items to 15.
-
-OUTPUT (strict):
-Return JSON array only. Example:
-[{"file":"Bed Double.fbx","x":2.0,"z":-4.0,"rotate":0}]
-
-USER REQUEST: "${userRequest}"
-`;
-                } else {
-                    prompt = `ACT AS: Senior Interior Architect.
-ROOM: 10m x 10m. Bounds: X(-5 to 5), Z(-5 to 5).
-
-STRICT FILENAME MANIFEST:
-Only use these exact filenames (case-sensitive):
-${safeFileList}
-
-PLACEMENT RULES (must follow all):
-1. No overlap: bounding boxes must not intersect.
-2. Minimum separation: maintain at least 2.0 meters between items.
-3. Bounds: all items must be within the room bounds above.
-4. Doors: if present, place flush against the room edge and flat on the floor (Y=0).
-5. Desk requirement: placing "Desk.fbx" requires a desk chair ("Desk Chair.fbx" or "Desk Chair (2).fbx") within 0.8m.
-6. Beds: place with headboard against a wall.
-7. Avoid placing any item at (0, 0).
-8. Vertical: all objects must sit on floor (Y=0); do not stack objects.
-9. Limit total items to 15.
-
-OUTPUT (strict):
-Return JSON array only. Example:
-[{"file":"Bed Double.fbx","x":2.0,"z":-4.0,"rotate":0}]
-
-USER REQUEST: "${userRequest}"
-`;
-                }
-
-                const result = await aiModel.generateContent(prompt);
-                const rawText = result.response.text();
-                console.log("Raw AI response:", rawText);
-                const layout = JSON.parse(rawText.replace(/```json|```/g, "").trim());
-
-                deselectObject();
-                spawnedFurniture.forEach(obj => scene.remove(obj));
-                spawnedFurniture.length = 0;
-
-                for (const item of layout) {
-                    await placeModel(item);
-                }
-            } catch (e) {
-                console.error("AI Error:", e);
-                const msg = e?.message || String(e);
-                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401')) {
-                    alert(`API key error: ${msg}`);
-                } else if (msg.includes('JSON') || msg.includes('parse') || msg.includes('SyntaxError')) {
-                    alert(`JSON parse failed — check console for raw model output.\n\n${msg}`);
-                } else {
-                    alert(`AI Error: ${msg}`);
-                }
-            } finally {
-                aiBtn.disabled = false;
-                aiBtn.innerText = "Generate Layout";
-            }
-        }
-
-        aiBtn.addEventListener('click', () => runGeneration(aiInput.value, true));
-
-        if (autoPrompt && aiInput) {
-            aiInput.value = autoPrompt;
-            runGeneration(autoPrompt, false);
+            for (const item of layout) await placeModel(item);
+        } catch (e) {
+            alert(e.message ?? String(e));
+        } finally {
+            if (aiBtn) { aiBtn.disabled = false; aiBtn.innerText = 'Generate Layout'; }
         }
     }
 
-    // ── 8. EVENTS ──
+    aiBtn?.addEventListener('click', () => handleGenerate(aiInput?.value, true));
+
+    // Auto-trigger from front-page redirect (?prompt=...)
+    const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
+    if (autoPrompt && aiInput) {
+        setTimeout(() => {
+            aiInput.classList.add('auto-fill');
+            aiInput.focus();
+            let i = 0;
+            aiInput.value = '';
+            const type = setInterval(() => {
+                aiInput.value += autoPrompt[i++];
+                if (i >= autoPrompt.length) {
+                    clearInterval(type);
+                    setTimeout(() => {
+                        aiInput.classList.remove('auto-fill');
+                        handleGenerate(autoPrompt, false);
+                    }, 400);
+                }
+            }, 30);
+        }, 600);
+    }
+
+    // ── 10. MOUSE & KEYBOARD ──
+    const raycaster = new THREE.Raycaster();
+    const mouse     = new THREE.Vector2();
+
     window.addEventListener('mousedown', (e) => {
         if (e.target !== renderer.domElement || transform.dragging) return;
         const rect = container.getBoundingClientRect();
-        mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        mouse.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+        mouse.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
         const hits = raycaster.intersectObjects(spawnedFurniture, true);
-        if (hits.length > 0) {
+        if (hits.length) {
             let root = hits[0].object;
             while (root.parent && !spawnedFurniture.includes(root)) root = root.parent;
             if (spawnedFurniture.includes(root)) selectObject(root);
-        } else { deselectObject(); }
+        } else {
+            deselectObject();
+        }
     });
 
     window.addEventListener('keydown', (e) => {
-        const key = e.key.toLowerCase();
-        if (key === 'escape') deselectObject();
-        if (!selectedObject) return;
-        if (key === 'g') transform.setMode('translate');
-        if (key === 'r') transform.setMode('rotate');
-        if (key === 's') transform.setMode('scale');
+        const k = e.key.toLowerCase();
+        if (k === 'escape') { deselectObject(); return; }
+        if (!transform.object) return;
+        if (k === 'g') transform.setMode('translate');
+        if (k === 'r') transform.setMode('rotate');
+        if (k === 's') transform.setMode('scale');
     });
 
-    function animate() {
+    // ── 11. RENDER LOOP ──
+    (function animate() {
         requestAnimationFrame(animate);
         orbit.update();
         renderer.render(scene, camera);
-    }
-    animate();
+    })();
 }
 
 initApp();
+
