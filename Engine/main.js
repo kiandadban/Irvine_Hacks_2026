@@ -24,7 +24,7 @@ async function initApp() {
 
     // ── 1. ASSET DATA LOADING ──
     try {
-        const resp = await fetch('../furniture_models/furniture_attributes.json');
+        const resp = await fetch('../models/furniture_attributes.json');
         const data = await resp.json();
         furnitureLibrary = data.furniture_library;
         assetMap = furnitureLibrary.reduce((m, a) => { m[a.file] = a; return m; }, {});
@@ -74,26 +74,40 @@ async function initApp() {
 
     // ── 3. VISUAL COLLISION FEEDBACK ──
     const updateCollisionVisuals = (obj) => {
+        if (!obj) return;
         const check = collisionEngine.checkCollision(obj);
-        
+
         obj.traverse(child => {
             if (child.isMesh && child.material) {
                 const materials = Array.isArray(child.material) ? child.material : [child.material];
                 materials.forEach(mat => {
+                    // On first encounter, store original visual properties so we can restore later
+                    if (!mat.userData._origVisual) {
+                        mat.userData._origVisual = {
+                            color: mat.color ? mat.color.clone() : null,
+                            emissive: mat.emissive ? mat.emissive.clone() : null,
+                            emissiveIntensity: typeof mat.emissiveIntensity === 'number' ? mat.emissiveIntensity : null,
+                            opacity: typeof mat.opacity === 'number' ? mat.opacity : null,
+                            transparent: typeof mat.transparent === 'boolean' ? mat.transparent : null
+                        };
+                    }
+
                     if (check.isColliding) {
-                        // Apply red tint and emissive glow
                         if (mat.emissive) {
                             mat.emissive.set(0xff0000);
                             mat.emissiveIntensity = 0.5;
                         }
-                        mat.color.set(0xffaaaa);
+                        if (mat.color) mat.color.set(0xffaaaa);
                     } else {
-                        // Reset to original
-                        if (mat.emissive) {
-                            mat.emissive.set(0x000000);
-                            mat.emissiveIntensity = 0;
+                        // Restore original visuals exactly as they were
+                        const o = mat.userData._origVisual;
+                        if (o) {
+                            if (mat.color && o.color) mat.color.copy(o.color);
+                            if (mat.emissive && o.emissive) mat.emissive.copy(o.emissive);
+                            if (typeof o.emissiveIntensity === 'number' && mat.emissive) mat.emissiveIntensity = o.emissiveIntensity;
+                            if (typeof o.opacity === 'number') mat.opacity = o.opacity;
+                            if (typeof o.transparent === 'boolean') mat.transparent = o.transparent;
                         }
-                        mat.color.set(0xffffff);
                     }
                 });
             }
@@ -193,25 +207,41 @@ async function initApp() {
 
         return new Promise((resolve) => {
             loader.load(path, (model) => {
-                const box = new THREE.Box3().setFromObject(model);
-                const size = box.getSize(new THREE.Vector3());
-                model.scale.setScalar((asset.dimensions.width || 1.0) / size.x);
+                // Measure original size to compute scale
+                const rawBox = new THREE.Box3().setFromObject(model);
+                const rawSize = rawBox.getSize(new THREE.Vector3());
+                model.scale.setScalar((asset.dimensions.width || 1.0) / rawSize.x);
 
                 model.rotation.y = itemConfig.rotate || 0;
 
-                // Physics Nudge: Try to find a legal spot
-                let posX = itemConfig.x || 0, posZ = itemConfig.z || 0;
+                // Physics Nudge: Try to find a legal spot. Snap X/Z to grid and snap Y to floor surface.
+                const snapStep = 0.5;
+                let posX = typeof itemConfig.x === 'number' ? itemConfig.x : 0;
+                let posZ = typeof itemConfig.z === 'number' ? itemConfig.z : 0;
                 let isValid = false, attempts = 0;
 
                 while (!isValid && attempts < 15) {
-                    model.position.set(posX, 0, posZ);
+                    // Snap to grid for placement testing
+                    const testX = Math.round(posX / snapStep) * snapStep;
+                    const testZ = Math.round(posZ / snapStep) * snapStep;
+
+                    // Position at ground level first, then compute bounding box to determine bottom Y
+                    model.position.set(testX, 0, testZ);
                     model.updateMatrixWorld(true);
-                    
+
+                    const worldBox = new THREE.Box3().setFromObject(model);
+                    const floorY = roomFloor ? roomFloor.position.y : 0;
+                    const bottomY = worldBox.min.y;
+
+                    // Lift or lower model so its bottom sits on the floor surface
+                    model.position.y = floorY - bottomY;
+                    model.updateMatrixWorld(true);
+
                     const check = collisionEngine.checkCollision(model);
                     if (!check.isColliding) {
                         isValid = true;
                     } else {
-                        // Nudge slightly and clamp to room
+                        // Nudge slightly and clamp to room bounds
                         posX += (Math.random() - 0.5) * 1.5;
                         posZ += (Math.random() - 0.5) * 1.5;
                         posX = Math.max(-(roomWidth/2 - 0.5), Math.min(roomWidth/2 - 0.5, posX));
@@ -221,6 +251,13 @@ async function initApp() {
                 }
 
                 if (isValid) {
+                    // Ensure final snap to grid and floor
+                    model.position.x = Math.round(model.position.x / snapStep) * snapStep;
+                    model.position.z = Math.round(model.position.z / snapStep) * snapStep;
+                    const finalWorldBox = new THREE.Box3().setFromObject(model);
+                    const finalFloorY = roomFloor ? roomFloor.position.y : 0;
+                    model.position.y = finalFloorY - finalWorldBox.min.y;
+
                     scene.add(model);
                     spawnedFurniture.push(model);
                     collisionEngine.updateObstacles();
@@ -250,7 +287,7 @@ async function initApp() {
     );
 
     const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
-    const aiModel = genAI?.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const aiModel = genAI?.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
     const aiBtn = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
@@ -279,27 +316,31 @@ async function initApp() {
             aiBtn.innerText = "Architecting...";
 
             try {
-                const prompt = `
-            ACT AS: Senior Interior Architect.
-            ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(-${roomWidth/2} to ${roomWidth/2}), Z(-${roomDepth/2} to ${roomDepth/2}).
-            
-            --- STRICT FILENAME MANIFEST ---
-            You MUST ONLY use these exact filenames. Do not invent "bed_double" or "wardrobe":
-            ${furnitureLibrary.assets.map(a => a.file).join(", ")}
-          
-            --- PLACEMENT RULES ---
-            1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
-            2. BOUNDS: All items must stay within X(-${roomWidth/2} to ${roomWidth/2}) and Z(-${roomDepth/2} to ${roomDepth/2}).
-            3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Z=-5) and lay it flat
-            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
-            5. SLEEPING: Place beds with the headboard against a wall.
-            6. Don't place objects at exactly (0, 0)
-            7. Keep amount of objects spawned to 15 or under
-          
-            --- OUTPUT FORMAT ---
-            Output JSON ONLY array: [{"file": "Bed Double.fbx", "x": 2.0, "z": -4.0, "rotate": 0}]
-            
-            USER REQUEST: "${aiInput.value}"`;
+                const prompt = `ACT AS: Senior Interior Architect.
+ROOM: ${roomWidth}m x ${roomDepth}m.
+BOUNDS: X(${(-roomWidth/2).toFixed(2)} to ${(roomWidth/2).toFixed(2)}), Z(${(-roomDepth/2).toFixed(2)} to ${(roomDepth/2).toFixed(2)}).
+
+STRICT FILENAME MANIFEST:
+Only use these exact filenames (case-sensitive):
+${Array.isArray(furnitureLibrary) ? furnitureLibrary.map(a => a.file).join(", ") : ""}
+
+PLACEMENT RULES (must follow all):
+1. No overlap: bounding boxes must not intersect.
+2. Minimum separation: maintain at least 2.0 meters between items.
+3. Bounds: all items must be within the room bounds above.
+4. Doors: if present, place flush against the room edge and flat on the floor (Y=0).
+5. Desk requirement: placing "Desk.fbx" requires a desk chair ("Desk Chair.fbx" or "Desk Chair (2).fbx") within 0.8m.
+6. Beds: place with headboard against a wall.
+7. Avoid placing any item at (0, 0).
+8. Vertical: all objects must sit on floor (Y=0); do not stack objects.
+9. Limit total items to 15.
+
+OUTPUT (strict):
+Return JSON array only. Example:
+[{"file":"Bed Double.fbx","x":2.0,"z":-4.0,"rotate":0}]
+
+USER REQUEST: "${aiInput.value}"
+`;
 
                 const result = await aiModel.generateContent(prompt);
                 const rawText = result.response.text();
