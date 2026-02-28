@@ -58,25 +58,31 @@ async function initApp() {
         });
     }
 
-    // ── 5. UI PANEL & CONTROLS ──
-    // Selection state wrappers
-    // In your initApp setup:
-const infoPanel = createInfoPanel((obj) => {
-    scene.remove(obj);
-    spawnedFurniture.splice(spawnedFurniture.indexOf(obj), 1);
-    collisionEngine.updateObstacles();
-});
+    // ── 5. SELECTION WRAPPERS & INFO PANEL ──
+    
+    // Initialize Info Panel first
+    const infoPanel = createInfoPanel((obj) => {
+        // Callback for the "Remove Item" button inside the side panel
+        if (!obj) return;
+        scene.remove(obj);
+        const idx = spawnedFurniture.indexOf(obj);
+        if (idx > -1) spawnedFurniture.splice(idx, 1);
+        collisionEngine.updateObstacles();
+        wrappedDeselect();
+    });
 
-const wrappedSelect = (obj) => {
-    selectObject(obj);    // Three.js Transform selection
-    infoPanel.update(obj); // UI Animation Selection
-};
+    const wrappedSelect = (obj) => {
+        if (!obj) return;
+        selectObject(obj);     // Triggers TransformControls
+        infoPanel.update(obj);  // Triggers UI Slide-in
+    };
 
-const wrappedDeselect = () => {
-    deselectObject();      // Three.js Deselect
-    infoPanel.hide();      // UI Slide Out
-};
+    const wrappedDeselect = () => {
+        deselectObject();       // Detaches TransformControls
+        infoPanel.hide();       // Triggers UI Slide-out
+    };
 
+    // ── 6. CONTROLS ──
     const uiRef = { getUI: () => ui };
     const { orbit, transform, selectObject, deselectObject } = initControls(
         camera, renderer, scene,
@@ -84,19 +90,38 @@ const wrappedDeselect = () => {
         updateCollisionVisuals, uiRef
     );
 
-    // ── 6. PLACEMENT & AI ──
+    // ── 7. PLACEMENT ──
     const { placeModel } = createPlacer(
         scene, spawnedFurniture, collisionEngine,
         assetMap, roomManager, wrappedSelect, updateCollisionVisuals
     );
 
+    // ── 8. UI ──
+    const ui = initUI(
+        () => {},
+        (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
+        () => {
+            // Global Delete logic (from sidebar or keyboard)
+            const obj = transform.object;
+            if (!obj) return;
+            scene.remove(obj);
+            const idx = spawnedFurniture.indexOf(obj);
+            if (idx > -1) spawnedFurniture.splice(idx, 1);
+            collisionEngine.updateObstacles();
+            wrappedDeselect();
+        },
+        (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
+    );
+
+    // ── 9. AI ──
     const ai = createAI(API_KEY, furnitureLibrary, roomManager);
     const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
     async function handleGenerate(userText, useRoomContext = true, roomType = null) {
         if (!userText || aiBtn?.disabled) return;
-        aiBtn.disabled = true;
+        if (aiBtn) { aiBtn.disabled = true; }
+
         try {
             const layout = await ai.runGeneration(userText, {
                 useRoomContext,
@@ -114,8 +139,7 @@ const wrappedDeselect = () => {
         } catch (e) {
             alert(e.message ?? String(e));
         } finally {
-            aiBtn.disabled = false;
-            aiBtn.innerText = 'Generate Layout';
+            if (aiBtn) { aiBtn.disabled = false; aiBtn.innerText = 'Generate Layout'; }
         }
     }
 
@@ -125,23 +149,7 @@ const wrappedDeselect = () => {
         handleGenerate(aiInput?.value, true, roomType);
     });
 
-    // Typewriter effect for auto-prompts
-    const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
-    if (autoPrompt && aiInput) {
-        setTimeout(() => {
-            aiInput.focus();
-            let i = 0;
-            const type = setInterval(() => {
-                aiInput.value += autoPrompt[i++];
-                if (i >= autoPrompt.length) {
-                    clearInterval(type);
-                    setTimeout(() => handleGenerate(autoPrompt, false), 400);
-                }
-            }, 30);
-        }, 600);
-    }
-
-    // Canvas Mouse Interaction
+    // ── 10. MOUSE & KEYBOARD ──
     const raycaster = new THREE.Raycaster();
     const mouse     = new THREE.Vector2();
 
@@ -172,7 +180,7 @@ const wrappedDeselect = () => {
         if (k === 's') transform.setMode('scale');
     });
 
-    // ── 9. ANIMATION LOOP ──
+    // ── 11. RENDER LOOP ──
     (function animate() {
         requestAnimationFrame(animate);
         orbit.update();
