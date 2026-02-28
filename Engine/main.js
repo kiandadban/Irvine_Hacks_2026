@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { initUI } from './ui.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+// furniture attributes will be fetched at runtime instead of using import assertions
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { API_KEY } from './config.js';
 
@@ -14,31 +15,69 @@ if (!API_KEY) {
     console.error("API_KEY missing! Check your config.js file.");
 }
 
-// ── 1. FURNITURE LIBRARY ──
-const furnitureLibrary = {
-    "assets": [
-        { "file": "Bed King.glb", "id": "king_bed", "category": "sleeping" },
-        { "file": "Bed Twin Old.glb", "id": "twin_bed", "category": "sleeping" },
-        { "file": "Bunk Bed.glb", "id": "bunk_bed", "category": "sleeping" },
-        { "file": "Couch Large.glb", "id": "sofa_large", "category": "seating" },
-        { "file": "Couch Medium.glb", "id": "sofa_medium", "category": "seating" },
-        { "file": "Armchair.glb", "id": "armchair", "category": "seating" },
-        { "file": "Desk.glb", "id": "desk", "category": "workspace" },
-        { "file": "Desk Chair.glb", "id": "chair_standard", "category": "workspace_seating" },
-        { "file": "Desk Chair (2).glb", "id": "chair_exec", "category": "workspace_seating" },
-        { "file": "Bookcase with Books.glb", "id": "bookcase", "category": "storage" },
-        { "file": "Drawer.glb", "id": "drawer", "category": "storage" },
-        { "file": "Dining Set.glb", "id": "dining_set", "category": "dining" },
-        { "file": "Kitchen.glb", "id": "kitchen", "category": "cooking" },
-        { "file": "Night Stand.glb", "id": "nightstand", "category": "accessory" },
-        { "file": "Futuristic Shelf.glb", "id": "shelf_future", "category": "decor" },
-        { "file": "Door_brown.glb", "id": "door_brown", "category": "architectural" },
-        { "file": "Door_white.glb", "id": "door_white", "category": "architectural" }
-    ]
-};
+// wrap initialization in async function so we can await fetching the JSON
+async function initApp() {
+
+    // ── 1. FURNITURE LIBRARY ──
+    // will be filled after loading JSON file
+    let furnitureLibrary;
+    let assetMap;
+
+    // convert a filename to a relative path under models
+    function modelPath(filename) {
+        const asset = assetMap[filename];
+        if (asset) return `../models/${asset.category}/${asset.file}`;
+        return `../models/${filename}`; // fallback
+    }
+
+    // dynamically populate the sidebar with all models
+    function populateModelPanel() {
+        const panel = document.getElementById('model-panel');
+        if (!panel) return;
+        panel.innerHTML = ''; // clear any hardcoded cards
+        furnitureLibrary.assets.forEach(asset => {
+            const card = document.createElement('div');
+            card.className = 'model-card model-load-btn';
+            card.dataset.path = modelPath(asset.file);
+            const icon = document.createElement('div');
+            icon.className = 'icon-box';
+            icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg>';
+            const span = document.createElement('span');
+            span.textContent = asset.name;
+            card.appendChild(icon);
+            card.appendChild(span);
+            panel.appendChild(card);
+        });
+    }
+
+    // fetch attributes file and build library
+    try {
+        const resp = await fetch('../furniture_models/furniture_attributes.json');
+        const data = await resp.json();
+        furnitureLibrary = {
+            assets: data.furniture_library.map(item => ({
+                file: item.file,
+                name: item.name,
+                category: item.category,
+                id: item.name.toLowerCase().replace(/\s+/g, '_')
+            }))
+        };
+    } catch (e) {
+        console.error('Failed to load furniture attributes', e);
+        furnitureLibrary = { assets: [] };
+    }
+
+    // build lookup map and populate panel
+    assetMap = furnitureLibrary.assets.reduce((m, a) => { m[a.file] = a; return m; }, {});
+    populateModelPanel();
+
 
 // ── 2. INITIALIZATION ──
 const container = document.getElementById('canvas-wrapper');
+    if (!container) {
+        console.error('canvas-wrapper element not found in DOM');
+        return;        // abort initialization
+    }
 
 let genAI = null;
 let aiModel = null;
@@ -59,7 +98,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.shadowMap.enabled = true;
 container.appendChild(renderer.domElement);
 
-const loader = new GLTFLoader();
+const loader = new FBXLoader();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -128,8 +167,9 @@ function deselectObject() {
 // ── 7. CORE LOADING FUNCTIONS ──
 function loadModel(path, config = {}) {
     return new Promise((resolve) => {
-        loader.load(path, (gltf) => {
-            const model = gltf.scene;
+        loader.load(path, (fbx) => {
+            // FBXLoader returns the model directly
+            const model = fbx;
 
             const box = new THREE.Box3().setFromObject(model);
             const size = box.getSize(new THREE.Vector3());
@@ -196,11 +236,11 @@ if (aiBtn) {
             1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
             2. BOUNDS: All items must stay within X(-5 to 5) and Y(-5 to 5).
             3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Y=-5) and lay it flat
-            4. DESK COMBO: If you place a "Desk.glb", you MUST place a "Desk Chair.glb" or "Desk Chair (2).glb" directly next to it (within 0.8m).
+            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
             5. SLEEPING: Place beds with the headboard against a wall.
           
             --- OUTPUT FORMAT ---
-            Output JSON ONLY array: [{"file": "Bed King.glb", "x": 2.0, "y": -4.0, "rotate": 0}]
+            Output JSON ONLY array: [{"file": "Bed Double.fbx", "x": 2.0, "y": -4.0, "rotate": 0}]
             
             USER REQUEST: "${aiInput.value}"
 
@@ -214,8 +254,8 @@ if (aiBtn) {
             spawnedFurniture.length = 0;
 
             for (const item of layout) {
-                // Path adjusted to your folder structure
-                const path = `../furniture_models/${item.file}`;
+                // resolve asset location using our map (category-aware)
+                const path = modelPath(item.file);
                 await loadModel(path, { x: item.x, z: item.z, rotate: item.rotate });
             }
         } catch (e) { console.error(e); }
@@ -281,3 +321,7 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
 });
+
+} // end initApp
+
+initApp().catch(err => console.error('initApp error', err));
