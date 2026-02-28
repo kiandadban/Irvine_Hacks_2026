@@ -95,13 +95,14 @@ async function initApp() {
     const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
-    async function handleGenerate(userText, useRoomContext = true) {
+    async function handleGenerate(userText, useRoomContext = true, roomType = null) {
         if (!userText || aiBtn?.disabled) return;
         if (aiBtn) { aiBtn.disabled = true; }
 
         try {
             const layout = await ai.runGeneration(userText, {
                 useRoomContext,
+                roomType,
                 onStatus: (s) => { if (aiBtn) aiBtn.innerText = s; },
             });
             if (!layout) return;
@@ -119,7 +120,11 @@ async function initApp() {
         }
     }
 
-    aiBtn?.addEventListener('click', () => handleGenerate(aiInput?.value, true));
+    aiBtn?.addEventListener('click', () => {
+        const activeRoomBtn = document.querySelector('.room-type-btn.active span');
+        const roomType = activeRoomBtn ? activeRoomBtn.innerText.trim() : 'Living Room';
+        handleGenerate(aiInput?.value, true, roomType);
+    });
 
     // Auto-trigger from front-page redirect (?prompt=...)
     const autoPrompt = new URLSearchParams(window.location.search).get('prompt');

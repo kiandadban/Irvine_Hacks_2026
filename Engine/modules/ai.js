@@ -64,7 +64,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
      * @param {string}  [opts.statusCallback]       - fn(statusText) for UI feedback
      * @returns {Promise<Array|null>} parsed layout array, or null on failure
      */
-    async function runGeneration(userText, { useRoomContext = true, onStatus } = {}) {
+    async function runGeneration(userText, { useRoomContext = true, roomType = null, onStatus } = {}) {
         if (!userText?.trim()) return null;
 
         const cacheKey = `${userText.trim().toLowerCase()}::${roomManager.roomWidth}x${roomManager.roomDepth}`;
@@ -87,8 +87,13 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
             ? `ROOM: ${rw}m x ${rd}m. Bounds: X(-${hw} to ${hw}), Z(-${hd} to ${hd}).`
             : `ROOM: 10m x 10m. Bounds: X(-5 to 5), Z(-5 to 5).`;
 
+        const roomTypeLine = (useRoomContext && roomType)
+            ? `ROOM TYPE: ${roomType}. Only place furniture appropriate for this room type.`
+            : '';
+
         const prompt = `ACT AS: Senior Interior Architect.
 ${roomLine}
+${roomTypeLine}
 
 STRICT FILENAME MANIFEST — use ONLY these exact filenames (case-sensitive):
 ${fileList}
