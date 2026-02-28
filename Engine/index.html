@@ -2,92 +2,167 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Three.js Professional Editor</title>
+    <title>Architectural Interior Editor</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
-        .panel { position: absolute; background: rgba(0,0,0,0.85); padding: 15px; border: 1px solid #444; color: #eee; z-index: 10; }
-        
-        #instructions { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); color: #888; text-align: center; pointer-events: none; }
+        /* ── Redfin-Inspired Cream & Green Theme ── */
+        :root {
+            --cream-bg: #FDFBF7;
+            --forest-green: #2C4C3B;
+            --sage-green: #E8F0E6;
+            --deep-charcoal: #333333;
+            --border-light: #E0DED7;
+            --white: #FFFFFF;
+        }
 
-        #spawn-panel { top: 10px; left: 10px; border-color: #00ff88; }
-        #props-panel { top: 10px; right: 10px; width: 180px; border-color: #00aaff; display: none; }
+        body { margin: 0; overflow: hidden; background: #E0DED7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        /* ── Horizontal Bottom Panel ── */
+        /* ── Floating Panels ── */
+        .panel { 
+            position: absolute; 
+            background: var(--cream-bg); 
+            padding: 20px; 
+            border: 1px solid var(--border-light); 
+            color: var(--deep-charcoal); 
+            z-index: 10; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+        
+        #instructions { 
+            position: absolute; 
+            bottom: 100px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            color: var(--forest-green); 
+            background: rgba(253, 251, 247, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            pointer-events: none; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #spawn-panel { top: 20px; left: 20px; }
+        #ai-panel { top: 160px; left: 20px; width: 220px; }
+        #props-panel { top: 20px; right: 20px; width: 200px; display: none; }
+        
+        /* ── Horizontal Bottom Library ── */
         #model-panel { 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            height: 80px; 
-            border-top: 1px solid #ff00ff; 
+            bottom: 0; left: 0; right: 0; 
+            height: 90px; 
+            background: var(--white);
+            border-top: 1px solid var(--border-light); 
             display: flex; 
             align-items: center; 
-            gap: 15px; 
+            gap: 12px; 
             overflow-x: auto; 
-            padding: 0 20px;
+            padding: 0 30px;
             white-space: nowrap;
         }
 
         .model-load-btn { 
             flex: 0 0 auto; 
-            height: 50px; 
-            min-width: 100px;
-            background: #222;
-            border: 1px solid #666;
-            transition: all 0.2s;
+            height: 45px; 
+            padding: 0 15px;
+            background: var(--white);
+            border: 1px solid var(--border-light);
+            color: var(--forest-green);
+            font-weight: 500;
+            border-radius: 4px;
+            transition: all 0.2s ease;
         }
 
-        button { cursor: pointer; background: #333; color: white; border: 1px solid #666; padding: 5px 10px; }
-        button:hover { background: #444; border-color: #00ff88; }
-        input[type="color"] { width: 100%; height: 30px; cursor: pointer; border: none; background: none; }
+        .model-load-btn:hover {
+            background: var(--sage-green);
+            border-color: var(--forest-green);
+        }
 
-        /* Custom Scrollbar for the bottom panel */
-        #model-panel::-webkit-scrollbar { height: 6px; }
-        #model-panel::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+        /* ── Typography & Inputs ── */
+        h3 { margin: 0 0 12px 0; font-size: 14px; color: var(--forest-green); text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        select, input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button { 
+            cursor: pointer; 
+            background: var(--forest-green); 
+            color: var(--white); 
+            border: none; 
+            padding: 10px 15px; 
+            width: 100%;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+        
+        #del-btn { background: #B33F40; margin-top: 15px; }
+
+        input[type="color"] { width: 100%; height: 35px; border: 1px solid var(--border-light); padding: 2px; background: white; border-radius: 4px; }
+
+        /* Custom Scrollbar */
+        #model-panel::-webkit-scrollbar { height: 4px; }
+        #model-panel::-webkit-scrollbar-thumb { background: var(--border-light); }
     </style>
 </head>
 <body>
     <div id="instructions">
-        G: Move | R: Rotate | S: Scale | L: Local/World | X: Snap
+        G: Move • R: Rotate • S: Scale • Esc: Deselect
     </div>
 
     <div id="spawn-panel" class="panel">
-        <strong>Create</strong><br><br>
+        <h3>Basic Shapes</h3>
         <select id="shape-type">
             <option value="box">Cube</option>
             <option value="sphere">Sphere</option>
             <option value="cone">Cone</option>
         </select>
-        <button id="add-btn">Add</button>
+        <button id="add-btn">Add Shape</button>
     </div>
 
-    <div id="model-panel" class="panel">
-        <strong style="color: #ff00ff; margin-right: 10px;">Library</strong>
+    <div id="ai-panel" class="panel">
+        <h3>AI Interior Designer</h3>
+        <input type="text" id="ai-prompt" placeholder="Describe a room style...">
+        <button id="ai-generate-btn">Generate Layout</button>
+    </div>
+
+    <div id="props-panel" class="panel">
+        <h3>Properties</h3>
+        <p id="obj-name" style="font-size: 13px; color: #666;">Selection: None</p>
+        <label style="font-size: 12px; font-weight: bold;">Material Color</label>
+        <input type="color" id="color-picker">
+        <button id="del-btn">Remove Item</button>
+    </div>
+
+    <div id="model-panel">
+        <h3 style="margin: 0; margin-right: 20px;">Furniture</h3>
         <button class="model-load-btn" data-path="../furniture_models/Bed King.glb">King Bed</button>
         <button class="model-load-btn" data-path="../furniture_models/Bunk Bed.glb">Bunk Bed</button>
         <button class="model-load-btn" data-path="../furniture_models/Couch Large.glb">Large Couch</button>
         <button class="model-load-btn" data-path="../furniture_models/Couch Medium.glb">Medium Couch</button>
-        <button class="model-load-btn" data-path="../furniture_models/Desk.glb">Desk</button>
+        <button class="model-load-btn" data-path="../furniture_models/Desk.glb">Work Desk</button>
         <button class="model-load-btn" data-path="../furniture_models/Night Stand.glb">Night Stand</button>
         <button class="model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">Bookcase</button>
         <button class="model-load-btn" data-path="../furniture_models/Drawer.glb">Drawer</button>
     </div>
 
-    <div id="props-panel" class="panel">
-        <strong>Properties</strong><hr>
-        <p id="obj-name">Type: None</p>
-        <label>Color</label>
-        <input type="color" id="color-picker">
-        <br><br>
-        <button id="del-btn" style="color: #ff4444; border-color: #ff4444;">Delete Object</button>
-    </div>
-
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
         }
+    }
     </script>
     <script type="module" src="main.js"></script>
 </body>

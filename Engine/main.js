@@ -5,214 +5,248 @@ import { initUI } from './ui.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Read the key from the environment
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-
+import { API_KEY } from './config.js'; // Import the key here
 if (!API_KEY) {
-    console.error("API Key missing! Check your .env file.");
+    console.error("API_KEY missing! Check your .env file and ensure it starts with VITE_");
 }
 
-const genAI = new GoogleGenerativeAI(API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-const loader = new GLTFLoader();
+const furnitureLibrary = {
+    "assets": [
+        { "file": "Bed King.glb", "id": "bed" },
+        { "file": "Bunk Bed.glb", "id": "bunk_bed" },
+        { "file": "Couch Large.glb", "id": "sofa_large" },
+        { "file": "Couch Medium.glb", "id": "sofa_medium" },
+        { "file": "Desk.glb", "id": "desk" },
+        { "file": "Night Stand.glb", "id": "nightstand" },
+        { "file": "Bookcase with Books.glb", "id": "bookcase" },
+        { "file": "Drawer.glb", "id": "drawer" }
+    ]
+};
 
-// ── 1. Scene Setup ──
+// ── 2. INITIALIZATION ──
+let genAI = null;
+let aiModel = null;
+
+if (API_KEY) {
+    genAI = new GoogleGenerativeAI(API_KEY);
+    aiModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+}
+
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050505);
+scene.background = new THREE.Color(0xF0F0F0); 
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(5, 5, 5);
+camera.position.set(6, 6, 6);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.appendChild(renderer.domElement);
 
-// ── 2. Lights & Helpers ──
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 10, 7);
-scene.add(light);
+const loader = new GLTFLoader();
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 
-const grid = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
-grid.position.y = -0.5;
+let spawnedFurniture = []; 
+let selectedObject = null;
+
+// ── 3. HELPERS & LIGHTS ──
+const grid = new THREE.GridHelper(10, 10, 0xCCCCCC, 0xE8E8E8);
+grid.position.y = -0.01; 
 scene.add(grid);
 
-// ── 3. Controls ──
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+sun.position.set(5, 10, 7);
+scene.add(sun);
+
+// ── 4. CONTROLS ──
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.enableDamping = true;
 
 const transform = new TransformControls(camera, renderer.domElement);
 scene.add(transform);
+transform.addEventListener('dragging-changed', (e) => orbit.enabled = !e.value);
 
-transform.addEventListener('dragging-changed', (event) => {
-  orbit.enabled = !event.value;
-});
+// ── 5. SELECTION HELPERS ──
 
-// ── 4. UI Initialization (Defined outside listeners) ──
+function selectObject(obj) {
+    if (selectedObject === obj) return;
+    selectedObject = obj;
+    transform.attach(selectedObject);
+    if (ui) ui.showProps(selectedObject);
+}
+
+function deselectObject() {
+    selectedObject = null;
+    transform.detach();
+    if (ui) ui.hideProps();
+}
+
+// ── 6. CORE ENGINE FUNCTIONS ──
+
+function loadModel(path, config = {}) {
+    loader.load(path, (gltf) => {
+        const model = gltf.scene;
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
+        model.scale.setScalar(2.5 / Math.max(size.x, size.y, size.z));
+
+        model.position.set(config.x || 0, 0, config.z || 0);
+        model.rotation.y = config.rotate || 0;
+
+        scene.add(model);
+        spawnedFurniture.push(model);
+        selectObject(model);
+    }, undefined, (err) => console.error("Load fail:", path, err));
+}
+
+function spawnPrimitive(type) {
+    const geo = type === 'box' ? new THREE.BoxGeometry(1, 1, 1) : 
+                type === 'sphere' ? new THREE.SphereGeometry(0.7, 32, 32) : 
+                new THREE.ConeGeometry(0.7, 1.2, 32);
+    
+    const mat = new THREE.MeshStandardMaterial({ color: 0x2C4C3B }); 
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(Math.random() * 2, 0.5, Math.random() * 2);
+    
+    scene.add(mesh);
+    spawnedFurniture.push(mesh);
+    selectObject(mesh);
+}
+
+// ── 7. UI LINKING ──
 const ui = initUI(
-    (type) => spawnObject(type), 
-    (hex) => changeColor(hex),
-    () => {
-        // --- THIS IS THE ONDELETE FUNCTION ---
-        if (selectedObject) {
-            console.log("Engine: Removing object", selectedObject);
-            
-            // 1. Remove the gizmo from the object first
-            transform.detach();
-            
-            // 2. Remove the object from the 3D world
+    (type) => spawnPrimitive(type),
+    (hex) => { if(selectedObject) selectedObject.traverse(n => n.isMesh && n.material.color.set(hex)) },
+    () => { 
+        if(selectedObject) {
             scene.remove(selectedObject);
-            
-            // 3. Clear the reference so we don't try to delete it again
-            selectedObject = null;
-            
-            // 4. Hide the properties panel
-            ui.hideProps();
-        } else {
-            console.warn("Engine: No object selected to delete");
+            spawnedFurniture = spawnedFurniture.filter(o => o !== selectedObject);
+            deselectObject();
         }
     },
     (path) => loadModel(path)
 );
 
-// ── 5. Selection & Raycasting ──
-let selectedObject = null;
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+document.getElementById('add-btn').onclick = () => {
+    const type = document.getElementById('shape-type').value;
+    spawnPrimitive(type);
+};
 
-window.addEventListener('mousedown', (event) => {
-  // 1. Ignore clicks on HTML UI elements
-  if (event.target !== renderer.domElement) return;
-
-  // 2. Prevent selection changes while actively dragging the gizmo
-  if (transform.dragging) return;
-
-  // 3. Update mouse coordinates
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  // 4. Perform Raycast
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(scene.children, true);
-
-  // 5. Look for a valid Mesh (excluding grid and gizmo)
-  const hit = intersects.find(i => {
-    let current = i.object;
-    while (current.parent && current.parent !== scene) {
-      current = current.parent;
-    }
-    return current !== grid && !current.isTransformControls;
-  });
-
-  if (hit) {
-    // Find the root object (crucial for GLB groups)
-    let rootObject = hit.object;
-    while (rootObject.parent && rootObject.parent !== scene) {
-      rootObject = rootObject.parent;
-    }
-
-    selectedObject = rootObject;
-    transform.attach(selectedObject);
-    ui.showProps(selectedObject);
-  } else {
-    // --- DESELECTION LOGIC ---
-
-    // Check if we accidentally hit the gizmo handles (arrows/rings)
-    const hitGizmo = intersects.find(i =>
-      i.object.isTransformControls ||
-      (i.object.parent && i.object.parent.isTransformControls)
-    );
-
-    // If we hit absolutely nothing, or anything that isn't the gizmo...
-    if (!hitGizmo) {
-      selectedObject = null;
-      transform.detach(); // Remove the arrows
-      ui.hideProps();     // Hide the side panel
-    }
-  }
+document.querySelectorAll('.model-load-btn').forEach(btn => {
+    btn.onclick = () => loadModel(btn.dataset.path);
 });
 
-// ── 6. Spawning Functions ──
-function spawnObject(type) {
-  let geo;
-  if (type === 'box') geo = new THREE.BoxGeometry(1, 1, 1);
-  else if (type === 'sphere') geo = new THREE.SphereGeometry(0.6, 32, 32);
-  else geo = new THREE.ConeGeometry(0.6, 1, 32);
+// AI Generation Handler
+const aiBtn = document.getElementById('ai-generate-btn');
+const aiInput = document.getElementById('ai-prompt');
 
-  const mat = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(Math.random() * 4 - 2, 0, Math.random() * 4 - 2);
-  scene.add(mesh);
+if (aiBtn) {
+    aiBtn.onclick = async () => {
+        if (!aiModel) {
+            alert("AI not initialized. Check API key in .env");
+            return;
+        }
+        if (!aiInput.value || aiBtn.disabled) return;
+        aiBtn.disabled = true;
+        aiBtn.innerText = "Designing...";
+        
+        try {
+            const prompt = `System: Interior Designer. Room: 10x10. Output ONLY JSON.
+            Library: ${JSON.stringify(furnitureLibrary.assets)}
+            Request: "${aiInput.value}"
+            Format: [{"file":"name.glb","x":0,"z":0,"rotate":0}]`;
 
-  selectedObject = mesh;
-  transform.attach(mesh);
-  ui.showProps(mesh);
+            const result = await aiModel.generateContent(prompt);
+            const text = result.response.text().replace(/```json|```/g, "").trim();
+            const layout = JSON.parse(text);
+
+            deselectObject();
+            spawnedFurniture.forEach(obj => scene.remove(obj));
+            spawnedFurniture = [];
+
+            layout.forEach(item => loadModel(`../furniture_models/${item.file}`, item));
+        } catch (err) {
+            console.error("AI Error:", err);
+            alert("Rate limit or AI error.");
+        } finally {
+            setTimeout(() => {
+                aiBtn.disabled = false;
+                aiBtn.innerText = "Generate Layout";
+            }, 5000);
+        }
+    };
 }
 
-function loadModel(path) {
-  console.log("Loading model from:", path);
+// ── 8. SELECTION & MOUSE LOGIC ──
 
-  loader.load(path, (gltf) => {
-    const model = gltf.scene;
+window.addEventListener('mousedown', (e) => {
+    if (e.target !== renderer.domElement || transform.dragging) return;
 
-    // --- SCALE & CENTERING FIX ---
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-    // Rescale the model so it's roughly 2 units big
-    const maxDim = Math.max(size.x, size.y, size.z);
-    if (maxDim > 0) {
-      const scale = 2 / maxDim;
-      model.scale.setScalar(scale);
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+
+    if (intersects.length > 0) {
+        const hitGizmo = intersects.some(i => {
+            let n = i.object;
+            while(n) {
+                if(n.isTransformControls) return true;
+                n = n.parent;
+            }
+            return false;
+        });
+
+        if (hitGizmo) return;
+
+        const furnitureHit = intersects.find(i => {
+            let candidate = i.object;
+            while (candidate.parent && candidate.parent !== scene) {
+                candidate = candidate.parent;
+            }
+            return spawnedFurniture.includes(candidate);
+        });
+
+        if (furnitureHit) {
+            let root = furnitureHit.object;
+            while (root.parent && root.parent !== scene) {
+                root = root.parent;
+            }
+            selectObject(root);
+        } else {
+            deselectObject();
+        }
+    } else {
+        deselectObject();
     }
+});
 
-    // Center the model's geometry so the arrows appear in the middle
-    model.position.x = -center.x * model.scale.x;
-    model.position.z = -center.z * model.scale.z;
-    model.position.y = 0; // Sit on the grid
+// ── 9. KEYBOARD & TRANSFORM MODES ──
 
-    scene.add(model);
-
-    // --- SELECTION ---
-    selectedObject = model;
-    transform.attach(model);
-    ui.showProps(model);
-
-    console.log("Model successfully added to scene.");
-  },
-    (xhr) => {
-      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    },
-    (error) => {
-      console.error("FAILED TO LOAD. Check if the file exists at: " + path, error);
-    });
-}
-// ── 7. Interaction & Loop ──
 window.addEventListener('keydown', (e) => {
-  if (e.key.toLowerCase() === 'g') transform.setMode('translate');
-  if (e.key.toLowerCase() === 'r') transform.setMode('rotate');
-  if (e.key.toLowerCase() === 's') transform.setMode('scale');
-  
-  if (e.key === 'Escape') {
-        selectedObject = null;
-        transform.detach();
-        ui.hideProps();
-    }
+    const key = e.key.toLowerCase();
+    if (e.key === 'Escape') deselectObject();
+    if (!selectedObject) return;
+
+    if (key === 'g') transform.setMode('translate');
+    if (key === 'r') transform.setMode('rotate'); 
+    if (key === 's') transform.setMode('scale'); 
+    if (key === 'l') transform.setSpace(transform.space === 'local' ? 'world' : 'local');
 });
 
-
+// ── 10. RENDER LOOP ──
 function animate() {
-  requestAnimationFrame(animate);
-  orbit.update();
-  renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    orbit.update();
+    renderer.render(scene, camera);
 }
+animate();
 
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-animate();
