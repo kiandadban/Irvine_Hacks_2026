@@ -13,9 +13,14 @@ async function initApp() {
     let assetMap = {};
     const spawnedFurniture = [];
     let selectedObject = null;
-    
     let roomWidth = 10;
     let roomDepth = 10;
+
+    const modelPath = (filename) => {
+        const asset = assetMap[filename];
+        return asset ? `../models/${asset.category}/${asset.file}` : `../models/${filename}`;
+    };
+
 
     // ── 1. ASSET DATA LOADING ──
     try {
@@ -44,11 +49,28 @@ async function initApp() {
 
     let { walls: currentWalls, floor: roomFloor } = createRoom(scene, roomWidth, roomDepth);
     const collisionEngine = new CollisionEngine(currentWalls, spawnedFurniture, roomWidth, roomDepth);
-    
-    let grid = new THREE.GridHelper(roomWidth, roomWidth, 0x444444, 0x222222);
-    grid.scale.z = roomDepth / roomWidth;
-    grid.position.y = 0.01;
+
+    function makeGrid(width, depth) {
+        const pts = [];
+        const step = 1;
+        for (let z = -depth / 2; z <= depth / 2 + 0.001; z += step) {
+            pts.push(-width / 2, 0, z,  width / 2, 0, z);
+        }
+        for (let x = -width / 2; x <= width / 2 + 0.001; x += step) {
+            pts.push(x, 0, -depth / 2,  x, 0, depth / 2);
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+        const mesh = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0xAAAAAA }));
+        mesh.position.y = 0.01;
+        return mesh;
+    }
+
+    let grid = makeGrid(roomWidth, roomDepth);
     scene.add(grid);
+
+    // rebuildRoom will be redefined later with additional logic
+
 
     // ── 3. VISUAL COLLISION FEEDBACK ──
     const updateCollisionVisuals = (obj) => {
@@ -91,9 +113,7 @@ async function initApp() {
         currentWalls = result.walls;
         roomFloor = result.floor;
 
-        grid = new THREE.GridHelper(roomWidth, roomWidth, 0x444444, 0x222222);
-        grid.scale.z = roomDepth / roomWidth;
-        grid.position.y = 0.01;
+        grid = makeGrid(roomWidth, roomDepth);
         scene.add(grid);
 
         collisionEngine.updateWalls(currentWalls, roomWidth, roomDepth);
@@ -176,19 +196,40 @@ async function initApp() {
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 model.scale.setScalar((asset.dimensions.width || 1.0) / size.x);
-                
-                box.setFromObject(model);
-                model.position.set(itemConfig.x || 0, -box.min.y, itemConfig.z || 0);
+
                 model.rotation.y = itemConfig.rotate || 0;
-                
-                scene.add(model);
-                spawnedFurniture.push(model);
-                collisionEngine.updateObstacles();
-                
+
+                // Physics Nudge: Try to find a legal spot
+                let posX = itemConfig.x || 0, posZ = itemConfig.z || 0;
+                let isValid = false, attempts = 0;
+
+                while (!isValid && attempts < 15) {
+                    model.position.set(posX, 0, posZ);
+                    model.updateMatrixWorld(true);
+                    
+                    const check = collisionEngine.checkCollision(model);
+                    if (!check.isColliding) {
+                        isValid = true;
+                    } else {
+                        // Nudge slightly and clamp to room
+                        posX += (Math.random() - 0.5) * 1.5;
+                        posZ += (Math.random() - 0.5) * 1.5;
+                        posX = Math.max(-(roomWidth/2 - 0.5), Math.min(roomWidth/2 - 0.5, posX));
+                        posZ = Math.max(-(roomDepth/2 - 0.5), Math.min(roomDepth/2 - 0.5, posZ));
+                        attempts++;
+                    }
+                }
+
+                if (isValid) {
+                    scene.add(model);
+                    spawnedFurniture.push(model);
+                    collisionEngine.updateObstacles();
+                }
                 updateCollisionVisuals(model); // Initial check
                 selectObject(model);
                 resolve(model);
-            });
+            }, undefined, () => resolve());
+
         });
     }
 
@@ -208,27 +249,62 @@ async function initApp() {
         (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
     );
 
-    const genAI = new GoogleGenerativeAI(API_KEY);
-    const aiModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
+    const aiModel = genAI?.getGenerativeModel({ model: "gemini-2.0-flash" });
+
     const aiBtn = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
     if (aiBtn) {
+        // Slider wiring
+        const widthSlider  = document.getElementById('widthSlider');
+        const lengthSlider = document.getElementById('lengthSlider');
+        const wValEl = document.getElementById('wVal');
+        const lValEl = document.getElementById('lVal');
+        if (widthSlider) widthSlider.addEventListener('input', () => {
+            roomWidth = parseFloat(widthSlider.value);
+            if (wValEl) wValEl.textContent = roomWidth.toFixed(1);
+            rebuildRoom(roomWidth, roomDepth);
+        });
+        if (lengthSlider) lengthSlider.addEventListener('input', () => {
+            roomDepth = parseFloat(lengthSlider.value);
+            if (lValEl) lValEl.textContent = roomDepth.toFixed(1);
+            rebuildRoom(roomWidth, roomDepth);
+        });
+
         aiBtn.onclick = async () => {
             if (!aiInput.value || aiBtn.disabled) return;
             aiBtn.disabled = true;
             aiBtn.innerText = "Architecting...";
 
             try {
-                const manifest = furnitureLibrary.map(item => item.file).join(", ");
-                const prompt = `ACT AS: Interior Designer. 
-                ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(-${roomWidth/2} to ${roomWidth/2}), Z(-${roomDepth/2} to ${roomDepth/2}).
-                TASK: Place 5-8 items for: "${aiInput.value}".
-                LIST: ${manifest}.
-                OUTPUT: JSON ONLY array. format: [{"file": "Bath.fbx", "x": 2, "z": -2, "rotate": 0}]`;
+                const prompt = `
+            ACT AS: Senior Interior Architect.
+            ROOM: ${roomWidth}m x ${roomDepth}m. Bounds: X(-${roomWidth/2} to ${roomWidth/2}), Z(-${roomDepth/2} to ${roomDepth/2}).
+            
+            --- STRICT FILENAME MANIFEST ---
+            You MUST ONLY use these exact filenames. Do not invent "bed_double" or "wardrobe":
+            ${furnitureLibrary.assets.map(a => a.file).join(", ")}
+          
+            --- PLACEMENT RULES ---
+            1. NO OVERLAP: Maintain at least 2m between all bounding boxes.
+            2. BOUNDS: All items must stay within X(-${roomWidth/2} to ${roomWidth/2}) and Z(-${roomDepth/2} to ${roomDepth/2}).
+            3. DOORS: If using a door, place it exactly at the edge (e.g., X=5 or Z=-5) and lay it flat
+            4. DESK COMBO: If you place a "Desk.fbx", you MUST place a "Desk Chair.fbx" or "Desk Chair (2).fbx" directly next to it (within 0.8m).
+            5. SLEEPING: Place beds with the headboard against a wall.
+            6. Don't place objects at exactly (0, 0)
+            7. Keep amount of objects spawned to 15 or under
+          
+            --- OUTPUT FORMAT ---
+            Output JSON ONLY array: [{"file": "Bed Double.fbx", "x": 2.0, "z": -4.0, "rotate": 0}]
+            
+            USER REQUEST: "${aiInput.value}"`;
 
                 const result = await aiModel.generateContent(prompt);
-                const layout = JSON.parse(result.response.text().replace(/```json|```/g, "").trim());
+                const rawText = result.response.text();
+                console.log("Raw AI response:", rawText);
+                const layout = JSON.parse(rawText.replace(/```json|```/g, "").trim());
+
 
                 deselectObject();
                 spawnedFurniture.forEach(obj => scene.remove(obj));
@@ -237,8 +313,20 @@ async function initApp() {
                 for (const item of layout) {
                     await placeModel(item);
                 }
-            } catch (e) { console.error("AI Error:", e); }
-            finally {
+            } catch (e) {
+                console.error("AI Error:", e);
+                // Show the actual error so we can diagnose it
+                const msg = e?.message || String(e);
+                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401') || msg.includes('API key')) {
+                    alert(`API key error: ${msg}`);
+                } else if (msg.includes('JSON') || msg.includes('parse') || msg.includes('SyntaxError')) {
+                    // Log the raw response so we can see what the model actually returned
+                    console.error("Raw response that failed to parse:", e);
+                    alert(`JSON parse failed — check console for raw model output.\n\n${msg}`);
+                } else {
+                    alert(`AI Error: ${msg}`);
+                }
+            } finally {
                 aiBtn.disabled = false;
                 aiBtn.innerText = "Generate Layout";
             }
