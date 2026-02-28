@@ -1,1 +1,1 @@
-# Irvine_Hacks_2026
+# Irvine Hacks 2026
