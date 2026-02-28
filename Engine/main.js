@@ -55,9 +55,24 @@ async function initApp() {
 
     let { walls: currentWalls, floor: roomFloor } = createRoom(scene, roomWidth, roomDepth);
     const collisionEngine = new CollisionEngine(currentWalls, spawnedFurniture, roomWidth, roomDepth);
-    let grid = new THREE.GridHelper(roomWidth, roomWidth, 0xCCCCCC, 0x444444);
-    grid.scale.z = roomDepth / roomWidth;
-    grid.position.y = 0.01;
+
+    function makeGrid(width, depth) {
+        const pts = [];
+        const step = 1;
+        for (let z = -depth / 2; z <= depth / 2 + 0.001; z += step) {
+            pts.push(-width / 2, 0, z,  width / 2, 0, z);
+        }
+        for (let x = -width / 2; x <= width / 2 + 0.001; x += step) {
+            pts.push(x, 0, -depth / 2,  x, 0, depth / 2);
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+        const mesh = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0xAAAAAA }));
+        mesh.position.y = 0.01;
+        return mesh;
+    }
+
+    let grid = makeGrid(roomWidth, roomDepth);
     scene.add(grid);
 
     function rebuildRoom(newWidth, newDepth) {
@@ -69,9 +84,7 @@ async function initApp() {
         const result = createRoom(scene, roomWidth, roomDepth);
         currentWalls = result.walls;
         roomFloor = result.floor;
-        grid = new THREE.GridHelper(roomWidth, roomWidth, 0xCCCCCC, 0x444444);
-        grid.scale.z = roomDepth / roomWidth;
-        grid.position.y = 0.01;
+        grid = makeGrid(roomWidth, roomDepth);
         scene.add(grid);
         collisionEngine.updateWalls(currentWalls, roomWidth, roomDepth);
     }
@@ -202,7 +215,7 @@ async function initApp() {
     }, (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 }));
 
     const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
-    const aiModel = genAI?.getGenerativeModel({ model: "gemini-3-flash-preview" });
+    const aiModel = genAI?.getGenerativeModel({ model: "gemini-2.0-flash" });
     const aiBtn = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
@@ -252,7 +265,9 @@ async function initApp() {
             USER REQUEST: "${aiInput.value}"`;
 
                 const result = await aiModel.generateContent(prompt);
-                const layout = JSON.parse(result.response.text().replace(/```json|```/g, ""));
+                const rawText = result.response.text();
+                console.log("Raw AI response:", rawText);
+                const layout = JSON.parse(rawText.replace(/```json|```/g, "").trim());
 
                 // Clear scene
                 deselectObject();
@@ -266,7 +281,17 @@ async function initApp() {
                 }
             } catch (e) {
                 console.error("AI Error:", e);
-                alert("AI hit a limit or failed to parse. Try again in a moment.");
+                // Show the actual error so we can diagnose it
+                const msg = e?.message || String(e);
+                if (msg.includes('API_KEY') || msg.includes('403') || msg.includes('401') || msg.includes('API key')) {
+                    alert(`API key error: ${msg}`);
+                } else if (msg.includes('JSON') || msg.includes('parse') || msg.includes('SyntaxError')) {
+                    // Log the raw response so we can see what the model actually returned
+                    console.error("Raw response that failed to parse:", e);
+                    alert(`JSON parse failed — check console for raw model output.\n\n${msg}`);
+                } else {
+                    alert(`AI Error: ${msg}`);
+                }
             } finally {
                 aiBtn.disabled = false;
                 aiBtn.innerText = "Generate Layout";
