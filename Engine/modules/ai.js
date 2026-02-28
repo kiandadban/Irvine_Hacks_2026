@@ -37,7 +37,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     }
 
     const genAI   = new GoogleGenerativeAI(apiKey);
-    const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
 
     async function callWithRetry(prompt, retries = 3) {
         for (let attempt = 0; attempt < retries; attempt++) {

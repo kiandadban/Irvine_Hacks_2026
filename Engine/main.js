@@ -8,9 +8,10 @@ import { createRoomManager }  from './modules/room.js';
 import { initControls }       from './modules/controls.js';
 import { createPlacer }       from './modules/placement.js';
 import { createAI }           from './modules/ai.js';
+import { createInfoPanel }    from './modules/infoPanel.js';
 
 async function initApp() {
-    // ── 1. DATA ──
+    // ── 1. DATA LOADING ──
     let furnitureLibrary, assetMap;
     try {
         ({ furnitureLibrary, assetMap } = await loadFurnitureLibrary());
@@ -19,18 +20,16 @@ async function initApp() {
         return;
     }
 
-    // ── 2. SCENE ──
+    // ── 2. SCENE & RENDERER ──
     const container = document.getElementById('canvas-wrapper');
     const { scene, camera, renderer } = initScene(container);
 
-    // ── 3. PHYSICS ──
+    // ── 3. PHYSICS & ROOM ──
     const spawnedFurniture = [];
     const collisionEngine  = new CollisionEngine([], spawnedFurniture, 10, 10);
-
-    // ── 4. ROOM ──
     const roomManager = createRoomManager(scene, collisionEngine);
 
-    // ── 5. COLLISION VISUALS ──
+    // ── 4. COLLISION VISUALS ──
     function updateCollisionVisuals(obj) {
         if (!obj) return;
         const { isColliding } = collisionEngine.checkCollision(obj);
@@ -40,8 +39,8 @@ async function initApp() {
             mats.forEach(mat => {
                 if (!mat.userData._orig) {
                     mat.userData._orig = {
-                        color:             mat.color?.clone(),
-                        emissive:          mat.emissive?.clone(),
+                        color: mat.color?.clone(),
+                        emissive: mat.emissive?.clone(),
                         emissiveIntensity: mat.emissiveIntensity,
                     };
                 }
@@ -51,7 +50,7 @@ async function initApp() {
                     mat.color?.set(0xffaaaa);
                 } else {
                     const o = mat.userData._orig;
-                    if (o?.color)    mat.color.copy(o.color);
+                    if (o?.color) mat.color.copy(o.color);
                     if (o?.emissive) mat.emissive.copy(o.emissive);
                     if (typeof o?.emissiveIntensity === 'number') mat.emissiveIntensity = o.emissiveIntensity;
                 }
@@ -59,8 +58,25 @@ async function initApp() {
         });
     }
 
-    // ── 6. CONTROLS ──
-    // uiRef defers access to `ui` so controls.js doesn't need it at construction time
+    // ── 5. UI PANEL & CONTROLS ──
+    // Selection state wrappers
+    // In your initApp setup:
+const infoPanel = createInfoPanel((obj) => {
+    scene.remove(obj);
+    spawnedFurniture.splice(spawnedFurniture.indexOf(obj), 1);
+    collisionEngine.updateObstacles();
+});
+
+const wrappedSelect = (obj) => {
+    selectObject(obj);    // Three.js Transform selection
+    infoPanel.update(obj); // UI Animation Selection
+};
+
+const wrappedDeselect = () => {
+    deselectObject();      // Three.js Deselect
+    infoPanel.hide();      // UI Slide Out
+};
+
     const uiRef = { getUI: () => ui };
     const { orbit, transform, selectObject, deselectObject } = initControls(
         camera, renderer, scene,
@@ -68,45 +84,44 @@ async function initApp() {
         updateCollisionVisuals, uiRef
     );
 
-    // ── 7. PLACEMENT ──
+    // ── 6. PLACEMENT & AI ──
     const { placeModel } = createPlacer(
         scene, spawnedFurniture, collisionEngine,
-        assetMap, roomManager, selectObject, updateCollisionVisuals
+        assetMap, roomManager, wrappedSelect, updateCollisionVisuals
     );
 
-    // ── 8. UI ──
-    const ui = initUI(
-        () => {},
-        (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
-        () => {
-            const obj = uiRef.getUI && transform.object;
-            if (!transform.object) return;
-            scene.remove(transform.object);
-            const idx = spawnedFurniture.indexOf(transform.object);
-            if (idx > -1) spawnedFurniture.splice(idx, 1);
-            collisionEngine.updateObstacles();
-            deselectObject();
-        },
-        (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
-    );
-
-    // ── 9. AI ──
     const ai = createAI(API_KEY, furnitureLibrary, roomManager);
     const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
+    // ── 7. UI INITIALIZATION ──
+    const ui = initUI(
+        () => {}, // Primitive spawning (disabled)
+        (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
+        () => { // Global delete handler
+            if (!transform.object) return;
+            const obj = transform.object;
+            scene.remove(obj);
+            const idx = spawnedFurniture.indexOf(obj);
+            if (idx > -1) spawnedFurniture.splice(idx, 1);
+            collisionEngine.updateObstacles();
+            wrappedDeselect();
+        },
+        (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
+    );
+
+    // ── 8. EVENT HANDLERS ──
     async function handleGenerate(userText, useRoomContext = true) {
         if (!userText || aiBtn?.disabled) return;
-        if (aiBtn) { aiBtn.disabled = true; }
-
+        aiBtn.disabled = true;
         try {
             const layout = await ai.runGeneration(userText, {
                 useRoomContext,
-                onStatus: (s) => { if (aiBtn) aiBtn.innerText = s; },
+                onStatus: (s) => { aiBtn.innerText = s; },
             });
             if (!layout) return;
 
-            deselectObject();
+            wrappedDeselect();
             spawnedFurniture.forEach(o => scene.remove(o));
             spawnedFurniture.length = 0;
             collisionEngine.updateObstacles();
@@ -115,34 +130,30 @@ async function initApp() {
         } catch (e) {
             alert(e.message ?? String(e));
         } finally {
-            if (aiBtn) { aiBtn.disabled = false; aiBtn.innerText = 'Generate Layout'; }
+            aiBtn.disabled = false;
+            aiBtn.innerText = 'Generate Layout';
         }
     }
 
     aiBtn?.addEventListener('click', () => handleGenerate(aiInput?.value, true));
 
-    // Auto-trigger from front-page redirect (?prompt=...)
+    // Typewriter effect for auto-prompts
     const autoPrompt = new URLSearchParams(window.location.search).get('prompt');
     if (autoPrompt && aiInput) {
         setTimeout(() => {
-            aiInput.classList.add('auto-fill');
             aiInput.focus();
             let i = 0;
-            aiInput.value = '';
             const type = setInterval(() => {
                 aiInput.value += autoPrompt[i++];
                 if (i >= autoPrompt.length) {
                     clearInterval(type);
-                    setTimeout(() => {
-                        aiInput.classList.remove('auto-fill');
-                        handleGenerate(autoPrompt, false);
-                    }, 400);
+                    setTimeout(() => handleGenerate(autoPrompt, false), 400);
                 }
             }, 30);
         }, 600);
     }
 
-    // ── 10. MOUSE & KEYBOARD ──
+    // Canvas Mouse Interaction
     const raycaster = new THREE.Raycaster();
     const mouse     = new THREE.Vector2();
 
@@ -151,27 +162,29 @@ async function initApp() {
         const rect = container.getBoundingClientRect();
         mouse.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
         mouse.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+        
         raycaster.setFromCamera(mouse, camera);
         const hits = raycaster.intersectObjects(spawnedFurniture, true);
+        
         if (hits.length) {
             let root = hits[0].object;
             while (root.parent && !spawnedFurniture.includes(root)) root = root.parent;
-            if (spawnedFurniture.includes(root)) selectObject(root);
+            if (spawnedFurniture.includes(root)) wrappedSelect(root);
         } else {
-            deselectObject();
+            wrappedDeselect();
         }
     });
 
     window.addEventListener('keydown', (e) => {
         const k = e.key.toLowerCase();
-        if (k === 'escape') { deselectObject(); return; }
+        if (k === 'escape') { wrappedDeselect(); return; }
         if (!transform.object) return;
         if (k === 'g') transform.setMode('translate');
         if (k === 'r') transform.setMode('rotate');
         if (k === 's') transform.setMode('scale');
     });
 
-    // ── 11. RENDER LOOP ──
+    // ── 9. ANIMATION LOOP ──
     (function animate() {
         requestAnimationFrame(animate);
         orbit.update();
@@ -180,4 +193,3 @@ async function initApp() {
 }
 
 initApp();
-
