@@ -2,93 +2,135 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Three.js Professional Editor</title>
-    <style>
-        body { margin: 0; overflow: hidden; background: #050505; font-family: sans-serif; }
-        .panel { position: absolute; background: rgba(0,0,0,0.85); padding: 15px; border: 1px solid #444; color: #eee; z-index: 10; }
-        
-        #instructions { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); color: #888; text-align: center; pointer-events: none; }
-
-        #spawn-panel { top: 10px; left: 10px; border-color: #00ff88; }
-        #props-panel { top: 10px; right: 10px; width: 180px; border-color: #00aaff; display: none; }
-        
-        /* ── Horizontal Bottom Panel ── */
-        #model-panel { 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            height: 80px; 
-            border-top: 1px solid #ff00ff; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            overflow-x: auto; 
-            padding: 0 20px;
-            white-space: nowrap;
-        }
-
-        .model-load-btn { 
-            flex: 0 0 auto; 
-            height: 50px; 
-            min-width: 100px;
-            background: #222;
-            border: 1px solid #666;
-            transition: all 0.2s;
-        }
-
-        button { cursor: pointer; background: #333; color: white; border: 1px solid #666; padding: 5px 10px; }
-        button:hover { background: #444; border-color: #00ff88; }
-        input[type="color"] { width: 100%; height: 30px; cursor: pointer; border: none; background: none; }
-
-        /* Custom Scrollbar for the bottom panel */
-        #model-panel::-webkit-scrollbar { height: 6px; }
-        #model-panel::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architectural Interior Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="instructions">
-        G: Move | R: Rotate | S: Scale | L: Local/World | X: Snap
-    </div>
-
-    <div id="spawn-panel" class="panel">
-        <strong>Create</strong><br><br>
-        <select id="shape-type">
-            <option value="box">Cube</option>
-            <option value="sphere">Sphere</option>
-            <option value="cone">Cone</option>
-        </select>
-        <button id="add-btn">Add</button>
-    </div>
-
-    <div id="model-panel" class="panel">
-        <strong style="color: #ff00ff; margin-right: 10px;">Library</strong>
-        <button class="model-load-btn" data-path="../furniture_models/Bed King.glb">King Bed</button>
-        <button class="model-load-btn" data-path="../furniture_models/Bunk Bed.glb">Bunk Bed</button>
-        <button class="model-load-btn" data-path="../furniture_models/Couch Large.glb">Large Couch</button>
-        <button class="model-load-btn" data-path="../furniture_models/Couch Medium.glb">Medium Couch</button>
-        <button class="model-load-btn" data-path="../furniture_models/Desk.glb">Desk</button>
-        <button class="model-load-btn" data-path="../furniture_models/Night Stand.glb">Night Stand</button>
-        <button class="model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">Bookcase</button>
-        <button class="model-load-btn" data-path="../furniture_models/Drawer.glb">Drawer</button>
+        G: Move • R: Rotate • S: Scale • Esc: Deselect
     </div>
 
     <div id="props-panel" class="panel">
-        <strong>Properties</strong><hr>
-        <p id="obj-name">Type: None</p>
-        <label>Color</label>
+        <h3>Properties</h3>
+        <p id="obj-name">Selection: None</p>
+        <label>Material Color</label>
         <input type="color" id="color-picker">
-        <br><br>
-        <button id="del-btn" style="color: #ff4444; border-color: #ff4444;">Delete Object</button>
+        <button id="del-btn">Remove Item</button>
+    </div>
+
+    <div id="bottom-container">
+        
+        <div id="ai-designer-shelf">
+            <div class="ai-input-wrapper">
+                <input type="text" id="ai-prompt" placeholder="Describe a room style (e.g., 'A modern bedroom')...">
+                <button id="ai-generate-btn">Generate Layout</button>
+            </div>
+        </div>
+
+        <div id="model-panel">
+            <div class="library-header">Select furniture to start planning</div>
+            <div class="scroll-container">
+                
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bed King.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9M18 8v9"/></svg>
+                    </div>
+                    <span>King Bed</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bed Twin Old.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4v16M2 8h20M22 4v16M2 17h20M6 8v9"/></svg>
+                    </div>
+                    <span>Twin Bed</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bunk Bed.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 2v20M22 2v20M2 6h20M2 14h20M2 18h20"/></svg>
+                    </div>
+                    <span>Bunk Bed</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Couch Large.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 11v5a2 2 0 002 2h16a2 2 0 002-2v-5M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2"/></svg>
+                    </div>
+                    <span>Large Sofa</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Desk.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M6 17v2M18 17v2"/></svg>
+                    </div>
+                    <span>Desk</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="3"/><path d="M5 20v-1a7 7 0 0114 0v1"/></svg>
+                    </div>
+                    <span>Chair</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Desk Chair (2).glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10V3m0 0l-3 3m3-3l3 3M5 21h14a2 2 0 002-2v-5H3v5a2 2 0 002 2z"/></svg>
+                    </div>
+                    <span>Exec Chair</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Bookcase with Books.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16"/></svg>
+                    </div>
+                    <span>Bookcase</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Drawer.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M4 16h16"/></svg>
+                    </div>
+                    <span>Drawer</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Dining Set.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v4H3zM7 7v14M17 7v14"/></svg>
+                    </div>
+                    <span>Dining Set</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Kitchen.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 10h18M10 10v11"/></svg>
+                    </div>
+                    <span>Kitchen</span>
+                </div>
+
+                <div class="model-card model-load-btn" data-path="../furniture_models/Night Stand.glb">
+                    <div class="icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="12" height="16" rx="2"/><path d="M6 12h12"/></svg>
+                    </div>
+                    <span>Night Stand</span>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-            }
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
         }
+    }
     </script>
+
     <script type="module" src="main.js"></script>
 </body>
 </html>

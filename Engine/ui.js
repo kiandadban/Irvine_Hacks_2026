@@ -1,50 +1,61 @@
-export function initUI(onSpawn, onColorChange, onDelete, onModelLoad) {
-    // 1. Get the elements for basic shapes
-    const addBtn = document.getElementById('add-btn');
-    const shapeSelect = document.getElementById('shape-type');
-
-    // 2. Get the elements for the properties panel
+/**
+ * ui.js - Handles DOM elements and event listeners
+ */
+export function initUI(onSpawn, onColor, onDelete, onLoad) {
+    const aiBtn = document.getElementById('ai-generate-btn');
+    const aiInput = document.getElementById('ai-prompt');
+    const deleteBtn = document.getElementById('del-btn');
     const propsPanel = document.getElementById('props-panel');
-    const colorPicker = document.getElementById('obj-color'); // Ensure this ID matches your HTML
+    const colorInput = document.getElementById('color-picker');
+    
+    // ── Primitive Spawning ──
+    // Looks for buttons with data-type="box" or "sphere"
+    document.querySelectorAll('.spawn-btn').forEach(btn => {
+        btn.onclick = () => onSpawn(btn.dataset.type);
+    });
 
-
-    // 3. Setup Basic Shape Spawning
-    if (addBtn) {
-        addBtn.onclick = () => onSpawn(shapeSelect.value);
-    }
-
-    // 4. Setup GLB Model Loading (The "furniture_models" buttons)
-    const modelButtons = document.querySelectorAll('.model-load-btn');
-    modelButtons.forEach(btn => {
+    // ── Model Library Loading ──
+    // Buttons with class .model-load-btn should provide a data-path attribute
+    document.querySelectorAll('.model-load-btn').forEach(btn => {
         btn.onclick = () => {
-            const path = btn.getAttribute('data-path');
-            console.log("UI: Requesting model from", path);
-            onModelLoad(path);
+            const path = btn.dataset.path;
+            if (path && onLoad) onLoad(path);
         };
     });
 
-    // 5. Setup Color and Delete
-    if (colorPicker) colorPicker.oninput = (e) => onColorChange(e.target.value);
-    const delBtn = document.getElementById('del-btn'); // Make sure this matches your HTML ID
-
-    if (delBtn) {
-        delBtn.onclick = () => {
-            console.log("UI: Delete button clicked");
-            onDelete(); // This calls the function inside main.js
-        };
+    // ── Color Change ──
+    if (colorInput) {
+        colorInput.oninput = (e) => onColor(e.target.value);
     }
 
-    // 6. Return the functions main.js needs to control the UI
+    // ── Delete Object ──
+    if (deleteBtn) {
+        deleteBtn.onclick = () => onDelete();
+    }
+
+    // ── UI Control Methods ──
     return {
         showProps: (obj) => {
             propsPanel.style.display = 'block';
-            // Optional: update color picker to match object
-            if (obj.material && obj.material.color) {
-                colorPicker.value = '#' + obj.material.color.getHexString();
-            }
+            
+            // For GLB models, we find the first mesh child to get the current color
+            let targetColor = "#00ff88"; 
+            obj.traverse((node) => {
+                if (node.isMesh && node.material.color) {
+                    targetColor = `#${node.material.color.getHexString()}`;
+                }
+            });
+            colorInput.value = targetColor;
         },
         hideProps: () => {
             propsPanel.style.display = 'none';
+        },
+        setAiLoading: (isLoading) => {
+            if (aiBtn) {
+                aiBtn.disabled = isLoading;
+                aiBtn.innerText = isLoading ? "Designing..." : "Generate";
+                aiBtn.style.opacity = isLoading ? "0.6" : "1";
+            }
         }
     };
 }
