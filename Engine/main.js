@@ -127,15 +127,79 @@ async function initApp() {
             
             if (!layout || !Array.isArray(layout)) return;
 
+            // Reorder layout: place non-placeable surface furniture first (tables, drawers, shelves, cupboards, desks)
+            try {
+                const surfaceOrder = [
+                    'tables', 'drawers', 'shelves', 'cupboard', 'cupboards', 'desk', 'sofas', 'beds', 'bed', 'electronics'
+                ];
+
+                const scoreFor = (item) => {
+                    const a = assetMap.find ? assetMap.find(item.file) : assetMap[item.file];
+                    if (!a) return 0;
+                    if (!a.placeable) {
+                        const folder = (a.folder || a.category || '').toString().toLowerCase();
+                        for (let i = 0; i < surfaceOrder.length; i++) {
+                            if (folder.startsWith(surfaceOrder[i])) return (surfaceOrder.length - i) + 10; // higher score for earlier entries
+                        }
+                        // non-placeable generic
+                        return 5;
+                    }
+                    // placeable accessories get low score
+                    return 0;
+                };
+
+                layout.sort((a, b) => {
+                    const sa = scoreFor(a);
+                    const sb = scoreFor(b);
+                    return sb - sa; // descending: higher score first
+                });
+            } catch (e) {
+                console.warn('[Main] Failed to reorder layout for surface-first placement', e);
+            }
+
             // Clear existing furniture for new AI layout
             wrappedDeselect();
             spawnedFurniture.forEach(o => scene.remove(o));
             spawnedFurniture.length = 0;
             collisionEngine.updateObstacles();
 
-            // Sequentially place items to maintain physics stability
-            for (const item of layout) {
-                await placeModel(item);
+            // Two-pass placement: place non-placeable surface furniture first,
+            // then place placeable accessories so they can snap to those surfaces.
+            const nonPlaceables = layout.filter(it => {
+                const a = assetMap.find ? assetMap.find(it.file) : assetMap[it.file];
+                return a ? !a.placeable : true; // if unknown, treat as non-placeable conservatively
+            });
+            const placeables = layout.filter(it => !nonPlaceables.includes(it));
+
+            // Place surfaces first
+            for (const item of nonPlaceables) {
+                try { await placeModel(item); } catch (e) { console.warn('[Main] surface placement failed', item, e); }
+            }
+
+            // Then place accessories; collect failures for a retry pass
+            const failedPlaceables = [];
+            for (const item of placeables) {
+                try {
+                    const res = await placeModel(item);
+                    if (!res) failedPlaceables.push(item);
+                } catch (e) {
+                    failedPlaceables.push(item);
+                }
+            }
+
+            // Retry any failed placeables once more after surfaces are settled
+            if (failedPlaceables.length) {
+                console.debug('[Main] Retrying failed placeables', failedPlaceables.length);
+                for (const item of failedPlaceables.slice()) {
+                    try {
+                        const res = await placeModel(item);
+                        if (res) {
+                            const idx = failedPlaceables.indexOf(item);
+                            if (idx > -1) failedPlaceables.splice(idx, 1);
+                        }
+                    } catch (e) { /* keep in failed list */ }
+                }
+                if (failedPlaceables.length) console.warn('[Main] Some placeables still failed to place:', failedPlaceables.map(i=>i.file));
             }
             window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
         } catch (e) {
@@ -168,7 +232,29 @@ async function initApp() {
         spawnedFurniture.forEach(o => scene.remove(o));
         spawnedFurniture.length = 0;
         collisionEngine.updateObstacles();
-        for (const item of layout) await placeModel(item);
+        // Two-pass placement for loaded layouts as well: surfaces first, then accessories
+        const nonPlaceables = layout.filter(it => {
+            const a = assetMap.find ? assetMap.find(it.file) : assetMap[it.file];
+            return a ? !a.placeable : true;
+        });
+        const placeables = layout.filter(it => !nonPlaceables.includes(it));
+
+        for (const item of nonPlaceables) {
+            try { await placeModel(item); } catch (e) { console.warn('[Main] surface placement failed (loaded layout)', item, e); }
+        }
+
+        const failedPlaceables = [];
+        for (const item of placeables) {
+            try { const res = await placeModel(item); if (!res) failedPlaceables.push(item); } catch (e) { failedPlaceables.push(item); }
+        }
+
+        if (failedPlaceables.length) {
+            for (const item of failedPlaceables.slice()) {
+                try { const res = await placeModel(item); if (res) { const idx = failedPlaceables.indexOf(item); if (idx > -1) failedPlaceables.splice(idx, 1); } } catch (e) {}
+            }
+            if (failedPlaceables.length) console.warn('[Main] Some loaded placeables still failed to place:', failedPlaceables.map(i=>i.file));
+        }
+
         window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
     });
 

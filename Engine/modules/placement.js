@@ -54,21 +54,27 @@ export function createPlacer(
                 let posZ = itemConfig.z;
 
                 if (asset.placeable) {
-                    // Logic: Only place on items that make sense (no keyboards on bathtubs)
-                    const surfaceCategories = ['Tables', 'Drawers', 'Shelves', 'Electronics'];
-                    const SNAP_TOLERANCE = 0.5; // 50cm search radius
+                    // Logic: Only place on reasonable surfaces. Use original folder (fAttrs.folder)
+                    const allowedFolders = ['tables', 'drawers', 'shelves', 'electronics', 'sofas', 'cupboard', 'kitchen'];
+                    const SNAP_TOLERANCE = 1.2; // expanded search radius (meters)
+                    const MAX_FALLBACK_DISTANCE = 2.5; // if nothing nearby, allow a further fallback
 
                     let bestSurface = null;
                     let minDistance = SNAP_TOLERANCE;
 
                     spawnedFurniture.forEach(f => {
                         const fAttrs = f.userData.attributes;
-                        if (fAttrs.placeable || !surfaceCategories.includes(fAttrs.category)) return;
+                        if (fAttrs.placeable) return; // skip other small accessories
+
+                        const fFolder = (fAttrs.folder || fAttrs.category || '').toString().toLowerCase();
+                        // only consider items whose original folder looks like a surface
+                        const isSurface = allowedFolders.some(sf => fFolder.startsWith(sf));
+                        if (!isSurface) return;
 
                         const fBox = new THREE.Box3().setFromObject(f);
                         const fCenter = fBox.getCenter(new THREE.Vector3());
-                        
-                        // Check horizontal distance to the surface center
+
+                        // horizontal distance to the surface center
                         const dist = new THREE.Vector2(posX, posZ).distanceTo(new THREE.Vector2(fCenter.x, fCenter.z));
 
                         if (dist < minDistance) {
@@ -77,24 +83,46 @@ export function createPlacer(
                         }
                     });
 
+                    // If no close surface found, try a nearest-surface fallback (within MAX_FALLBACK_DISTANCE)
+                    if (!bestSurface) {
+                        let fallback = null;
+                        let bestDist = MAX_FALLBACK_DISTANCE;
+                        spawnedFurniture.forEach(f => {
+                            const fAttrs = f.userData.attributes;
+                            if (fAttrs.placeable) return;
+                            const fFolder = (fAttrs.folder || fAttrs.category || '').toString().toLowerCase();
+                            const isSurface = allowedFolders.some(sf => fFolder.startsWith(sf));
+                            if (!isSurface) return;
+
+                            const fBox = new THREE.Box3().setFromObject(f);
+                            // compute closest point on box to the desired pos
+                            const cx = Math.max(fBox.min.x, Math.min(posX, fBox.max.x));
+                            const cz = Math.max(fBox.min.z, Math.min(posZ, fBox.max.z));
+                            const dist = new THREE.Vector2(posX, posZ).distanceTo(new THREE.Vector2(cx, cz));
+                            if (dist < bestDist) { bestDist = dist; fallback = f; }
+                        });
+                        if (fallback) {
+                            bestSurface = fallback;
+                            console.debug('[Placer] Using fallback surface for', asset.name, 'at distance', bestDist);
+                        }
+                    }
+
                     if (bestSurface) {
                         const sBox = new THREE.Box3().setFromObject(bestSurface);
                         const sCenter = sBox.getCenter(new THREE.Vector3());
 
                         targetY = sBox.max.y; // Snap to top mesh
                         
-                        // AESTHETIC FIX: Snap coordinates to the center of the surface
-                        // This prevents items from hanging off the edges due to sloppy AI math
+                        // Snap coordinates to a sensible point on the surface (center)
                         posX = sCenter.x;
                         posZ = sCenter.z;
                         
-                        // Inherit rotation: If the desk is turned, the monitor turns with it
+                        // Inherit rotation
                         model.rotation.y = bestSurface.rotation.y;
                     } else {
-                        // If it's placeable but no surface is found, skip it to prevent floor clutter
-                        console.warn(`[Placer] Skipping ${asset.name}: No logical surface found.`);
-                        resolve(null);
-                        return;
+                        // No suitable surface found; instead of skipping, allow placement on the floor
+                        console.warn(`[Placer] No surface found for ${asset.name}; placing on floor as fallback.`);
+                        targetY = 0;
                     }
                 }
 
