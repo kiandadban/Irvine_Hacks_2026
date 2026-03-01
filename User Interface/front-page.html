@@ -13,41 +13,53 @@
             --arch-blue: #265d5a;
             --border-tan: #e8e4db;
         }
-
         body {
             background-color: var(--bg-cream);
             color: var(--text-black);
             font-family: 'Inter', sans-serif;
             overflow: hidden;
         }
-
         .mesh-bg {
-            position: fixed;
-            top: 0;
-            left: 0;        
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            position: fixed; top: 0; left: 0;        
+            width: 100%; height: 100%; z-index: -1;
             background: 
                 radial-gradient(at 0% 0%, rgba(38, 93, 90, 0.04) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(166, 93, 70, 0.03) 0px, transparent 50%);
             filter: blur(100px);
         }
-
-        .serif {
-            font-family: 'Playfair Display', serif;
-        }
-
+        .serif { font-family: 'Playfair Display', serif; }
         .custom-input {
             background: rgba(255, 255, 255, 0.7);
             border: 1.5px solid var(--border-tan);
             transition: all 0.3s ease;
         }
-
         .custom-input:focus-within {
             border-color: var(--arch-blue);
             background: white;
         }
+        .room-btn {
+            border: 1.5px solid var(--border-tan);
+            background: rgba(232, 228, 219, 0.4);
+            color: #9a9386;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 136px;
+            height: 106px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .room-btn svg { stroke: #a09387; transition: stroke 0.2s ease; }
+        .room-btn:hover { border-color: var(--arch-blue); color: var(--arch-blue); background: rgba(38, 93, 90, 0.06); }
+        .room-btn:hover svg { stroke: var(--arch-blue); }
+        .room-btn.selected { border-color: var(--arch-blue); border-width: 2px; background: rgba(38, 93, 90, 0.07); color: var(--arch-blue); }
+        .room-btn.selected svg { stroke: var(--arch-blue); }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-6">
@@ -70,6 +82,77 @@
                 Reimagine your <br> 
                 <span class="italic text-[var(--arch-blue)]">living space.</span>
             </h1>
+
+            <!-- Room Type Selection -->
+            <div class="flex flex-col items-center gap-4">
+                <p class="text-stone-400 text-sm font-light tracking-widest uppercase">Select a room type</p>
+                <div class="flex flex-wrap justify-center gap-3">
+
+                    <button class="room-btn" data-room="Living Room" onclick="selectRoom(this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 13L5 6h14l2 7"/>
+                            <path d="M2 13h2a1 1 0 0 1 1 1v2h14v-2a1 1 0 0 1 1-1h2"/>
+                            <path d="M5 16v3M19 16v3"/>
+                            <path d="M5 19h14"/>
+                        </svg>
+                        Living Room
+                    </button>
+
+                    <button class="room-btn" data-room="Bedroom" onclick="selectRoom(this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 20v-6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6"/>
+                            <path d="M2 14v-3a2 2 0 0 1 2-2h2V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2h2a2 2 0 0 1 2 2v3"/>
+                            <path d="M2 20h20"/>
+                            <path d="M7 9h4M13 9h4"/>
+                        </svg>
+                        Bedroom
+                    </button>
+
+                    <button class="room-btn" data-room="Kitchen" onclick="selectRoom(this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18"/>
+                            <path d="M7 14h2v4H7zM13 14h4v4h-4z"/>
+                            <circle cx="7.5" cy="6" r="1" fill="#a09387" stroke="none"/>
+                            <circle cx="12" cy="6" r="1" fill="#a09387" stroke="none"/>
+                            <circle cx="16.5" cy="6" r="1" fill="#a09387" stroke="none"/>
+                        </svg>
+                        Kitchen
+                    </button>
+
+                    <button class="room-btn" data-room="Bathroom" onclick="selectRoom(this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12h16v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-4z"/>
+                            <path d="M4 12V7a2 2 0 0 1 2-2h.5a2 2 0 0 1 2 2v1"/>
+                            <line x1="4" y1="12" x2="5" y2="12"/>
+                            <path d="M8 20v2M16 20v2"/>
+                        </svg>
+                        Bathroom
+                    </button>
+
+                    <button class="room-btn" data-room="Home Office" onclick="selectRoom(this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="13" rx="2"/>
+                            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                            <line x1="12" y1="12" x2="12" y2="16"/>
+                            <line x1="10" y1="14" x2="14" y2="14"/>
+                        </svg>
+                        Home Office
+                    </button>
+
+                    <button class="room-btn" data-room="Dining Room" onclick="selectRoom(this)">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 10h18"/>
+                            <path d="M3 10V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3"/>
+                            <path d="M5 10v7M19 10v7"/>
+                            <path d="M5 17h14"/>
+                            <path d="M9 6V4M12 6V3M15 6V4"/>
+                        </svg>
+                        Dining Room
+                    </button>
+
+                </div>
+            </div>
 
             <div class="relative max-w-2xl mx-auto">
                 <div class="custom-input rounded-full flex items-center p-2 pr-2 pl-8 shadow-sm">
@@ -96,24 +179,28 @@
     </section>
 
     <script>
+        let selectedRoom = '';
+
+        function selectRoom(btn) {
+            document.querySelectorAll('.room-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedRoom = btn.getAttribute('data-room');
+            const input = document.getElementById('user-prompt');
+            if (!input.value) {
+                input.placeholder = `Describe your ${selectedRoom.toLowerCase()}...`;
+            }
+        }
+
         function startApp() {
             const landing = document.getElementById('landing-page');
-            const dashboard = document.getElementById('dashboard');
             const prompt = document.getElementById('user-prompt').value;
-
-            if (!prompt) {
-                alert("Describe a room first.");
-                return;
-            }
-
-            // 1. Fade out the landing page
+            if (!selectedRoom && !prompt) { alert("Please select a room type and describe it."); return; }
+            if (!prompt) { alert("Describe your room first."); return; }
+            const fullPrompt = selectedRoom ? `${selectedRoom}: ${prompt}` : prompt;
             landing.style.opacity = '0';
             landing.style.transition = 'opacity 0.5s ease';
-
             setTimeout(() => {
-                // Redirect to the engine page which bootstraps Three.js
-                const target = `../Engine/index.html?prompt=${encodeURIComponent(prompt)}`;
-                window.location.href = target;
+                window.location.href = `../Engine/index.html?prompt=${encodeURIComponent(fullPrompt)}&roomType=${encodeURIComponent(selectedRoom)}`;
             }, 300);
         }
     </script>
