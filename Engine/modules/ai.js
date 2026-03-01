@@ -26,7 +26,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     
     // FORCED JSON MODE: This eliminates the need for regex parsing or cleaning comments
     const aiModel = genAI.getGenerativeModel({ 
-        model: 'gemini-2.5-flash-lite',
+        model: 'gemini-3-flash-preview',
         generationConfig: {
             responseMimeType: "application/json",
         }
@@ -66,7 +66,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
         // Keeping your specific room logic intact but cleaning it for the prompt
         const roomRequirements = {
             "bedroom": "- Must include at least one bed from the list (Bed Single, Bed Double, Bunk Bed or Triple Bunk Bed). Exactly one bed is preferred. Two Nightstands should flank the bed with Lamps on them. Wardrobe against a wall.",
-            "living room": "- Sofas face Media Console. Rug in center with Coffee Table on top. TV/Speakers on Console.",
+            "living room": "- There is a table with a TV and Media Console on top. Sofas face TV. Rug in center with Coffee Table on top in between sofa and TV.",
             "kitchen": "- Counter units edge-to-edge. One Fridge, one Oven, one Sink. Small items on Countertop (Y=0.9).",
             "office": "- Desk faces window/door. Desk MUST have Monitor, Keyboard, and PC. Shelves against walls.",
             "bathroom": "- Exactly one Toilet, Sink, and Shower. Toilet Roll holder next to toilet."
