@@ -330,7 +330,7 @@ async function initApp() {
     });
 
     // 2. Save to local storage
-    localStorage.setItem('spaitial_cart', JSON.stringify(shoppingItems));
+    localStorage.setItem('spatial_ai_cart', JSON.stringify(shoppingItems));
 
     // 3. Navigate
     window.location.href = "../User Interface/shopping-list.html";

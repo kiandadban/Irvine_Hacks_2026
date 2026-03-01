@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const CACHE_KEY = 'spaitial_layout_cache';
+const CACHE_KEY = 'spatial_ai_layout_cache';
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24;
 
 function getCached(key) {
