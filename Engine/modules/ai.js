@@ -91,13 +91,22 @@ MANDATORY SPATIAL RULES:
 2. STACKING: All items with [PlaceableOnFurniture: true] MUST share the EXACT (X, Z) coordinates as a base item (Desk, Table, Console) and set Y to that base item's Height (H).
 3. AESTHETICS: ${currentRequirements}
 4. CLEARANCE: Maintain 1.2m walking paths. No clipping.
-5. ORIENTATION: TVs face the center. Seats face the TV. Backs of large furniture touch the walls.
-6. MANDATORY BEDROOM PIECE: if room type is bedroom, ensure the layout includes a bed item (Single, Double, Bunk or Triple Bunk) before returning results.
+5. ORIENTATION: TVs face the center. Sofas face the TV. Backs of large furniture touch the walls.
+        If there is no TV, sofas face the center.
+        Chairs face towards tables
+6. ORIENTATION & SNAP: 
+   - All "rotate" values MUST be multiples of 1.5708 (90 degrees). 
+   - Use ONLY these values: 0.0, 1.5708 (90°), 3.14159 (180°), or 4.71239 (270°). 
+   - Ensure furniture backs are perfectly parallel to the room bounds.
 
 USER REQUEST: "${userText}"
 
 OUTPUT FORMAT (JSON ARRAY ONLY):
-[{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":0.0}]`;
+- Return ONLY a valid JSON array.
+- No comments, no markdown blocks, no text explanations.
+- The "rotate" value MUST be one of: [0.0, 1.5708, 3.14159, 4.71239].
+
+Format: [{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":1.5708}]`;
 
         try {
             const result = await callWithRetry(prompt);
