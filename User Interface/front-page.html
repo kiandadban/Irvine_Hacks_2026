@@ -154,6 +154,15 @@
                 </div>
             </div>
 
+            <!-- Budget slider -->
+            <div class="w-full flex flex-col items-center mt-8">
+                <div class="text-stone-400 text-sm font-light tracking-widest uppercase">Max Budget</div>
+                <div class="w-3/4 flex items-center gap-3 mt-2">
+                    <span>$</span>
+                    <input id="budget-slider" type="range" min="0" max="10000" step="100" value="500" class="w-full">
+                    <span id="budget-display">500</span>
+                </div>
+            </div>
             <div class="relative max-w-2xl mx-auto">
                 <div class="custom-input rounded-full flex items-center p-2 pr-2 pl-8 shadow-sm">
                     <input 
@@ -191,16 +200,28 @@
             }
         }
 
+        // sync budget display
+        const budgetSlider = document.getElementById('budget-slider');
+        const budgetDisplay = document.getElementById('budget-display');
+        if (budgetSlider && budgetDisplay) {
+            budgetSlider.addEventListener('input', () => {
+                budgetDisplay.textContent = budgetSlider.value;
+            });
+        }
+
         function startApp() {
             const landing = document.getElementById('landing-page');
             const prompt = document.getElementById('user-prompt').value;
             if (!selectedRoom && !prompt) { alert("Please select a room type and describe it."); return; }
             if (!prompt) { alert("Describe your room first."); return; }
             const fullPrompt = selectedRoom ? `${selectedRoom}: ${prompt}` : prompt;
+            const budget = budgetSlider ? budgetSlider.value : '';
             landing.style.opacity = '0';
             landing.style.transition = 'opacity 0.5s ease';
             setTimeout(() => {
-                window.location.href = `../Engine/index.html?prompt=${encodeURIComponent(fullPrompt)}&roomType=${encodeURIComponent(selectedRoom)}`;
+                let url = `../Engine/index.html?prompt=${encodeURIComponent(fullPrompt)}&roomType=${encodeURIComponent(selectedRoom)}`;
+                if (budget) url += `&budget=${encodeURIComponent(budget)}`;
+                window.location.href = url;
             }, 300);
         }
     </script>

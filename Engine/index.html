@@ -184,9 +184,28 @@
     </div>
 
     <script>
-        // Capture prompt from URL query parameter
+        // Capture prompt, room type, and budget from URL query parameters
         const urlParams = new URLSearchParams(window.location.search);
         window.initialPrompt = urlParams.get('prompt') || '';
+        const initialRoom = urlParams.get('roomType') || '';
+        const initialBudget = urlParams.get('budget');
+        window.initialBudget = initialBudget;
+
+        // if a budget was passed, update the slider value and display
+        if (initialBudget !== null) {
+            const bs = document.getElementById('budgetSlider');
+            const bv = document.getElementById('budgetVal');
+            if (bs) bs.value = initialBudget;
+            if (bv) bv.innerText = initialBudget;
+        }
+
+        // if a room type passed, trigger selection after DOM loads
+        window.addEventListener('DOMContentLoaded', () => {
+            if (initialRoom) {
+                const btn = Array.from(document.querySelectorAll('.room-type-btn')).find(b => b.getAttribute('data-room') === initialRoom);
+                if (btn) btn.click();
+            }
+        });
 
         function selectRoom(el) {
             document.querySelectorAll('.room-type-btn').forEach(b => {

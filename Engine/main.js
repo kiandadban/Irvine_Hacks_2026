@@ -96,9 +96,11 @@ async function initApp() {
         if (aiBtn) { aiBtn.disabled = true; }
 
         try {
+            const budgetParam = window.initialBudget || document.getElementById('budgetSlider')?.value;
             const layout = await ai.runGeneration(userText, {
                 useRoomContext,
                 roomType,
+                budget: budgetParam,
                 onStatus: (s) => { if (aiBtn) aiBtn.innerText = s; },
             });
             

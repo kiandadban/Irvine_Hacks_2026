@@ -44,7 +44,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
         }
     }
 
-    async function runGeneration(userText, { useRoomContext = true, roomType = null, onStatus } = {}) {
+    async function runGeneration(userText, { useRoomContext = true, roomType = null, budget = null, onStatus } = {}) {
         if (!userText?.trim()) return null;
 
         const rw = roomManager.roomWidth;
@@ -68,16 +68,20 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
             "living room": "- There is a table with a TV and Media Console on top. Sofas face TV. Rug in center with Coffee Table on top in between sofa and TV.",
             "kitchen": "- Counter units edge-to-edge. One Fridge, one Oven, one Sink. Small items on Countertop (Y=0.9).",
             "office": "- Desk faces window/door. Desk MUST have Monitor, Keyboard, and PC. Shelves against walls.",
-            "bathroom": "- Exactly one Toilet, Sink, and Shower. Toilet Roll holder next to toilet."
+            "bathroom": "- Exactly one Toilet, Sink, and Shower. Toilet Roll holder next to toilet.",
+            "gaming": "- Entertainment/gaming setup required: include at least one Desk or Media Console with Monitor/TV and a Desktop/Console. Include Keyboard and Mouse (or Controller) placed on desk/console. Gaming Chair near Desk.",
+            "entertainment": "- Entertainment setup required: include TV/Monitor and Media Console, speakers, seating oriented to the screen. Place small electronics (controllers, remotes) on tables or consoles.",
+            "media room": "- Media room: TV or projector screen with Media Console or wall mount, seating arranged for viewing, small surfaces for controllers and accessories."
         };
 
         const currentRequirements = roomRequirements[roomType?.toLowerCase()] || "Apply general professional standards.";
 
+        const budgetClause = budget != null && budget !== '' ? `BUDGET: items should cost no more than $${budget}. Prioritize lower-cost items when possible.\n\n` : '';
         const prompt = `
 ROLE: Master Interior Architect.
 TASK: Generate a valid JSON array of furniture placement objects.
 
-ROOM CONTEXT:
+${budgetClause}ROOM CONTEXT:
 - Type: ${roomType || 'General'}
 - Size: ${rw}m x ${rd}m. 
 - Bounds: X(-${hw} to ${hw}), Z(-${hd} to ${hd}).
