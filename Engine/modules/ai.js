@@ -64,15 +64,13 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
         ).join('\n');
 
         const roomRequirements = {
-            "bedroom": "- Must include at least one bed from the list (Bed Single, Bed Double, Bunk Bed or Triple Bunk Bed). Exactly one bed is preferred. Two Nightstands should flank the bed with Lamps on them. Wardrobe against a wall.",
-            "living room": "- There is a table with a TV and Media Console on top. Sofas face TV. Rug in center with Coffee Table on top in between sofa and TV.",
-            "kitchen": "- Counter units edge-to-edge. One Fridge, one Oven, one Sink. Small items on Countertop (Y=0.9).",
-            "office": "- Desk faces window/door. Desk MUST have Monitor, Keyboard, and PC. Shelves against walls.",
-            "bathroom": "- Exactly one Toilet, Sink, and Shower. Toilet Roll holder next to toilet.",
-            "gaming": "- Entertainment/gaming setup required: include at least one Desk or Media Console with Monitor/TV and a Desktop/Console. Include Keyboard and Mouse (or Controller) placed on desk/console. Gaming Chair near Desk.",
-            "entertainment": "- Entertainment setup required: include TV/Monitor and Media Console, speakers, seating oriented to the screen. Place small electronics (controllers, remotes) on tables or consoles.",
-            "media room": "- Media room: TV or projector screen with Media Console or wall mount, seating arranged for viewing, small surfaces for controllers and accessories."
-        };
+            "living room": "- Backs of Sofas or Chairs should be against walls or facing a central Table. Must include a Carpet in the center. Place a Media Console or Table with a TV and Speakers on top (X, Z alignment).",
+            "bedroom": "- MANDATORY: Must include exactly one item from the 'Beds' folder (Bed Single, Bed Double, etc.). Place two Tables (Nightstands) flanking the bed. Place Lamps on top of the Nightstands at Y=Height.",
+            "kitchen": "- Use 'Kitchen' folder assets. Counter units must be edge-to-edge (90-degree rotations). Place one Fridge, one Oven, and one Sink. Place small accessories (Microwave, Toaster) on the Kitchen counters.",
+            "home office": "- Include a Desk from the 'Tables' folder. Desk MUST have a Monitor, Keyboard, and PC from the 'Electronics' folder placed on top (matching X, Z). Include one Office Chair facing the desk.",
+            "bathroom": "- Use 'Bathroom' folder. Exactly one Toilet, one Sink, and one Shower/Bathtub. Use 'Miscellaneous' for small items like Toilet Roll holders placed near the Toilet.",
+            "dining room": "- Center a large Dining Table from the 'Tables' folder. Surround it with at least four items from the 'Chairs' folder, all rotated 90 degrees to face the table center. Place a Vase or Bowl on the table."
+        }
 
         const currentRequirements = roomRequirements[roomType?.toLowerCase()] || "Apply general professional standards.";
 
@@ -94,7 +92,7 @@ MANDATORY SPATIAL RULES:
 2. STACKING: All items with [PlaceableOnFurniture: true] MUST share the EXACT (X, Z) coordinates as a base item (Desk, Table, Console) and set Y to that base item's Height (H). SHELVES are NOT valid base items—NOTHING can be placed on top of a shelf.
 3. SPACING: Distribute furniture across the room. Avoid clustering everything at (0, 0). Use the full room bounds.
 4. CLEARANCE: Maintain 1.2m walking paths. No clipping.
-5. SEATING: Chairs in front of desks MUST use Chair E.fbx only. Position chairs directly in front of desk, facing the desk center.
+5. SEATING: Desks must have a Chair E.fbx paired with it. Position chair directly in front of desk, facing the desk center.
 6. ORIENTATION: 
    - TVs MUST rotate to face the CENTER of the room (0, 0). Calculate rotation based on TV position: if TV X < 0 (left side), rotate = 1.5708; if TV X > 0 (right side), rotate = 4.71239; if TV Z < 0 (front), rotate = 0.0; if TV Z > 0 (back), rotate = 3.14159.
    - Beds MUST rotate to face the center of the room (rotate: 0.0 if against the left wall, 3.14159 if against the right wall, etc.).
@@ -105,7 +103,7 @@ MANDATORY SPATIAL RULES:
    - All "rotate" values MUST be multiples of 1.5708 (90 degrees). 
    - Use ONLY these values: 0.0, 1.5708 (90°), 3.14159 (180°), or 4.71239 (270°). 
    - Ensure furniture backs are perfectly perpendicular to the room bounds.
-9. PERPENDICULAR: Shelves have to be flat and perpendicular against the wall, there must be 0 space between them and the wall.
+9. PERPENDICULAR: Shelves and cupboards have to be flat and perpendicular against the wall, there must be 0 space between them and the wall.
 
 USER REQUEST: "${userText}"
 

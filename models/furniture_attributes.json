@@ -15,6 +15,7 @@
       "file": "Bath.fbx",
       "category": "bathroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.7,
         "depth": 0.75,
@@ -32,6 +33,7 @@
       "file": "Shower.fbx",
       "category": "bathroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.9,
         "depth": 0.9,
@@ -49,6 +51,7 @@
       "file": "Sink.fbx",
       "category": "bathroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.5,
@@ -66,6 +69,7 @@
       "file": "Toilet Roll Holder.fbx",
       "category": "bathroom",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.15,
         "depth": 0.1,
@@ -83,6 +87,7 @@
       "file": "Toilet Rolls.fbx",
       "category": "bathroom",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.25,
         "depth": 0.12,
@@ -100,6 +105,7 @@
       "file": "Toilet.fbx",
       "category": "bathroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.4,
         "depth": 0.7,
@@ -117,6 +123,7 @@
       "file": "Towel Holder.fbx",
       "category": "bathroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.1,
@@ -134,6 +141,7 @@
       "file": "Bed Double.fbx",
       "category": "bedroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.5,
         "depth": 2.0,
@@ -151,6 +159,7 @@
       "file": "Bed Single.fbx",
       "category": "bedroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.0,
         "depth": 2.0,
@@ -168,6 +177,7 @@
       "file": "Bunk Bed.fbx",
       "category": "bedroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.0,
         "depth": 2.0,
@@ -185,6 +195,7 @@
       "file": "Triple Bunk Bed.fbx",
       "category": "bedroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.0,
         "depth": 2.0,
@@ -202,6 +213,7 @@
       "file": "Carpet A.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 2.0,
         "depth": 3.0,
@@ -219,6 +231,7 @@
       "file": "Carpet B.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.5,
         "depth": 2.2,
@@ -236,6 +249,7 @@
       "file": "Carpet C.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 2.5,
         "depth": 2.5,
@@ -253,6 +267,7 @@
       "file": "Chair A.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.45,
         "depth": 0.5,
@@ -266,27 +281,11 @@
       "folder": "Chairs"
     },
     {
-      "name": "Chair B",
-      "file": "Chair B.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.5,
-        "depth": 0.55,
-        "height": 0.9
-      },
-      "shopping": {
-        "store": "Amazon",
-        "price": 65.0,
-        "url": "https://www.amazon.com/Amazon-Basics-Classic-Mid-Century-Furniture/dp/B07NSS9472"
-      },
-      "folder": "Chairs"
-    },
-    {
       "name": "Chair C",
       "file": "Chair C.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.6,
@@ -304,6 +303,7 @@
       "file": "Chair D.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.55,
         "depth": 0.6,
@@ -321,6 +321,7 @@
       "file": "Chair E.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.5,
         "depth": 0.5,
@@ -338,6 +339,7 @@
       "file": "Drawer A.fbx",
       "category": "bedroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.8,
         "depth": 0.5,
@@ -355,6 +357,7 @@
       "file": "Drawer B.fbx",
       "category": "bedroom",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.4,
         "depth": 0.4,
@@ -372,6 +375,7 @@
       "file": "Console A.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.4,
         "depth": 0.4,
@@ -389,6 +393,7 @@
       "file": "Console B.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.3,
         "depth": 0.3,
@@ -406,6 +411,7 @@
       "file": "Console C.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.35,
         "depth": 0.35,
@@ -423,6 +429,7 @@
       "file": "Console D.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.2,
         "depth": 0.1,
@@ -440,6 +447,7 @@
       "file": "Keyboard.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.45,
         "depth": 0.15,
@@ -457,6 +465,7 @@
       "file": "Laptop.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.35,
         "depth": 0.25,
@@ -474,6 +483,7 @@
       "file": "Monitor.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.2,
@@ -491,6 +501,7 @@
       "file": "Pc.fbx",
       "category": "office",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.2,
         "depth": 0.45,
@@ -508,6 +519,7 @@
       "file": "Phone.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.07,
         "depth": 0.15,
@@ -525,6 +537,7 @@
       "file": "Tablet.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.18,
         "depth": 0.25,
@@ -542,6 +555,7 @@
       "file": "TV A.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.2,
         "depth": 0.1,
@@ -559,6 +573,7 @@
       "file": "TV B.fbx",
       "category": "office",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.6,
         "depth": 0.1,
@@ -576,6 +591,7 @@
       "file": "Blender.fbx",
       "category": "kitchen",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.2,
         "depth": 0.2,
@@ -593,6 +609,7 @@
       "file": "Cupboard A.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.6,
@@ -610,6 +627,7 @@
       "file": "Cupboard B.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.4,
         "depth": 0.6,
@@ -627,6 +645,7 @@
       "file": "Cupboard C.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.3,
@@ -644,6 +663,7 @@
       "file": "Cupboard D.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.8,
         "depth": 0.3,
@@ -661,6 +681,7 @@
       "file": "Cupboard E.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.6,
@@ -678,6 +699,7 @@
       "file": "Cupboard F.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.9,
         "depth": 0.6,
@@ -695,6 +717,7 @@
       "file": "Cupboard Sink.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.9,
         "depth": 0.6,
@@ -712,6 +735,7 @@
       "file": "Dishwasher.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.6,
@@ -729,6 +753,7 @@
       "file": "Fridge A.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.9,
         "depth": 0.85,
@@ -746,6 +771,7 @@
       "file": "Fridge B.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.7,
         "depth": 0.7,
@@ -763,6 +789,7 @@
       "file": "Kettle.fbx",
       "category": "kitchen",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.22,
         "depth": 0.22,
@@ -780,6 +807,7 @@
       "file": "Kitchen Roll.fbx",
       "category": "kitchen",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.12,
         "depth": 0.12,
@@ -797,6 +825,7 @@
       "file": "Microwave.fbx",
       "category": "kitchen",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.5,
         "depth": 0.4,
@@ -814,6 +843,7 @@
       "file": "Oven.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.76,
         "depth": 0.7,
@@ -831,6 +861,7 @@
       "file": "Toaster.fbx",
       "category": "kitchen",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.2,
         "depth": 0.3,
@@ -848,6 +879,7 @@
       "file": "Washing Machine.fbx",
       "category": "kitchen",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.6,
@@ -865,6 +897,7 @@
       "file": "Lamp A.fbx",
       "category": "living room",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.25,
         "depth": 0.25,
@@ -882,6 +915,7 @@
       "file": "Lamp B.fbx",
       "category": "living room",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.3,
         "depth": 0.3,
@@ -899,6 +933,7 @@
       "file": "Lamp C.fbx",
       "category": "living room",
       "placeable": true,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.2,
         "depth": 0.2,
@@ -916,6 +951,7 @@
       "file": "Shelf A.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.8,
         "depth": 0.3,
@@ -933,6 +969,7 @@
       "file": "Shelf B.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.0,
         "depth": 0.35,
@@ -950,6 +987,7 @@
       "file": "Shelf C.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.25,
@@ -967,6 +1005,7 @@
       "file": "Shelf D.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.2,
         "depth": 0.4,
@@ -984,6 +1023,7 @@
       "file": "Shelf E.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.9,
         "depth": 0.3,
@@ -1001,6 +1041,7 @@
       "file": "Sofa A.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 0.9,
       "dimensions": {
         "width": 2.4,
         "depth": 1.0,
@@ -1018,6 +1059,7 @@
       "file": "Sofa B.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.8,
         "depth": 0.9,
@@ -1035,6 +1077,7 @@
       "file": "Sofa C.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 2.8,
         "depth": 1.6,
@@ -1052,6 +1095,7 @@
       "file": "Sofa D.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.5,
         "depth": 0.8,
@@ -1069,6 +1113,7 @@
       "file": "Desk.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.4,
         "depth": 0.7,
@@ -1086,6 +1131,7 @@
       "file": "Rounded Table A.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.0,
         "depth": 1.0,
@@ -1103,6 +1149,7 @@
       "file": "Rounded Table B.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.8,
         "depth": 0.8,
@@ -1120,6 +1167,7 @@
       "file": "Rounded Table C.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.5,
         "depth": 0.5,
@@ -1137,6 +1185,7 @@
       "file": "Table A.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.8,
         "depth": 0.9,
@@ -1154,6 +1203,7 @@
       "file": "Table B.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 1.2,
         "depth": 0.6,
@@ -1171,6 +1221,7 @@
       "file": "Table C.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 0.6,
         "depth": 0.6,
@@ -1188,6 +1239,7 @@
       "file": "Table D.fbx",
       "category": "living room",
       "placeable": false,
+      "scale": 1.0,
       "dimensions": {
         "width": 2.2,
         "depth": 1.0,
