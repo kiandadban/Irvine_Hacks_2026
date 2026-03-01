@@ -224,6 +224,14 @@ async function initApp() {
         handleGenerate(aiInput?.value, true, selectedRoomType);
     });
 
+    // Auto-generate layout if prompt was passed from front page
+    if (window.initialPrompt) {
+        aiInput.value = window.initialPrompt;
+        const activeBtn = document.querySelector('.room-type-btn.active span');
+        const selectedRoomType = activeBtn ? activeBtn.innerText.trim() : 'Living Room';
+        handleGenerate(window.initialPrompt, true, selectedRoomType);
+    }
+
     // Load layout from JSON file (dispatched by download.js)
     window.addEventListener('loadlayout', async (e) => {
         const layout = e.detail;

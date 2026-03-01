@@ -158,6 +158,10 @@
     </div>
 
     <script>
+        // Capture prompt from URL query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        window.initialPrompt = urlParams.get('prompt') || '';
+
         function selectRoom(el) {
             document.querySelectorAll('.room-type-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
