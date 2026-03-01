@@ -223,6 +223,14 @@ input[type=range] {
 }
 #load-btn:hover { background: var(--bg2); }
 
+#cart-btn {
+    background: var(--white);
+    color: var(--ink);
+    border: 1px solid var(--bg3);
+    transition: background 0.2s;
+}
+#cart-btn:hover { background: var(--bg2); }
+
 #download-btn {
     background: var(--teal);
     color: var(--white);

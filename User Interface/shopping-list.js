@@ -1,6 +1,6 @@
 // shopping-list.js
 document.addEventListener('DOMContentLoaded', () => {
-    const data = localStorage.getItem('roomai_cart');
+    const data = localStorage.getItem('spaitial_cart');
     const items = JSON.parse(data || "[]");
     const tbody = document.getElementById('cart-body');
     const totalEl = document.getElementById('total-price');

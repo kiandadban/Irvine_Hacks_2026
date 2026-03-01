@@ -330,7 +330,7 @@ async function initApp() {
     });
 
     // 2. Save to local storage
-    localStorage.setItem('roomai_cart', JSON.stringify(shoppingItems));
+    localStorage.setItem('spaitial_cart', JSON.stringify(shoppingItems));
 
     // 3. Navigate
     window.location.href = "../User Interface/shopping-list.html";
