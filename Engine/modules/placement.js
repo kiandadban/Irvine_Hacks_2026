@@ -30,14 +30,40 @@ export function createPlacer(
             if (rawSize.x > 0) model.scale.setScalar(targetW / rawSize.x);
             model.rotation.y = itemConfig.rotate ?? 0;
 
-            // 2. SURFACE DETECTION FOR PLACEABLES
-            let targetY = 0;
+            // 2. WALL SNAPPING FOR SHELVES & CUPBOARDS
             let posX = (typeof itemConfig.x === 'number') ? itemConfig.x : 0;
             let posZ = (typeof itemConfig.z === 'number') ? itemConfig.z : 0;
+            const isWallFurniture = (asset.file || '').toLowerCase().includes('shelf') || 
+                                    (asset.file || '').toLowerCase().includes('cupboard');
+            
+            if (isWallFurniture) {
+                const rw = roomManager.roomWidth || 10;
+                const rd = roomManager.roomDepth || 10;
+                const hw = rw / 2;
+                const hd = rd / 2;
+                const absX = Math.abs(posX);
+                const absZ = Math.abs(posZ);
+                
+                // Snap to nearest wall
+                if (absX > absZ) {
+                    // Snap to left or right wall
+                    posX = posX < 0 ? -hw : hw;
+                } else {
+                    // Snap to front or back wall
+                    posZ = posZ < 0 ? -hd : hd;
+                }
+            }
+
+            // 3. SURFACE DETECTION FOR PLACEABLES
+            let targetY = 0;
             model.userData._baseSurface = null;
 
-            if (asset.placeable) {
-                const allowedKeywords = ['table', 'tables', 'desk', 'desks', 'drawer', 'drawers', 'shelf', 'shelves', 'console', 'cabinet', 'cupboard', 'counter'];
+            // Windows and doors should NEVER snap to surfaces; they stay on floor against walls
+            const isWindowOrDoor = (asset.file || '').toLowerCase().includes('window') || 
+                                   (asset.file || '').toLowerCase().includes('door');
+
+            if (asset.placeable && !isWindowOrDoor) {
+                const allowedKeywords = ['table', 'tables', 'desk', 'desks', 'drawer', 'drawers', 'console', 'cabinet', 'cupboard', 'counter'];
                 const SNAP_TOLERANCE = 3.0; // meters
                 const MAX_FALLBACK_DISTANCE = 6.0;
 
@@ -103,6 +129,12 @@ export function createPlacer(
                     console.warn('[Placer] No surface found for', asset.name, '— placing on floor');
                     targetY = 0;
                 }
+            }
+
+            // 4. CUPBOARD HEIGHT ADJUSTMENT
+            if ((asset.file || '').toLowerCase().includes('cupboard')) {
+                // Cupboards snap to wall at their natural height (not on floor)
+                targetY = asset.dimensions?.height ?? 0.9;
             }
 
             model.userData.targetY = targetY;

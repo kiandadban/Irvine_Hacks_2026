@@ -26,7 +26,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     
     // FORCED JSON MODE: This eliminates the need for regex parsing or cleaning comments
     const aiModel = genAI.getGenerativeModel({ 
-        model: 'gemini-2.5-flash',
+        model: 'gemini-2.5-flash-lite',
         generationConfig: {
             responseMimeType: "application/json",
         }
@@ -87,20 +87,21 @@ ${fileList}
 
 MANDATORY SPATIAL RULES:
 1. GROUNDING: All items with [PlaceableOnFurniture: false] MUST be at Y=0.
-2. STACKING: All items with [PlaceableOnFurniture: true] MUST share the EXACT (X, Z) coordinates as a base item (Desk, Table, Console) and set Y to that base item's Height (H). SHELVES are NOT valid base items—nothing can be placed on shelves.
+2. STACKING: All items with [PlaceableOnFurniture: true] MUST share the EXACT (X, Z) coordinates as a base item (Desk, Table, Console) and set Y to that base item's Height (H). SHELVES are NOT valid base items—NOTHING can be placed on top of a shelf.
 3. SPACING: Distribute furniture across the room. Avoid clustering everything at (0, 0). Use the full room bounds.
 4. CLEARANCE: Maintain 1.2m walking paths. No clipping.
-5. ORIENTATION: 
+5. SEATING: Chairs in front of desks MUST use Chair E.fbx only. Position chairs directly in front of desk, facing the desk center.
+6. ORIENTATION: 
    - TVs MUST rotate to face the CENTER of the room (0, 0). Calculate rotation based on TV position: if TV X < 0 (left side), rotate = 1.5708; if TV X > 0 (right side), rotate = 4.71239; if TV Z < 0 (front), rotate = 0.0; if TV Z > 0 (back), rotate = 3.14159.
    - Beds MUST rotate to face the center of the room (rotate: 0.0 if against the left wall, 3.14159 if against the right wall, etc.).
    - Sofas face the TV. Backs of large furniture touch the walls.
    - If there is no TV, sofas face the center.
    - Chairs face towards tables.
-6. ROTATION PRECISION: 
+7. ROTATION PRECISION: 
    - All "rotate" values MUST be multiples of 1.5708 (90 degrees). 
    - Use ONLY these values: 0.0, 1.5708 (90°), 3.14159 (180°), or 4.71239 (270°). 
-   - Ensure furniture backs are perfectly parallel to the room bounds.
-7. PARALLEL: Doors, windows, shelves, and curtains have to be flat and parallel against the wall
+   - Ensure furniture backs are perfectly perpendicular to the room bounds.
+9. PERPENDICULAR: Shelves have to be flat and perpendicular against the wall, there must be 0 space between them and the wall.
 
 USER REQUEST: "${userText}"
 

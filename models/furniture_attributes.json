@@ -334,57 +334,6 @@
       "folder": "Chairs"
     },
     {
-      "name": "Door A",
-      "file": "Door A.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.9,
-        "depth": 0.1,
-        "height": 2.0
-      },
-      "shopping": {
-        "store": "Home Depot",
-        "price": 145.0,
-        "url": "https://www.homedepot.com/p/JELD-WEN-32-in-x-80-in-6-Panel-White-Right-Hand-Hollow-Core-Textured-Composite-Prehung-Interior-Door-THDJW160700465/202036440"
-      },
-      "folder": "Doors"
-    },
-    {
-      "name": "Door B",
-      "file": "Door B.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.8,
-        "depth": 0.1,
-        "height": 2.0
-      },
-      "shopping": {
-        "store": "Home Depot",
-        "price": 160.0,
-        "url": "https://www.homedepot.com/p/JELD-WEN-30-in-x-80-in-Smooth-2-Panel-Caiman-White-Right-Hand-Molded-Composite-Interior-Door-Prehung-THDJW240600021/204856018"
-      },
-      "folder": "Doors"
-    },
-    {
-      "name": "Door C",
-      "file": "Door C.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.9,
-        "depth": 0.15,
-        "height": 2.1
-      },
-      "shopping": {
-        "store": "Amazon",
-        "price": 250.0,
-        "url": "https://www.amazon.com/Barn-Door-Hardware-Kit-Wood/dp/B07P7Z8N5Y"
-      },
-      "folder": "Doors"
-    },
-    {
       "name": "Drawer A",
       "file": "Drawer A.fbx",
       "category": "bedroom",
@@ -1048,40 +997,6 @@
       "folder": "Shelves"
     },
     {
-      "name": "Wall Shelf A",
-      "file": "Wall Shelf A.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 1.0,
-        "depth": 0.2,
-        "height": 0.05
-      },
-      "shopping": {
-        "store": "IKEA",
-        "price": 20.0,
-        "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282177/"
-      },
-      "folder": "Shelves"
-    },
-    {
-      "name": "Wall Shelf B",
-      "file": "Wall Shelf B.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.6,
-        "depth": 0.15,
-        "height": 0.05
-      },
-      "shopping": {
-        "store": "IKEA",
-        "price": 12.0,
-        "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282182/"
-      },
-      "folder": "Shelves"
-    },
-    {
       "name": "Sofa A",
       "file": "Sofa A.fbx",
       "category": "living room",
@@ -1284,57 +1199,6 @@
         "url": "https://www.ikea.com/us/en/p/moerbylanga-table-oak-veneer-brown-stained-20293766/"
       },
       "folder": "Tables"
-    },
-    {
-      "name": "Window A",
-      "file": "Window A.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.9,
-        "depth": 0.15,
-        "height": 1.2
-      },
-      "shopping": {
-        "store": "Lowe's",
-        "price": 215.0,
-        "url": "https://www.lowes.com/pl/Windows-Windows-doors/4294858074"
-      },
-      "folder": "Windows"
-    },
-    {
-      "name": "Window B",
-      "file": "Window B.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 1.2,
-        "depth": 0.15,
-        "height": 1.2
-      },
-      "shopping": {
-        "store": "Home Depot",
-        "price": 300.0,
-        "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87"
-      },
-      "folder": "Windows"
-    },
-    {
-      "name": "Window C",
-      "file": "Window C.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.6,
-        "depth": 0.15,
-        "height": 0.9
-      },
-      "shopping": {
-        "store": "Home Depot",
-        "price": 150.0,
-        "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87"
-      },
-      "folder": "Windows"
     }
   ]
 }
