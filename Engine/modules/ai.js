@@ -25,6 +25,8 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     const genAI = new GoogleGenerativeAI(apiKey);
     const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
 
+
+
     async function callWithRetry(prompt, retries = 3) {
         for (let attempt = 0; attempt < retries; attempt++) {
             try {
@@ -40,7 +42,13 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     async function runGeneration(userText, { useRoomContext = true, roomType = null, onStatus } = {}) {
         if (!userText?.trim()) return null;
 
-        const cacheKey = `${userText.trim().toLowerCase()}::${roomManager.roomWidth}x${roomManager.roomDepth}`;
+        const rw = roomManager.roomWidth;
+        const rd = roomManager.roomDepth;
+        const hw = (rw / 2).toFixed(2);
+        const hd = (rd / 2).toFixed(2);
+
+        // Include roomType in cache key to distinguish between bedroom/office layouts of same prompt
+        const cacheKey = `${userText.trim().toLowerCase()}::${rw}x${rd}::${roomType || 'general'}`;
         const cached = getCached(cacheKey);
         if (cached) return cached;
 
@@ -51,27 +59,53 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
             `${a.file} [PlaceableOnFurniture: ${a.placeable}, H: ${a.dimensions.height}m]`
         ).join('\n');
 
-        const rw = roomManager.roomWidth;
-        const rd = roomManager.roomDepth;
-        const hw = (rw / 2).toFixed(2);
-        const hd = (rd / 2).toFixed(2);
-        const roomTypeLine = (useRoomContext && roomType)
-            ? `ROOM TYPE: ${roomType}`
-            : '';
-        const budgetValue = useRoomContext
-            ? Number(document.getElementById('budgetSlider')?.value ?? 0)
-            : null;
-        const budgetLine = budgetValue
-            ? `BUDGET: $${budgetValue.toLocaleString()}. Only select furniture appropriate for this price range.`
-            : '';
+        // --- ROOM SPECIFIC REQUIREMENTS ---
+        const roomRequirements = {
+            "bedroom": `
+                - PRIMARY PIECE: Exactly one Bed (Double or Single). Centered against a wall.
+                - SYMMETRY: Place two Nightstands/Side Tables flanking the bed.
+                - LIGHTING: Place two Lamps on the Nightstands.
+                - STORAGE: Include at least one Wardrobe or Dresser flush against a perimeter wall.
+                - SEATING: Use only an Office Chair if a Desk is present.`,
+            
+            "living room": `
+                - FOCAL POINT: Arrange seating (Sofas) to face a Media Console or TV.
+                - CONVERSATION ZONE: Place a Rug in the center with a Coffee Table on top.
+                - ACCESSORIES: Place a TV and Speakers on the Console.
+                - AMBIANCE: Include at least two Plants and one Floor Lamp in corners.`,
+            
+            "kitchen": `
+                - SNAPPING: Lower units (Cupboard, Oven, Dishwasher, Sink) MUST be placed edge-to-edge (0m gap with no other objects in between). 
+                - ALIGNMENT: All lower units MUST share the same Z-coordinate (if on a North/South wall) or X-coordinate (if on an East/West wall) to form a straight line.
+                - WALL UNITS: If a file name contains 'Upper' or 'Wall', set its Y-value to 1.5m. 
+                - FLAT ROTATION: All Cupboards and Appliances MUST have a rotation of 0, 90, 180, or 270 degrees only—keep them perfectly flush against the walls.
+                - APPLIANCES: One Fridge (Floor), one Oven (Built-in to line), and one Sink (Built-in to line).
+                - SURFACES: Small items (Toaster, Kettle) must sit on the Countertop (Y = 0.9m).`,
+            
+            "office": `
+                - WORKSTATION: Position the Desk to face the door or a window.
+                - ERGONOMICS: Use exactly one Office Chair.
+                - TECH: The Desk MUST have a Monitor, Keyboard, and PC/Laptop.
+                - ORGANIZATION: Place at least two Shelves or Bookshelves against the walls.`,
+            
+            "bathroom": `
+                - SANITATION: Must include exactly one Toilet, one Sink/Vanity, and one Shower or Bath.
+                - ACCESSORIES: Place a Toilet Roll Holder next to the Toilet.
+                - STORAGE: Place a Towel Holder near the Shower/Bath.
+                - SCALE: Keep 1.2m of clear floor space in front of the Sink.`
+        };
 
-const prompt = `ACT AS: Master Interior Architect & CAD Expert.
+        const currentRequirements = roomRequirements[roomType?.toLowerCase()] || "Apply general professional interior design standards.";
+
+        const prompt = `ACT AS: Master Interior Architect & CAD Expert.
 ROOM SIZE: ${rw}m x ${rd}m. Bounds: X(-${hw} to ${hw}), Z(-${hd} to ${hd}).
-${roomTypeLine}
-${budgetLine}
+ROOM TYPE: ${roomType || 'General'}
 
 --- ASSET LIBRARY ---
 ${fileList}
+
+--- SPECIFIC ROOM REQUIREMENTS (MANDATORY) ---
+${currentRequirements}
 
 --- DESIGN PHILOSOPHY: SIMPLE & ELEGANT ---
 1. INTENTIONALITY: Every object must serve a purpose. Avoid clutter. If an item doesn't add to the function or elegance of the room, exclude it.
@@ -105,23 +139,48 @@ Only place accessories on logical surfaces. If a required surface is missing, do
 2. CLEARANCE: Maintain at least a 1.2m clear walking path through the center. No "islands" of furniture blocking movement.
 3. SYMMETRY: Aim for balanced layouts (e.g., centered beds, paired nightstands).
 
+--- SURFACE & STACKING LOGIC (No Overlaps) ---
+1. NO STACKING: Multiple accessories on the same surface MUST have different (X, Z) coordinates. 
+2. SURFACE JITTER: For every additional item on a surface, offset the X or Z by 0.2m to 0.4m from the center to prevent z-fighting/clipping.
+3. BOUNDS CHECK: Ensure the accessory's (X, Z) remains within the physical footprint of the base furniture.
+
+--- GRAVITY & ANCHORING (No Floating) ---
+1. ANCHORING: A TV, Monitor, or Lamp CANNOT exist without a supporting "Surface" item (Stand, Desk, Table) at the same location.
+2. Y-PRECISION: The Y-value of an accessory MUST match the Height (H) of the item directly beneath it. 
+3. FLOOR FALLBACK: If an item is NOT an accessory (placeable: false), its Y-value MUST be 0.0 (Floor Level).
+
+--- MISCELLANEOUS ---
+1. If a TV is placed, make sure that it is on top of a table and facing towards the center of the room
+2. Make sure nothing is blocking the TV's view 
+
 OUTPUT: Return a JSON array ONLY.
 Format: [{"file":"name.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":0.0}]
 
 USER REQUEST: "${userText}"`;
 
-        try {
-            const result = await callWithRetry(prompt);
-            const rawText = result.response.text();
-            const jsonStart = rawText.indexOf('[');
-            const jsonEnd = rawText.lastIndexOf(']') + 1;
-            const layout = JSON.parse(rawText.substring(jsonStart, jsonEnd));
-            setCache(cacheKey, layout);
-            return layout;
-        } catch (e) {
-            console.error('[AI] Error:', e);
-            throw e;
-        }
+try {
+    const result = await callWithRetry(prompt);
+    let rawText = result.response.text();
+    
+    // 1. Find the boundaries of the JSON array
+    const jsonStart = rawText.indexOf('[');
+    const jsonEnd = rawText.lastIndexOf(']') + 1;
+    
+    if (jsonStart === -1) throw new Error("No JSON layout found in AI response");
+    
+    let jsonString = rawText.substring(jsonStart, jsonEnd);
+
+    // 2. THE FIX: Remove Javascript-style comments (// or /* */) 
+    // which the AI sometimes includes, breaking JSON.parse
+    jsonString = jsonString.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, "");
+
+    const layout = JSON.parse(jsonString);
+    setCache(cacheKey, layout);
+    return layout;
+} catch (e) {
+    console.error('[AI] Parsing Error. Raw Response:', e);
+    throw new Error("The AI returned an invalid format. Please try again.");
+}
     }
 
     return { runGeneration };

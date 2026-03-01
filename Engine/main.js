@@ -59,10 +59,7 @@ async function initApp() {
     }
 
     // ── 5. SELECTION WRAPPERS & INFO PANEL ──
-    
-    // Initialize Info Panel first
     const infoPanel = createInfoPanel((obj) => {
-        // Callback for the "Remove Item" button inside the side panel
         if (!obj) return;
         scene.remove(obj);
         const idx = spawnedFurniture.indexOf(obj);
@@ -73,13 +70,13 @@ async function initApp() {
 
     const wrappedSelect = (obj) => {
         if (!obj) return;
-        selectObject(obj);     // Triggers TransformControls
-        infoPanel.update(obj);  // Triggers UI Slide-in
+        selectObject(obj);     
+        infoPanel.update(obj);  
     };
 
     const wrappedDeselect = () => {
-        deselectObject();       // Detaches TransformControls
-        infoPanel.hide();       // Triggers UI Slide-out
+        deselectObject();       
+        infoPanel.hide();       
     };
 
     // ── 6. CONTROLS ──
@@ -101,7 +98,6 @@ async function initApp() {
         () => {},
         (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
         () => {
-            // Global Delete logic (from sidebar or keyboard)
             const obj = transform.object;
             if (!obj) return;
             scene.remove(obj);
@@ -113,7 +109,7 @@ async function initApp() {
         (path) => placeModel({ file: path.split('/').pop(), x: 0, z: 0 })
     );
 
-    // ── 9. AI ──
+    // ── 9. AI GENERATION LOGIC ──
     const ai = createAI(API_KEY, furnitureLibrary, roomManager);
     const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
@@ -128,28 +124,54 @@ async function initApp() {
                 roomType,
                 onStatus: (s) => { if (aiBtn) aiBtn.innerText = s; },
             });
-            if (!layout) return;
+            
+            if (!layout || !Array.isArray(layout)) return;
 
+            // Clear existing furniture for new AI layout
             wrappedDeselect();
             spawnedFurniture.forEach(o => scene.remove(o));
             spawnedFurniture.length = 0;
             collisionEngine.updateObstacles();
 
-            for (const item of layout) await placeModel(item);
+            // Sequentially place items to maintain physics stability
+            for (const item of layout) {
+                await placeModel(item);
+            }
+            window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
         } catch (e) {
-            alert(e.message ?? String(e));
+            console.error("AI Generation Error:", e);
+            alert("Design Error: " + (e.message ?? String(e)));
         } finally {
-            if (aiBtn) { aiBtn.disabled = false; aiBtn.innerText = 'Generate Layout'; }
+            if (aiBtn) { 
+                aiBtn.disabled = false; 
+                aiBtn.innerText = 'Generate Layout'; 
+            }
         }
     }
 
+    // ── 10. EVENT LISTENERS ──
+
+    // Capture the selected Room Type from the UI when clicking Generate
     aiBtn?.addEventListener('click', () => {
-        const activeRoomBtn = document.querySelector('.room-type-btn.active span');
-        const roomType = activeRoomBtn ? activeRoomBtn.innerText.trim() : 'Living Room';
-        handleGenerate(aiInput?.value, true, roomType);
+        // Look for the active button in the sidebar
+        const activeBtn = document.querySelector('.room-type-btn.active span');
+        const selectedRoomType = activeBtn ? activeBtn.innerText.trim() : 'Living Room';
+        
+        handleGenerate(aiInput?.value, true, selectedRoomType);
     });
 
-    // ── 10. MOUSE & KEYBOARD ──
+    // Load layout from JSON file (dispatched by download.js)
+    window.addEventListener('loadlayout', async (e) => {
+        const layout = e.detail;
+        if (!Array.isArray(layout)) return;
+        wrappedDeselect();
+        spawnedFurniture.forEach(o => scene.remove(o));
+        spawnedFurniture.length = 0;
+        collisionEngine.updateObstacles();
+        for (const item of layout) await placeModel(item);
+        window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
+    });
+
     const raycaster = new THREE.Raycaster();
     const mouse     = new THREE.Vector2();
 
@@ -178,6 +200,14 @@ async function initApp() {
         if (k === 'g') transform.setMode('translate');
         if (k === 'r') transform.setMode('rotate');
         if (k === 's') transform.setMode('scale');
+        if (k === 'delete' || k === 'backspace') {
+            const obj = transform.object;
+            scene.remove(obj);
+            const idx = spawnedFurniture.indexOf(obj);
+            if (idx > -1) spawnedFurniture.splice(idx, 1);
+            collisionEngine.updateObstacles();
+            wrappedDeselect();
+        }
     });
 
     // ── 11. RENDER LOOP ──
