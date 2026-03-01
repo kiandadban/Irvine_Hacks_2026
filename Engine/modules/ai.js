@@ -99,7 +99,7 @@ MANDATORY SPATIAL RULES:
    - Sofas face the TV. Backs of large furniture touch the walls.
    - If there is no TV, sofas face the center.
    - Chairs face towards tables.
-7. ROTATION PRECISION: 
+7. ROTATION PRECISION:  
    - All "rotate" values MUST be multiples of 1.5708 (90 degrees). 
    - Use ONLY these values: 0.0, 1.5708 (90°), 3.14159 (180°), or 4.71239 (270°). 
    - Ensure furniture backs are perfectly perpendicular to the room bounds.
