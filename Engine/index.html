@@ -87,10 +87,17 @@
         </aside>
 
         <main id="canvas-wrapper">
-            <button id="download-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>
-                Download
-            </button>
+            <input type="file" id="load-input" accept=".json" style="display:none">
+            <div id="canvas-actions">
+                <button id="load-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Load
+                </button>
+                <button id="download-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M5 14l7 7 7-7"/><path d="M3 21h18"/></svg>
+                    Download
+                </button>
+            </div>
             <div id="props-panel">
                 <h3>Object Details</h3>
                 <p id="obj-name">Selection: None</p>
