@@ -55,9 +55,20 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
         const rd = roomManager.roomDepth;
         const hw = (rw / 2).toFixed(2);
         const hd = (rd / 2).toFixed(2);
+        const roomTypeLine = (useRoomContext && roomType)
+            ? `ROOM TYPE: ${roomType}`
+            : '';
+        const budgetValue = useRoomContext
+            ? Number(document.getElementById('budgetSlider')?.value ?? 0)
+            : null;
+        const budgetLine = budgetValue
+            ? `BUDGET: $${budgetValue.toLocaleString()}. Only select furniture appropriate for this price range.`
+            : '';
+
 const prompt = `ACT AS: Master Interior Architect & CAD Expert.
 ROOM SIZE: ${rw}m x ${rd}m. Bounds: X(-${hw} to ${hw}), Z(-${hd} to ${hd}).
-ROOM TYPE: ${roomType || 'General'}
+${roomTypeLine}
+${budgetLine}
 
 --- ASSET LIBRARY ---
 ${fileList}
