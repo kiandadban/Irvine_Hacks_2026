@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { SpatialRules } from './spatialRules.js';
 
 const loader = new FBXLoader();
 // Simple in-memory cache for loaded FBX scenes. Keyed by asset.file
@@ -122,7 +123,138 @@ export function createPlacer(
             loader.load(path, (model) => {
                 // cache a deep clone (original loaded root) for reuse
                 try { modelCache.set(asset.file, model.clone(true)); } catch (e) { /* cache best-effort */ }
+<<<<<<< Updated upstream
                 computePlacementForModel(model);
+=======
+                model.userData.attributes = asset;
+
+                // 1. PHYSICAL SCALING & ROTATION
+                const rawBox = new THREE.Box3().setFromObject(model);
+                const rawSize = rawBox.getSize(new THREE.Vector3());
+                const targetW = asset.dimensions?.width ?? 1.0;
+                if (rawSize.x > 0) model.scale.setScalar(targetW / rawSize.x);
+                model.rotation.y = itemConfig.rotate ?? 0;
+
+                // 2. AESTHETIC SURFACE DETECTION
+                let targetY = 0; 
+                let posX = itemConfig.x;
+                let posZ = itemConfig.z;
+
+                if (asset.placeable) {
+                    // Determine which zone this item belongs to
+                    const itemZone = Object.keys(SpatialRules.ZONES).find(
+                        zone => SpatialRules.ZONES[zone].includes(asset.name)
+                    );
+                    
+                    const SNAP_TOLERANCE = 2.5;
+                    const MAX_FALLBACK_DISTANCE = 5.0;
+                    const EXTREME_FALLBACK_DISTANCE = 20.0; // Very wide tolerance
+
+                    let bestSurface = null;
+                    let minDistance = SNAP_TOLERANCE;
+
+                    spawnedFurniture.forEach(f => {
+                        const fAttrs = f.userData.attributes;
+                        if (fAttrs.placeable) return;
+
+                        // Check if this surface can host this item's zone
+                        let isValidSurface = false;
+                        if (itemZone) {
+                            const allowedZones = SpatialRules.SURFACE_MAP[fAttrs.category] || [];
+                            isValidSurface = allowedZones.includes(itemZone);
+                        }
+
+                        // Fallback: check folder/category for generic surface types
+                        if (!isValidSurface) {
+                            const fFolder = (fAttrs.folder || fAttrs.category || '').toString().toLowerCase();
+                            const allowedFolders = ['table', 'drawer', 'shelf', 'electronic', 'sofa', 'cupboard', 'kitchen', 'desk'];
+                            isValidSurface = allowedFolders.some(sf => fFolder.includes(sf));
+                        }
+
+                        if (!isValidSurface) return;
+
+                        const fBox = new THREE.Box3().setFromObject(f);
+                        const fCenter = fBox.getCenter(new THREE.Vector3());
+                        const dist = new THREE.Vector2(posX, posZ).distanceTo(new THREE.Vector2(fCenter.x, fCenter.z));
+
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            bestSurface = f;
+                        }
+                    });
+
+                    // Fallback 1: nearest surface within MAX_FALLBACK_DISTANCE
+                    if (!bestSurface) {
+                        let fallback = null;
+                        let bestDist = MAX_FALLBACK_DISTANCE;
+                        spawnedFurniture.forEach(f => {
+                            const fAttrs = f.userData.attributes;
+                            if (fAttrs.placeable) return;
+                            const fFolder = (fAttrs.folder || fAttrs.category || '').toString().toLowerCase();
+                            const allowedFolders = ['table', 'drawer', 'shelf', 'electronic', 'sofa', 'cupboard', 'kitchen', 'desk'];
+                            const isSurface = allowedFolders.some(sf => fFolder.includes(sf));
+                            if (!isSurface) return;
+
+                            const fBox = new THREE.Box3().setFromObject(f);
+                            const cx = Math.max(fBox.min.x, Math.min(posX, fBox.max.x));
+                            const cz = Math.max(fBox.min.z, Math.min(posZ, fBox.max.z));
+                            const dist = new THREE.Vector2(posX, posZ).distanceTo(new THREE.Vector2(cx, cz));
+                            if (dist < bestDist) { bestDist = dist; fallback = f; }
+                        });
+                        if (fallback) {
+                            bestSurface = fallback;
+                            console.debug('[Placer] Using fallback surface for', asset.name, 'at distance', bestDist);
+                        }
+                    }
+
+                    // Fallback 2: extreme range - ANY furniture surface, ignore category/zone
+                    if (!bestSurface) {
+                        let fallback = null;
+                        let bestDist = EXTREME_FALLBACK_DISTANCE;
+                        spawnedFurniture.forEach(f => {
+                            const fAttrs = f.userData.attributes;
+                            if (fAttrs.placeable) return; // still skip other accessories
+
+                            const fBox = new THREE.Box3().setFromObject(f);
+                            const cx = Math.max(fBox.min.x, Math.min(posX, fBox.max.x));
+                            const cz = Math.max(fBox.min.z, Math.min(posZ, fBox.max.z));
+                            const dist = new THREE.Vector2(posX, posZ).distanceTo(new THREE.Vector2(cx, cz));
+                            if (dist < bestDist) { bestDist = dist; fallback = f; }
+                        });
+                        if (fallback) {
+                            bestSurface = fallback;
+                            console.debug('[Placer] Using extreme fallback surface for', asset.name, 'at distance', bestDist);
+                        }
+                    }
+
+                    if (bestSurface) {
+                        const sBox = new THREE.Box3().setFromObject(bestSurface);
+                        const sCenter = sBox.getCenter(new THREE.Vector3());
+
+                        targetY = sBox.max.y; // Snap to top mesh
+                        
+                        // Snap coordinates to a sensible point on the surface (center)
+                        posX = sCenter.x;
+                        posZ = sCenter.z;
+                        
+                        // Inherit rotation
+                        model.rotation.y = bestSurface.rotation.y;
+                    } else {
+                        // Fallback 4: No valid surfaces found — place on floor at original position
+                        console.warn(`[Placer] No surface found for ${asset.name}. Placing on floor at requested position (${itemConfig.x}, ${itemConfig.z}).`);
+                        targetY = 0;
+                        posX = itemConfig.x;
+                        posZ = itemConfig.z;
+                    }
+                }
+
+                // attach computed targetY so finalize can access it
+                model.userData.targetY = targetY;
+                model.userData._posX = posX;
+                model.userData._posZ = posZ;
+
+                // finalize and add
+>>>>>>> Stashed changes
                 finalizeAndAdd(model, asset, itemConfig, resolve);
             }, undefined, (err) => {
                 console.error('[Placer] failed to load', path, err);

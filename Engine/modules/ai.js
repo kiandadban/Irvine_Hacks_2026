@@ -26,7 +26,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     
     // FORCED JSON MODE: This eliminates the need for regex parsing or cleaning comments
     const aiModel = genAI.getGenerativeModel({ 
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-2.5-flash',
         generationConfig: {
             responseMimeType: "application/json",
         }

@@ -14,7 +14,9 @@ export const SpatialRules = {
         'Tables': ['WORK_RIG', 'MEDIA_CENTER', 'DINING', 'BEDSIDE'],
         'Drawers': ['BEDSIDE', 'MEDIA_CENTER'],
         'Shelves': ['MEDIA_CENTER', 'DINING'],
-        'Electronics': ['MEDIA_CENTER'] // e.g., placing a console on a TV stand
+        'Electronics': ['MEDIA_CENTER'], // e.g., placing a console on a TV stand
+        'Desks': ['WORK_RIG'],
+        'Sofas': ['MEDIA_CENTER', 'BEDSIDE']
     },
 
     /**
