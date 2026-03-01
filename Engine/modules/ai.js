@@ -23,7 +23,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     if (!apiKey) return { runGeneration: async () => null };
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-lite' });
+    const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
 
     async function callWithRetry(prompt, retries = 3) {
         for (let attempt = 0; attempt < retries; attempt++) {
@@ -77,6 +77,14 @@ ${fileList}
 1. INTENTIONALITY: Every object must serve a purpose. Avoid clutter. If an item doesn't add to the function or elegance of the room, exclude it.
 2. ZONING: Divide the room into logical zones (e.g., Workspace, Relaxation, Sleeping). Do not mix unrelated furniture (e.g., don't put a Desk next to a Toilet).
 3. PROPORTION: Ensure large items (Sofa, Bed) have enough breathing room.
+
+--- ROOM CATEGORY RULES ---
+* kitchen: only one stove and dishwasher; one of each appliance type; keep appliances on counter tops; stove must sit adjacent to dishwasher; maintain at least 0.4 m spacing between appliances.
+* living room: layout must include seating and a rug; every seat/sofa should face the TV; center major seating groups on a carpet; keep design balanced.
+* bedroom: make the space cozy, avoid clipping furniture; beds should abut a wall; leave a clear buffer around all items.
+* bathroom: keep fixtures organized and tidy; enforce min clearance 0.3 m around components; follow adjacency pairs and wall‑mount rules from object groups.
+* office: workspace should remain neat; chairs belong with desks; do not scatter random objects on the floor.
+
 
 --- STRICT RELATIONSHIP LOGIC (Surface Pairing) ---
 Only place accessories on logical surfaces. If a required surface is missing, do not place the accessory.
