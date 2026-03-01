@@ -2,21 +2,44 @@ import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
 const loader = new FBXLoader();
+// Simple in-memory cache for loaded FBX scenes. Keyed by asset.file
+const modelCache = new Map();
 
 export function createPlacer(
     scene, spawnedFurniture, collisionEngine,
     assetMap, roomManager, selectObject, updateCollisionVisuals
 ) {
     async function placeModel(itemConfig) {
-        const asset = assetMap[itemConfig.file];
-        if (!asset) return null;
+        // tolerant lookup: allow keys produced by AI that may differ in case/extension
+        const asset = assetMap.find ? assetMap.find(itemConfig.file) : assetMap[itemConfig.file];
+        if (!asset) {
+            console.warn('[Placer] asset not found for', itemConfig.file);
+            return null;
+        }
 
-        const folder = asset.folder || asset.category;
-        const path = `../models/${encodeURIComponent(folder)}/${encodeURIComponent(asset.file)}`;
+        const path = asset.url || `../models/${encodeURIComponent(asset.folder || asset.category)}/${encodeURIComponent(asset.file)}`;
 
         return new Promise((resolve) => {
+            // If we've loaded this model before, clone and return immediately
+            if (modelCache.has(asset.file)) {
+                try {
+                    const cached = modelCache.get(asset.file);
+                    const clone = cached.clone(true);
+                    clone.userData = { ...cached.userData };
+                    clone.userData.attributes = asset;
+                    // finalize clone placement
+                    finalizeAndAdd(clone, asset, itemConfig, resolve);
+                    return;
+                } catch (err) {
+                    // fallthrough to fresh load on clone errors
+                    console.warn('[Placer] failed to clone cached model', asset.file, err);
+                }
+            }
+
             loader.load(path, (model) => {
-                model.userData.attributes = asset; 
+                // cache a deep clone (original loaded root) for reuse
+                try { modelCache.set(asset.file, model.clone(true)); } catch (e) { /* cache best-effort */ }
+                model.userData.attributes = asset;
 
                 // 1. PHYSICAL SCALING & ROTATION
                 const rawBox = new THREE.Box3().setFromObject(model);
@@ -75,41 +98,60 @@ export function createPlacer(
                     }
                 }
 
-                // 3. APPLY POSITION WITH PIVOT CORRECTION
-                model.position.set(posX, 0, posZ);
-                model.updateMatrixWorld(true);
+                // attach computed targetY so finalize can access it
+                model.userData.targetY = targetY;
+                model.userData._posX = posX;
+                model.userData._posZ = posZ;
 
-                const currentBox = new THREE.Box3().setFromObject(model);
-                const bottomOffset = currentBox.min.y - model.position.y;
-                
-                const floorLevel = roomManager.roomFloor?.position.y ?? 0;
-                model.position.y = (floorLevel + targetY) - bottomOffset;
-                model.updateMatrixWorld(true);
-
-                // 4. PHYSICS VALIDATION
-                const check = collisionEngine.checkCollision(model);
-                let isBlocked = check.isColliding;
-
-                // For accessories, we ignore the collision with the table beneath them
-                if (asset.placeable && isBlocked) {
-                    const hitObj = check.collider;
-                    if (hitObj?.userData?.attributes?.placeable === false) {
-                        isBlocked = false; 
-                    }
-                }
-
-                if (!isBlocked) {
-                    scene.add(model);
-                    spawnedFurniture.push(model);
-                    collisionEngine.updateObstacles();
-                    updateCollisionVisuals(model);
-                    selectObject(model);
-                    resolve(model);
-                } else {
-                    resolve(null);
-                }
-            }, undefined, (err) => resolve(null));
+                // finalize and add
+                finalizeAndAdd(model, asset, itemConfig, resolve);
+            }, undefined, (err) => {
+                console.error('[Placer] failed to load', path, err);
+                resolve(null);
+            });
         });
+    }
+
+    // Helper used for both freshly loaded and cloned models
+    function finalizeAndAdd(model, asset, itemConfig, resolve) {
+        // prefer computed snapped coordinates if present
+        const posX = model.userData._posX ?? itemConfig.x;
+        const posZ = model.userData._posZ ?? itemConfig.z;
+
+        // 3. APPLY POSITION WITH PIVOT CORRECTION
+        model.position.set(posX, 0, posZ);
+        model.updateMatrixWorld(true);
+
+        const currentBox = new THREE.Box3().setFromObject(model);
+        const bottomOffset = currentBox.min.y - model.position.y;
+        
+        const floorLevel = roomManager.roomFloor?.position.y ?? 0;
+        const targetY = model.userData?.targetY ?? 0;
+        model.position.y = (floorLevel + targetY) - bottomOffset;
+        model.updateMatrixWorld(true);
+
+        // 4. PHYSICS VALIDATION
+        const check = collisionEngine.checkCollision(model);
+        let isBlocked = check.isColliding;
+
+        // For accessories, we ignore the collision with the table beneath them
+        if (asset.placeable && isBlocked) {
+            const hitObj = check.collider;
+            if (hitObj?.userData?.attributes?.placeable === false) {
+                isBlocked = false; 
+            }
+        }
+
+        if (!isBlocked) {
+            scene.add(model);
+            spawnedFurniture.push(model);
+            collisionEngine.updateObstacles();
+            updateCollisionVisuals(model);
+            selectObject(model);
+            resolve(model);
+        } else {
+            resolve(null);
+        }
     }
 
     return { placeModel };

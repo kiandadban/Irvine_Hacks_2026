@@ -844,22 +844,6 @@
       "folder": "Kitchen"
     },
     {
-      "name": "Knife Block",
-      "file": "Knife Block.fbx",
-      "category": "kitchen",
-      "placeable": true,
-      "dimensions": {
-        "width": 0.12,
-        "depth": 0.18,
-        "height": 0.25
-      },
-      "shopping": {
-        "store": "Amazon",
-        "price": 60.0,
-        "url": "https://www.amazon.com/Cuisinart-C77TR-15P-Triple-Rivet-Collection/dp/B00GIBKC3K"
-      }
-    },
-    {
       "name": "Microwave",
       "file": "Microwave.fbx",
       "category": "kitchen",
@@ -928,22 +912,6 @@
       "folder": "Kitchen"
     },
     {
-      "name": "Ceiling Light",
-      "file": "Ceiling Light.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.4,
-        "depth": 0.4,
-        "height": 0.1
-      },
-      "shopping": {
-        "store": "Amazon",
-        "price": 45.0,
-        "url": "https://www.amazon.com/Flush-Mount-Ceiling-Light-Fixture/dp/B08BLKV8P1"
-      }
-    },
-    {
       "name": "Lamp A",
       "file": "Lamp A.fbx",
       "category": "living room",
@@ -994,22 +962,7 @@
       },
       "folder": "Lights"
     },
-    {
-      "name": "Wall Light",
-      "file": "Wall Light.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.15,
-        "depth": 0.2,
-        "height": 0.25
-      },
-      "shopping": {
-        "store": "Wayfair",
-        "price": 40.0,
-        "url": "https://www.wayfair.com/lighting/pdp/allmodern-owen-1-light-dimmable-flush-mount-w003531406.html"
-      }
-    },
+
     {
       "name": "Alarm Clock",
       "file": "Alarm Clock.fbx",
@@ -1419,23 +1372,6 @@
       "folder": "Miscellaneous"
     },
     {
-      "name": "Radiator B",
-      "file": "Radiator B.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.4,
-        "depth": 0.1,
-        "height": 0.6
-      },
-      "shopping": {
-        "store": "Home Depot",
-        "price": 100.0,
-        "url": "https://www.homedepot.com/b/Heating-Venting-Cooling-Heaters-Baseboard-Heaters/N-5yc1vZc4m8"
-      },
-      "folder": "Miscellaneous"
-    },
-    {
       "name": "Safe A",
       "file": "Safe A.fbx",
       "category": "living room",
@@ -1520,22 +1456,7 @@
       },
       "folder": "Miscellaneous"
     },
-    {
-      "name": "Vent",
-      "file": "Vent.fbx",
-      "category": "living room",
-      "placeable": false,
-      "dimensions": {
-        "width": 0.3,
-        "depth": 0.05,
-        "height": 0.15
-      },
-      "shopping": {
-        "store": "Home Depot",
-        "price": 15.0,
-        "url": "https://www.homedepot.com/p/Everbilt-10-in-x-6-in-2-Way-Steel-Wall-Ceiling-Register-in-White-E102M-10X06/202230752"
-      }
-    },
+
     {
       "name": "Shelf A",
       "file": "Shelf A.fbx",

@@ -101,16 +101,73 @@ OUTPUT FORMAT (JSON ARRAY ONLY):
 
         try {
             const result = await callWithRetry(prompt);
-            const rawText = result.response.text();
-            
-            // JSON Mode ensures the response is a clean string, no regex needed.
-            const layout = JSON.parse(rawText);
-            
+
+            // Be robust: response might be available as JSON, text, or wrapped.
+            let raw = null;
+            try {
+                if (result && result.response) {
+                    const resp = result.response;
+                    if (typeof resp.json === 'function') {
+                        try { raw = await resp.json(); } catch (_) { /* ignore */ }
+                    }
+                    if (raw == null && typeof resp.text === 'function') {
+                        try { raw = await resp.text(); } catch (_) { /* ignore */ }
+                    }
+                }
+            } catch (innerErr) {
+                console.warn('[AI] response read failed, falling back:', innerErr);
+            }
+
+            if (raw == null) raw = result;
+
+            let layout = null;
+
+            if (typeof raw === 'string') {
+                // Try direct parse first
+                try {
+                    layout = JSON.parse(raw);
+                } catch (parseErr) {
+                    // Some models wrap JSON in code fences or extra text — attempt to extract
+                    const s = raw;
+                    const si = s.indexOf('[');
+                    const ei = s.lastIndexOf(']');
+                    if (si !== -1 && ei !== -1 && ei > si) {
+                        const candidate = s.substring(si, ei + 1);
+                        layout = JSON.parse(candidate);
+                    } else {
+                        throw parseErr;
+                    }
+                }
+            } else if (Array.isArray(raw)) {
+                layout = raw;
+            } else if (raw && typeof raw === 'object') {
+                // Common provider shapes: { outputs: [...] } or top-level array under a key
+                if (Array.isArray(raw.outputs)) {
+                    // try to pull textual content from outputs
+                    const outText = raw.outputs.map(o => (o.text || (o.content && o.content[0] && o.content[0].text) || '')).join('\n');
+                    if (outText) {
+                        try { layout = JSON.parse(outText); } catch (_) { /* ignore */ }
+                    }
+                }
+
+                if (!layout) {
+                    // look for first array value in object
+                    for (const v of Object.values(raw)) {
+                        if (Array.isArray(v)) { layout = v; break; }
+                    }
+                }
+            }
+
+            if (!Array.isArray(layout)) {
+                console.error('[AI] Unable to parse layout. Raw response:', raw);
+                throw new Error('Unrecognized AI response format');
+            }
+
             setCache(cacheKey, layout);
             return layout;
         } catch (e) {
             console.error('[AI] Generation Error:', e);
-            throw new Error("Failed to parse layout. Please try a different request.");
+            throw new Error("Failed to parse layout. Please try a different request. See console for details.");
         }
     }
 
