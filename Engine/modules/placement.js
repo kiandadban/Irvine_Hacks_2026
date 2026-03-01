@@ -55,9 +55,9 @@ export function createPlacer(
 
                 if (asset.placeable) {
                     // Logic: Only place on reasonable surfaces. Use original folder (fAttrs.folder)
-                    const allowedFolders = ['tables', 'drawers', 'shelves', 'electronics', 'sofas', 'cupboard', 'kitchen'];
-                    const SNAP_TOLERANCE = 1.2; // expanded search radius (meters)
-                    const MAX_FALLBACK_DISTANCE = 2.5; // if nothing nearby, allow a further fallback
+                    const allowedFolders = ['tables', 'drawers', 'shelves', 'electronics', 'sofas', 'cupboard', 'kitchen', 'desks'];
+                    const SNAP_TOLERANCE = 2.5; // expanded search radius (meters)
+                    const MAX_FALLBACK_DISTANCE = 5.0; // increased fallback radius
 
                     let bestSurface = null;
                     let minDistance = SNAP_TOLERANCE;
@@ -66,9 +66,10 @@ export function createPlacer(
                         const fAttrs = f.userData.attributes;
                         if (fAttrs.placeable) return; // skip other small accessories
 
+                        // Check both folder and category fields for surface type
                         const fFolder = (fAttrs.folder || fAttrs.category || '').toString().toLowerCase();
-                        // only consider items whose original folder looks like a surface
-                        const isSurface = allowedFolders.some(sf => fFolder.startsWith(sf));
+                        const isSurface = allowedFolders.some(sf => fFolder.includes(sf));
+                        
                         if (!isSurface) return;
 
                         const fBox = new THREE.Box3().setFromObject(f);
@@ -83,7 +84,7 @@ export function createPlacer(
                         }
                     });
 
-                    // If no close surface found, try a nearest-surface fallback (within MAX_FALLBACK_DISTANCE)
+                    // If no close surface found, try a nearest-surface fallback
                     if (!bestSurface) {
                         let fallback = null;
                         let bestDist = MAX_FALLBACK_DISTANCE;
@@ -91,7 +92,7 @@ export function createPlacer(
                             const fAttrs = f.userData.attributes;
                             if (fAttrs.placeable) return;
                             const fFolder = (fAttrs.folder || fAttrs.category || '').toString().toLowerCase();
-                            const isSurface = allowedFolders.some(sf => fFolder.startsWith(sf));
+                            const isSurface = allowedFolders.some(sf => fFolder.includes(sf));
                             if (!isSurface) return;
 
                             const fBox = new THREE.Box3().setFromObject(f);
@@ -120,8 +121,12 @@ export function createPlacer(
                         // Inherit rotation
                         model.rotation.y = bestSurface.rotation.y;
                     } else {
-                        // No suitable surface found; instead of skipping, allow placement on the floor
-                        console.warn(`[Placer] No surface found for ${asset.name}; placing on floor as fallback.`);
+                        // No suitable surface found; log which surfaces are available
+                        const availableSurfaces = spawnedFurniture
+                            .filter(f => !f.userData.attributes.placeable)
+                            .map(f => f.userData.attributes.name || 'Unknown')
+                            .join(', ');
+                        console.warn(`[Placer] No surface found for ${asset.name}. Available surfaces: ${availableSurfaces || 'none'}. Placing on floor.`);
                         targetY = 0;
                     }
                 }
