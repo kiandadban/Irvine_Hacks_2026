@@ -209,7 +209,6 @@ export function createPlacer(
                     scene.add(model);
                     spawnedFurniture.push(model);
                     collisionEngine.updateObstacles();
-                    updateCollisionVisuals(model);
                     selectObject(model);
                     console.debug('[Placer] successfully placed (random offset)', asset.name, `at (${randX.toFixed(1)}, ${randZ.toFixed(1)})`);
                     placed = true;

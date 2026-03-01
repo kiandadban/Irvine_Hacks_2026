@@ -30,32 +30,9 @@ async function initApp() {
     const roomManager = createRoomManager(scene, collisionEngine);
 
     // ── 4. COLLISION VISUALS ──
+    // Collision visual feedback removed per user request
     function updateCollisionVisuals(obj) {
-        if (!obj) return;
-        const { isColliding } = collisionEngine.checkCollision(obj);
-        obj.traverse(child => {
-            if (!child.isMesh || !child.material) return;
-            const mats = Array.isArray(child.material) ? child.material : [child.material];
-            mats.forEach(mat => {
-                if (!mat.userData._orig) {
-                    mat.userData._orig = {
-                        color: mat.color?.clone(),
-                        emissive: mat.emissive?.clone(),
-                        emissiveIntensity: mat.emissiveIntensity,
-                    };
-                }
-                if (isColliding) {
-                    mat.emissive?.set(0xff0000);
-                    if (mat.emissive) mat.emissiveIntensity = 0.5;
-                    mat.color?.set(0xffaaaa);
-                } else {
-                    const o = mat.userData._orig;
-                    if (o?.color) mat.color.copy(o.color);
-                    if (o?.emissive) mat.emissive.copy(o.emissive);
-                    if (typeof o?.emissiveIntensity === 'number') mat.emissiveIntensity = o.emissiveIntensity;
-                }
-            });
-        });
+        // No-op: objects maintain their natural colors
     }
 
     // ── 5. SELECTION WRAPPERS & INFO PANEL ──
