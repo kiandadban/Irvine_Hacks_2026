@@ -130,19 +130,7 @@ input[type=range] {
 }
 #ai-generate-btn:hover { background: #165050; }
 
-/* Room Grid */
-.room-types { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.room-type-btn {
-    padding: 14px 8px; background: var(--bg2); border: 1.5px solid var(--bg3);
-    border-radius: 10px; display: flex; flex-direction: column; 
-    align-items: center; gap: 6px; cursor: pointer; transition: all 0.18s;
-}
-.room-type-btn:hover, .room-type-btn.active { border-color: var(--teal); background: var(--teal-lt); }
-.room-type-btn.active { box-shadow: 0 0 0 3px rgba(31, 96, 96, 0.08); }
-.room-type-btn.active svg { stroke: var(--teal); }
-.room-type-btn.active span { color: var(--teal); font-weight: 500; }
-.room-type-btn svg { width: 22px; height: 22px; stroke: var(--ink3); fill: none; }
-.room-type-btn span { font-size: 11px; color: var(--ink3); }
+/* Room Grid — styled via Tailwind in index.html */
 
 /* ── 5. FLOATING PROPERTIES PANEL (Animated) ── */
 #props-panel {
