@@ -27,7 +27,8 @@ export function createPlacer(
             const rawBox = new THREE.Box3().setFromObject(model);
             const rawSize = rawBox.getSize(new THREE.Vector3());
             const targetW = asset.dimensions?.width ?? 1.0;
-            if (rawSize.x > 0) model.scale.setScalar(targetW / rawSize.x);
+            const scaleMultiplier = asset.scale ?? 1.0;
+            if (rawSize.x > 0) model.scale.setScalar((targetW / rawSize.x) * scaleMultiplier);
             model.rotation.y = itemConfig.rotate ?? 0;
 
             // 2. WALL SNAPPING FOR SHELVES & CUPBOARDS
