@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoomAI | Your Shopping List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shopping-list.css">
+</head>
+<body>
+    <div class="container">
+        <header class="list-header">
+            <div class="logo">RoomAI</div>
+            <h1 class="hero-text">Your Curated <em>Collection.</em></h1>
+            <p class="hero-sub">A detailed breakdown of every architectural element in your design.</p>
+        </header>
+
+        <main class="list-wrapper">
+            <table id="shopping-table">
+                <thead>
+                    <tr>
+                        <th>Item Description</th>
+                        <th>Vendor</th>
+                        <th>Estimate</th>
+                        <th class="text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-body">
+                    </tbody>
+            </table>
+
+            <div class="summary-card">
+                <div class="total-row">
+                    <span>Total Project Estimate</span>
+                    <span id="total-price">$0.00</span>
+                </div>
+                <div class="actions">
+                    <button class="secondary-btn" onclick="window.history.back()">Back to Editor</button>
+                    <button class="primary-btn" onclick="window.print()">Print Specification</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="shopping-list.js"></script>
+</body>
+</html>

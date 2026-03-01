@@ -302,6 +302,25 @@ async function initApp() {
         orbit.update();
         renderer.render(scene, camera);
     })();
+
+    document.getElementById('cart-btn').addEventListener('click', () => {
+    // 1. Map the Three.js objects back to their data attributes
+    const shoppingItems = spawnedFurniture.map(model => {
+        const attr = model.userData.attributes;
+        return {
+            name: attr.name,
+            price: attr.shopping?.price || 0,
+            url: attr.shopping?.url || "#",
+            store: attr.shopping?.store || "Unknown"
+        };
+    });
+
+    // 2. Save to local storage
+    localStorage.setItem('roomai_cart', JSON.stringify(shoppingItems));
+
+    // 3. Navigate
+    window.location.href = "../User Interface/shopping-list.html";
+});
 }
 
 initApp();

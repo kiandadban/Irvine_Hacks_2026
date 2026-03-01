@@ -1,0 +1,151 @@
+:root {
+    --bg: #fcfcfc;
+    --text-main: #1a1a1a;
+    --text-sub: #666;
+    --accent: #222;
+    --border: #eeeeee;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--bg);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 40px;
+}
+
+.list-header {
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.logo {
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.hero-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.hero-text em {
+    font-style: italic;
+}
+
+.hero-sub {
+    font-size: 16px;
+    color: var(--text-sub);
+    font-weight: 300;
+}
+
+/* Table Styling */
+#shopping-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+}
+
+#shopping-table th {
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--accent);
+    color: var(--text-sub);
+}
+
+#shopping-table td {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px;
+}
+
+.text-right { text-align: right; }
+
+#shopping-table a {
+    color: var(--text-main);
+    text-decoration: underline;
+    font-size: 13px;
+    transition: opacity 0.2s;
+}
+
+#shopping-table a:hover {
+    opacity: 0.6;
+}
+
+/* Summary Card */
+.summary-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 40px;
+    border-radius: 4px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 30px;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.total-row span:first-child {
+    font-size: 20px;
+    color: var(--text-sub);
+}
+
+#total-price {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    flex: 1;
+    padding: 16px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+button:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+@media print {
+    .secondary-btn { display: none; }
+    .container { margin: 0; padding: 20px; }
+}
