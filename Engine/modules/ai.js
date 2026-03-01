@@ -117,10 +117,10 @@ Format: [{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":1.5708}]`;
                 if (result && result.response) {
                     const resp = result.response;
                     if (typeof resp.json === 'function') {
-                        try { raw = await resp.json(); } catch (_) { /* ignore */ }
+                        try { raw = await resp.json(); } catch (e) { console.warn('[AI] resp.json() failed', e); }
                     }
                     if (raw == null && typeof resp.text === 'function') {
-                        try { raw = await resp.text(); } catch (_) { /* ignore */ }
+                        try { raw = await resp.text(); } catch (e) { console.warn('[AI] resp.text() failed', e); }
                     }
                 }
             } catch (innerErr) {
@@ -132,20 +132,48 @@ Format: [{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":1.5708}]`;
             let layout = null;
 
             if (typeof raw === 'string') {
-                // Try direct parse first
-                try {
-                    layout = JSON.parse(raw);
-                } catch (parseErr) {
-                    // Some models wrap JSON in code fences or extra text — attempt to extract
-                    const s = raw;
-                    const si = s.indexOf('[');
-                    const ei = s.lastIndexOf(']');
-                    if (si !== -1 && ei !== -1 && ei > si) {
-                        const candidate = s.substring(si, ei + 1);
-                        layout = JSON.parse(candidate);
-                    } else {
-                        throw parseErr;
+                // Try multiple parsing strategies on a string.
+                function attemptParse(str) {
+                    // attempt to fix common minor formatting issues before parsing
+                    const normalize = (s) => {
+                        // insert missing colon between key and quoted string value
+                        s = s.replace(/([\{\[,]\s*)([a-zA-Z0-9_]+)\s+"/g, '$1"$2":"');
+                        // remove trailing commas
+                        s = s.replace(/,\s*([}\]])/g, '$1');
+                        return s;
+                    };
+
+                    // first try strict JSON (normalize string first)
+                    try { return JSON.parse(normalize(str)); } catch (e) {
+                        console.warn('[AI] JSON.parse failed on raw string', e);
                     }
+                    // strip code fences/markdown and grab bracketed JSON
+                    const si = str.indexOf('[');
+                    const ei = str.lastIndexOf(']');
+                    if (si !== -1 && ei !== -1 && ei > si) {
+                        let candidate = str.substring(si, ei + 1);
+                        candidate = normalize(candidate);
+                        try {
+                            return JSON.parse(candidate);
+                        } catch (e) {
+                            console.warn('[AI] JSON.parse failed on extracted candidate', e, candidate);
+                            // try evaluating as JS
+                            try { return (new Function('return ' + candidate))(); } catch (e2) {
+                                console.warn('[AI] eval failed on candidate', e2);
+                            }
+                        }
+                    }
+                    // as a last resort try to eval the whole string as JS (might handle unquoted keys)
+                    try { return (new Function('return ' + normalize(str)))(); } catch (e) {
+                        console.warn('[AI] eval failed on raw string', e);
+                    }
+                    return null;
+                }
+
+                layout = attemptParse(raw);
+                if (layout == null) {
+                    // parsing failed entirely; throw to be caught below
+                    throw new Error('Unable to parse AI string response');
                 }
             } else if (Array.isArray(raw)) {
                 layout = raw;
