@@ -137,6 +137,7 @@ async function initApp() {
             for (const item of layout) {
                 await placeModel(item);
             }
+            window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
         } catch (e) {
             console.error("AI Generation Error:", e);
             alert("Design Error: " + (e.message ?? String(e)));
@@ -157,6 +158,18 @@ async function initApp() {
         const selectedRoomType = activeBtn ? activeBtn.innerText.trim() : 'Living Room';
         
         handleGenerate(aiInput?.value, true, selectedRoomType);
+    });
+
+    // Load layout from JSON file (dispatched by download.js)
+    window.addEventListener('loadlayout', async (e) => {
+        const layout = e.detail;
+        if (!Array.isArray(layout)) return;
+        wrappedDeselect();
+        spawnedFurniture.forEach(o => scene.remove(o));
+        spawnedFurniture.length = 0;
+        collisionEngine.updateObstacles();
+        for (const item of layout) await placeModel(item);
+        window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
     });
 
     const raycaster = new THREE.Raycaster();
