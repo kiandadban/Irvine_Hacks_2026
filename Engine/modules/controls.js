@@ -28,14 +28,14 @@ export function initControls(
     scene.add(transform);
 
     transform.addEventListener('change', () => {
-        if (transform.object) updateCollisionVisuals(transform.object);
+        // Collision visuals removed per user request
     });
 
     transform.addEventListener('dragging-changed', (e) => {
         orbit.enabled = !e.value;
         if (!e.value) {
             collisionEngine.updateObstacles();
-            if (transform.object) updateCollisionVisuals(transform.object);
+            // updateCollisionVisuals removed
         }
     });
 
