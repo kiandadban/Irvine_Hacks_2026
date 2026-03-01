@@ -24,7 +24,7 @@
       "shopping": {
         "store": "Wayfair",
         "price": 549.99,
-        "url": "https://www.wayfair.com/home-improvement/pdp/woodbridge-67-x-32-freestanding-soaking-acrylic-bathtub-wdb1241.html"
+        "url": "https://www.wayfair.com/home-improvement/pdp/vanity-art-54-x-29-freestanding-soaking-acrylic-bathtub-vnar1721.html?piid=81515706"
       },
       "folder": "Bathroom"
     },
@@ -40,9 +40,9 @@
         "height": 2.1
       },
       "shopping": {
-        "store": "Home Depot",
-        "price": 897.0,
-        "url": "https://www.homedepot.com/p/Delta-Foundations-38-in-L-x-38-in-W-x-73-88-in-H-Corner-Shower-Stall-Kit-BVS3-FN263-WHPC/304663304"
+        "store": "Wayfair",
+        "price": 500.0,
+        "url": "https://www.wayfair.com/home-improvement/pdp/everstein-wall-mount-12-high-pressure-rainfall-shower-faucet-dual-rainfall-shower-head-system-with-thermostatic-valve-eebs1095.html?piid=103352445&auctionId=8bfa192a-bc9a-495f-8aac-a7a1cecbd371&trackingId={%22adType%22:%22WSP%22,%22auctionId%22:%228bfa192a-bc9a-495f-8aac-a7a1cecbd371%22}&adTypeId=1"
       },
       "folder": "Bathroom"
     },
@@ -59,8 +59,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 160.0,
-        "url": "https://www.ikea.com/us/en/p/rattviken-single-sink-white-40223697/"
+        "price": 224.0,
+        "url": "https://www.ikea.com/us/en/p/havsen-apron-front-sink-white-s79253725/"
       },
       "folder": "Bathroom"
     },
@@ -76,9 +76,9 @@
         "height": 0.1
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 15.99,
-        "url": "https://www.amazon.com/Toilet-Paper-Holder-Stand-Storage/dp/B07RRYLZZ6"
+        "store": "IKEA",
+        "price": 8.99,
+        "url": "https://www.ikea.com/us/en/p/brogrund-toilet-roll-holder-stainless-steel-00328540/"
       },
       "folder": "Bathroom"
     },
@@ -113,8 +113,8 @@
       },
       "shopping": {
         "store": "Lowe's",
-        "price": 189.0,
-        "url": "https://www.lowes.com/pd/Kohler-Highline-White-WaterSense-Elongated-2-piece-Toilet/1000180461"
+        "price": 254.0,
+        "url": "https://www.wayfair.com/home-improvement/pdp/abruzzo-1116-gpf-dual-flush-elongated-one-piece-toilet-with-1713-in-comfort-seat-height-ceramic-glazed-surfacesoft-close-seat-included-4-colors-option-aruz1032.html?piid=88272606"
       },
       "folder": "Bathroom"
     },
@@ -149,8 +149,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 299.0,
-        "url": "https://www.ikea.com/us/en/p/malm-high-bed-frame-black-brown-s69931169/"
+        "price": 249.0,
+        "url": "https://www.ikea.com/us/en/p/malm-bed-frame-dark-brown-veneer-s09574367/"
       },
       "folder": "Beds"
     },
@@ -167,8 +167,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 149.0,
-        "url": "https://www.ikea.com/us/en/p/neiden-bed-frame-pine-s79248606/"
+        "price": 249.0,
+        "url": "https://www.ikea.com/us/en/p/malm-bed-frame-dark-brown-veneer-s09574367/"
       },
       "folder": "Beds"
     },
@@ -185,8 +185,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 349.0,
-        "url": "https://www.ikea.com/us/en/p/mydal-bunk-bed-frame-pine-00531891/"
+        "price": 199.0,
+        "url": "https://www.ikea.com/us/en/p/tuffing-bunk-bed-frame-dark-gray-70299285/"
       },
       "folder": "Beds"
     },
@@ -203,8 +203,8 @@
       },
       "shopping": {
         "store": "Wayfair",
-        "price": 839.99,
-        "url": "https://www.wayfair.com/baby-kids/pdp/isabelle-max-lyndon-twin-over-twin-over-twin-triple-bunk-bed-w005271842.html"
+        "price": 330.99,
+        "url": "https://www.wayfair.com/baby-kids/pdp/harriet-bee-cvyatko-twin-over-twin-triple-bunk-bed-w006110630.html?piid=1455597000"
       },
       "folder": "Beds"
     },
@@ -238,9 +238,9 @@
         "height": 0.01
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 85.0,
-        "url": "https://www.amazon.com/SAFAVIEH-Hudson-Shag-Collection-SGH281B/dp/B00P29P680"
+        "store": "Wayfair",
+        "price": 143.99,
+        "url": "https://www.wayfair.com/rugs/pdp/bungalow-rose-dagmar-machine-washable-area-rugs-modern-abstract-rugs-ultra-soft-indoor-floor-mat-for-dining-room-low-pile-carpet-with-non-slip-backing-w116592277.html?piid=1592396155&auctionId=d3a91ff3-b9ae-46bf-8d6b-cad2ee3f217e&trackingId={%22adType%22:%22WSP%22,%22auctionId%22:%22d3a91ff3-b9ae-46bf-8d6b-cad2ee3f217e%22}&adTypeId=1"
       },
       "folder": "Carpets"
     },
@@ -256,9 +256,9 @@
         "height": 0.01
       },
       "shopping": {
-        "store": "West Elm",
-        "price": 399.0,
-        "url": "https://www.westelm.com/products/sweater-rug-t4937/"
+        "store": "Wayfair",
+        "price": 143.99,
+        "url": "https://www.wayfair.com/rugs/pdp/bungalow-rose-dagmar-machine-washable-area-rugs-modern-abstract-rugs-ultra-soft-indoor-floor-mat-for-dining-room-low-pile-carpet-with-non-slip-backing-w116592277.html?piid=1592396155&auctionId=d3a91ff3-b9ae-46bf-8d6b-cad2ee3f217e&trackingId={%22adType%22:%22WSP%22,%22auctionId%22:%22d3a91ff3-b9ae-46bf-8d6b-cad2ee3f217e%22}&adTypeId=1"
       },
       "folder": "Carpets"
     },
@@ -275,8 +275,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 89.0,
-        "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-80211089/"
+        "price": 35.0,
+        "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-00211088/"
       },
       "folder": "Chairs"
     },
@@ -293,8 +293,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 129.0,
-        "url": "https://www.ikea.com/us/en/p/odger-chair-anthracite-50457313/"
+        "price": 35.0,
+        "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-00211088/"
       },
       "folder": "Chairs"
     },
@@ -310,9 +310,9 @@
         "height": 0.95
       },
       "shopping": {
-        "store": "West Elm",
-        "price": 299.0,
-        "url": "https://www.westelm.com/products/mid-century-upholstered-dining-chair-h702/"
+        "store": "IKEA",
+        "price": 35.0,
+        "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-00211088/"
       },
       "folder": "Chairs"
     },
@@ -329,8 +329,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 159.0,
-        "url": "https://www.ikea.com/us/en/p/nordvalla-dark-gray-wing-chair-80359844/"
+        "price": 199.99,
+        "url": "https://www.ikea.com/us/en/p/centerhalv-office-chair-black-10601124/"
       },
       "folder": "Chairs"
     },
@@ -347,8 +347,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 199.0,
-        "url": "https://www.ikea.com/us/en/p/malm-6-drawer-dresser-white-10360469/"
+        "price": 95.0,
+        "url": "https://www.ikea.com/us/en/p/alex-drawer-unit-white-00473546/"
       },
       "folder": "Drawers"
     },
@@ -364,9 +364,9 @@
         "height": 0.6
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 45.0,
-        "url": "https://www.amazon.com/Prepac-Floating-Nightstand-Drawer-White/dp/B00652Y2W6"
+        "store": "IKEA",
+        "price": 95.0,
+        "url": "https://www.ikea.com/us/en/p/alex-drawer-unit-white-00473546/"
       },
       "folder": "Drawers"
     },
@@ -384,7 +384,7 @@
       "shopping": {
         "store": "Best Buy",
         "price": 499.0,
-        "url": "https://www.bestbuy.com/site/sony-playstation-5-console-white/6430161.p"
+        "url": "https://direct.playstation.com/en-us/checkout?tab=cart"
       },
       "folder": "Electronics"
     },
@@ -401,8 +401,8 @@
       },
       "shopping": {
         "store": "Best Buy",
-        "price": 299.0,
-        "url": "https://www.bestbuy.com/site/nintendo-switch-with-neon-blue-and-neon-red-joy-con-console-multi/6367728.p"
+        "price": 499.0,
+        "url": "https://direct.playstation.com/en-us/checkout?tab=cart"
       },
       "folder": "Electronics"
     },
@@ -436,9 +436,9 @@
         "height": 0.05
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 40.0,
-        "url": "https://www.amazon.com/Fire-TV-Stick-4K-Max-with-Alexa-Voice-Remote/dp/B08MQZXN1X"
+        "store": "Microsoft",
+        "price": 500.0,
+        "url": "https://www.xbox.com/en-US/consoles/xbox-series-x"
       },
       "folder": "Electronics"
     },
@@ -455,8 +455,8 @@
       },
       "shopping": {
         "store": "Amazon",
-        "price": 100.0,
-        "url": "https://www.amazon.com/Logitech-MX-Keys-Advanced-Wireless-Keyboard/dp/B07S92QBCJ"
+        "price": 33.0,
+        "url": "https://www.amazon.com/dp/B0BT4DP7SC/ref=sspa_dk_detail_1?psc=1&pd_rd_i=B0BT4DP7SC&pd_rd_w=AUqYj&content-id=amzn1.sym.bbb3fb5e-28ad-4062-a3ba-1f7b9f2e4371&pf_rd_p=bbb3fb5e-28ad-4062-a3ba-1f7b9f2e4371&pf_rd_r=202NRTT37KA60BBVXF21&pd_rd_wg=1qeWF&pd_rd_r=c188d3ae-be3c-4824-b469-c7ea732126b3&sp_csd=d2lkZ2V0TmFtZT1zcF9kZXRhaWxfdGhlbWF0aWM"
       },
       "folder": "Electronics"
     },
@@ -491,8 +491,8 @@
       },
       "shopping": {
         "store": "Dell",
-        "price": 300.0,
-        "url": "https://www.dell.com/en-us/shop/dell-27-monitor-s2721hn/apd/210-axkv/monitors-monitor-accessories"
+        "price": 69.0,
+        "url": "https://www.amazon.com/PHILIPS-Adaptive-Replacement-Warranty-221V8LB/dp/B0CVM2GJCN/ref=sr_1_3?crid=3ST25A7NS6BHT&dib=eyJ2IjoiMSJ9.RKbEqrLn0ahV9lPycWigr40cHn5Fuv0xKWRBNIap2v4i1xWmNVPfZHCY9I8CHV5yxoFr1LB49JtVmORz1k23Jgot2QHeR0oXLiRcxBeAkuyJT4yGzQfVBmFpA6S6_Lhmg1znR_bFJxwlVPmBmpfsYL5mmirzjiNxKmxjXf3uJ3eww__m6Fv4MTpnk75ISYpNgJ4Cx3HWf4v4cBEs59JJRQZ5Zpc0O8G_fpDSbM4-iDA.oQ1at7AF7XI3BiLULS71Gf3etdUlvt09b2MbM6Ja6zw&dib_tag=se&keywords=monitor&qid=1772350551&sprefix=monitor%2Caps%2C190&sr=8-3"
       },
       "folder": "Electronics"
     },
@@ -509,8 +509,8 @@
       },
       "shopping": {
         "store": "Newegg",
-        "price": 1200.0,
-        "url": "https://www.newegg.com/p/N82E16883360155"
+        "price": 1199.0,
+        "url": "https://www.newegg.com/abs-cyclone-aqua-gaming-desktop-geforce-rtx-5060-intel-core-i7-14700f-32gb-2x16gb-ddr5-1tb-nvme-ssd-black/p/N82E16883360950"
       },
       "folder": "Electronics"
     },
@@ -563,8 +563,8 @@
       },
       "shopping": {
         "store": "Best Buy",
-        "price": 800.0,
-        "url": "https://www.bestbuy.com/site/lg-55-class-c3-series-oled-4k-uhd-smart-webos-tv/6535929.p"
+        "price": 199.0,
+        "url": "https://www.bestbuy.com/product/insignia-55-class-f50-series-led-4k-uhd-smart-fire-tv/J2FPJKSV76"
       },
       "folder": "Electronics"
     },
@@ -580,9 +580,9 @@
         "height": 0.9
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 1500.0,
-        "url": "https://www.amazon.com/Samsung-75-Inch-Class-QLED-Built/dp/B0BZ8ZMTD2"
+        "store": "Best Buy",
+        "price": 199.0,
+        "url": "https://www.bestbuy.com/product/insignia-55-class-f50-series-led-4k-uhd-smart-fire-tv/J2FPJKSV76"
       },
       "folder": "Electronics"
     },
@@ -617,8 +617,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 250.0,
-        "url": "https://www.ikea.com/us/en/cat/sektion-kitchen-cabinets-23598/"
+        "price": 99.0,
+        "url": "https://www.ikea.com/us/en/p/brimnes-cabinet-with-doors-white-40300662/"
       },
       "folder": "Kitchen"
     },
@@ -634,9 +634,9 @@
         "height": 0.9
       },
       "shopping": {
-        "store": "Home Depot",
-        "price": 200.0,
-        "url": "https://www.homedepot.com/b/Kitchen-Kitchen-Cabinets/N-5yc1vZas87"
+        "store": "IKEA",
+        "price": 99.0,
+        "url": "https://www.ikea.com/us/en/p/brimnes-cabinet-with-doors-white-40300662/"
       },
       "folder": "Kitchen"
     },
@@ -653,8 +653,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 120.0,
-        "url": "https://www.ikea.com/us/en/p/enhet-wall-cab-with-2-shelves-white-s99320964/"
+        "price": 99.0,
+        "url": "https://www.ikea.com/us/en/p/brimnes-cabinet-with-doors-white-40300662/"
       },
       "folder": "Kitchen"
     },
@@ -670,9 +670,9 @@
         "height": 0.8
       },
       "shopping": {
-        "store": "Wayfair",
-        "price": 180.0,
-        "url": "https://www.wayfair.com/kitchen-tabletop/pdp/rebrilliant-kitchen-wall-cabinet-w005486248.html"
+        "store": "IKEA",
+        "price": 99.0,
+        "url": "https://www.ikea.com/us/en/p/brimnes-cabinet-with-doors-white-40300662/"
       },
       "folder": "Kitchen"
     },
@@ -688,9 +688,9 @@
         "height": 2.1
       },
       "shopping": {
-        "store": "Home Depot",
-        "price": 500.0,
-        "url": "https://www.homedepot.com/p/Hampton-Bay-Hampton-Pantry-Assembled-18x84x24-in-in-Satin-White-KP1884-SW/205334289"
+        "store": "IKEA",
+        "price": 99.0,
+        "url": "https://www.ikea.com/us/en/p/brimnes-cabinet-with-doors-white-40300662/"
       },
       "folder": "Kitchen"
     },
@@ -707,8 +707,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 300.0,
-        "url": "https://www.ikea.com/us/en/p/sektion-base-cabinet-for-sink-white-80265398/"
+        "price": 99.0,
+        "url": "https://www.ikea.com/us/en/p/brimnes-cabinet-with-doors-white-40300662/"
       },
       "folder": "Kitchen"
     },
@@ -724,9 +724,9 @@
         "height": 0.9
       },
       "shopping": {
-        "store": "Home Depot",
-        "price": 400.0,
-        "url": "https://www.homedepot.com/p/KOHLER-Whitehaven-Farmhouse-Apron-Front-Cast-Iron-36-in-Single-Bowl-Kitchen-Sink-in-White-K-6489-0/203433601"
+        "store": "IKEA",
+        "price": 579.0,
+        "url": "https://www.ikea.com/us/en/p/aengsjoen-orrsjoen-bathroom-vanity-with-sink-faucet-oak-effect-s69530747/"
       },
       "folder": "Kitchen"
     },
@@ -743,8 +743,8 @@
       },
       "shopping": {
         "store": "Best Buy",
-        "price": 600.0,
-        "url": "https://www.bestbuy.com/site/bosch-800-series-24-top-control-built-in-dishwasher-stainless-steel/6542978.p"
+        "price": 699.0,
+        "url": "https://www.ikea.com/us/en/p/vintrosa-built-in-dishwasher-stainless-steel-70591018/"
       },
       "folder": "Kitchen"
     },
@@ -760,9 +760,9 @@
         "height": 1.8
       },
       "shopping": {
-        "store": "Home Depot",
-        "price": 1498.0,
-        "url": "https://www.homedepot.com/p/Samsung-28-cu-ft-3-Door-French-Door-Refrigerator-in-Stainless-Steel-RF28T5001SR/312904393"
+        "store": "IKEA",
+        "price": 1299.0,
+        "url": "https://www.ikea.com/us/en/p/bergsnaes-bottom-freezer-refrigerator-stainless-steel-color-60607883/"
       },
       "folder": "Kitchen"
     },
@@ -778,9 +778,9 @@
         "height": 1.7
       },
       "shopping": {
-        "store": "Best Buy",
-        "price": 800.0,
-        "url": "https://www.bestbuy.com/site/insignia-18-cu-ft-top-freezer-refrigerator-stainless-steel/6168318.p"
+        "store": "IKEA",
+        "price": 1299.0,
+        "url": "https://www.ikea.com/us/en/p/bergsnaes-bottom-freezer-refrigerator-stainless-steel-color-60607883/"
       },
       "folder": "Kitchen"
     },
@@ -797,26 +797,8 @@
       },
       "shopping": {
         "store": "Amazon",
-        "price": 40.0,
-        "url": "https://www.amazon.com/COSORI-Electric-Kettle-Gooseneck-Filter/dp/B08P19TZZK"
-      },
-      "folder": "Kitchen"
-    },
-    {
-      "name": "Kitchen Roll",
-      "file": "Kitchen Roll.fbx",
-      "category": "kitchen",
-      "placeable": true,
-      "scale": 1.0,
-      "dimensions": {
-        "width": 0.12,
-        "depth": 0.12,
-        "height": 0.28
-      },
-      "shopping": {
-        "store": "Walmart",
-        "price": 15.0,
-        "url": "https://www.walmart.com/ip/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls/486221598"
+        "price": 59.0,
+        "url": "https://www.amazon.com/INTASTING-Electric-Gooseneck-Temperature-Stainless/dp/B0F62LMYNY/ref=sxin_17_pa_sp_search_thematic-asin_sspa?content-id=amzn1.sym.833783a2-fed6-4873-b348-bc0ec954be54%3Aamzn1.sym.833783a2-fed6-4873-b348-bc0ec954be54&crid=2QRJC0H6H3732&cv_ct_cx=kettle&keywords=kettle&pd_rd_i=B0F62LMYNY&pd_rd_r=e8a00992-3ca0-4682-bb33-1cb0e2b78196&pd_rd_w=6RaO7&pd_rd_wg=2GdSH&pf_rd_p=833783a2-fed6-4873-b348-bc0ec954be54&pf_rd_r=ABHWJ080KBGWQTEZPYJ8&qid=1772350881&s=home-garden&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sprefix=kettl%2Cgarden%2C205&sr=1-1-fe3e2451-1a8c-4091-ae99-af52f4a2bff2-spons&aref=BUBJdNBYTI&sp_csd=d2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM&th=1"
       },
       "folder": "Kitchen"
     },
@@ -832,9 +814,9 @@
         "height": 0.3
       },
       "shopping": {
-        "store": "Best Buy",
-        "price": 150.0,
-        "url": "https://www.bestbuy.com/site/panasonic-1-2-cu-ft-mid-size-microwave-stainless-steel/6253406.p"
+        "store": "Amazon",
+        "price": 133.0,
+        "url": "https://www.amazon.com/Toshiba-EM131A5C-BS-Microwave-Interior-Stainless/dp/B071WCB1T6/ref=sr_1_3?crid=37N9L6X24ANAT&dib=eyJ2IjoiMSJ9.AtPyrHDYiL35ibE2ioI51YQbXGm9m4S4sUCYpcNnmDaqhvEp8vm7QhyA2phZwYHeEVpQXgspK2jxNusaJibgPmAI75FQ03PRmh5GoqF-Ui31ru5s3OsQZIPmTFmaIbEk87Mt5pqAkVDz7HEp-JGRdJEQohYeKhciLpyngZqYfdIusSzvGB4IHhp2U8hIEjCVPUWQo9NyWCqf0SR46hrP3vwC2GfI6Cxf4vlVcUk2mt0KoEtSch-_aQI63MLdJtaOI0WsAs4MAOHzke0IfHy0p2aZePNQV6gmOpQQHaGKrjE.11FXTijyT7IwtnW52M0EZb_KSeIPPlrInrB8DxMduxw&dib_tag=se&keywords=microwave&qid=1772350921&s=home-garden&sprefix=microwav%2Cgarden%2C200&sr=1-3&th=1"
       },
       "folder": "Kitchen"
     },
@@ -850,9 +832,9 @@
         "height": 0.9
       },
       "shopping": {
-        "store": "Best Buy",
+        "store": "IKEA",
         "price": 849.99,
-        "url": "https://www.bestbuy.com/site/samsung-6-3-cu-ft-freestanding-electric-range-with-wifi/6421334.p"
+        "url": "https://www.ikea.com/us/en/p/oerminge-range-with-glass-ceramic-cooktop-stainless-steel-90591022/"
       },
       "folder": "Kitchen"
     },
@@ -869,8 +851,8 @@
       },
       "shopping": {
         "store": "Amazon",
-        "price": 40.0,
-        "url": "https://www.amazon.com/Cuisinart-CPT-180P1-Metal-Classic-Toaster/dp/B009GQ0KI4"
+        "price": 49.0,
+        "url": "https://www.amazon.com/Toaster-Fits-anywhereTM-Kitchenware-Setting-Removable/dp/B0CYJBB2JQ/ref=sr_1_3?crid=1BZGTWLRY36S1&dib=eyJ2IjoiMSJ9.9fOo4dGVGNzFagvISt6chd9qSPJrybXkpAFsy2DkLNjm_JEl64rrZTR7pSTqdxsDWRFFUIFYtExiR4MygfYj_egPteHtEZ1RtKfxbH7HCcSbNh6rI996Xa6YIxlGV_jb8wesp-28vvAr4abvqcBo3gVhFmgBspHBnzGzcu1T5_B0f66B84vNxzSynvLF5GfcfYya6PlG3n5GT5EzIWEh3hNX8fqAF1FR6sh_5bTMn05S68B0Im5BVS2eHKp8LwwqMEPWsutrY5qcFxvzwXeXLZpDse_Jedq7O9gI5WCyC9o.7CdiJt4tb6aMBcriR2vWWssjmcXRvC23KTKGRUwmKus&dib_tag=se&keywords=toaster&qid=1772350984&s=home-garden&sprefix=toaste%2Cgarden%2C185&sr=1-3"
       },
       "folder": "Kitchen"
     },
@@ -886,9 +868,9 @@
         "height": 0.85
       },
       "shopping": {
-        "store": "Home Depot",
-        "price": 700.0,
-        "url": "https://www.homedepot.com/p/LG-Electronics-4-5-cu-ft-Large-Capacity-High-Efficiency-Stackable-Front-Load-Washer-in-White-WM3400CW/312015505"
+        "store": "Amazon",
+        "price": 846.0,
+        "url": "https://www.amazon.com/BLACK-DECKER-Clothes-Display-Control/dp/B0D42BN7ZP/ref=sxin_17_pa_sp_search_thematic-asin_sspa?content-id=amzn1.sym.833783a2-fed6-4873-b348-bc0ec954be54%3Aamzn1.sym.833783a2-fed6-4873-b348-bc0ec954be54&cv_ct_cx=washing+machine&keywords=washing+machine&pd_rd_i=B0D42BN7ZP&pd_rd_r=cf2034cc-1ae6-461c-988b-b7e164ef7033&pd_rd_w=uliPK&pd_rd_wg=Cbhyx&pf_rd_p=833783a2-fed6-4873-b348-bc0ec954be54&pf_rd_r=R75PTSWKVKSXA1RZX4PF&qid=1772351006&sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&sr=1-1-fe3e2451-1a8c-4091-ae99-af52f4a2bff2-spons&aref=Zs8emwlqSF&sp_csd=d2lkZ2V0TmFtZT1zcF9zZWFyY2hfdGhlbWF0aWM&psc=1"
       },
       "folder": "Kitchen"
     },
@@ -904,9 +886,9 @@
         "height": 0.5
       },
       "shopping": {
-        "store": "Target",
-        "price": 30.0,
-        "url": "https://www.target.com/p/threshold-designed-with-studio-mcgee/-/A-80213928"
+        "store": "Amazon",
+        "price": 18.99,
+        "url": "https://www.amazon.com/Beside-Table-Lamp-Bedroom-Nightstand/dp/B0BZXNSW5K/ref=sr_1_8?crid=2SQ3LRM4FUWVL&dib=eyJ2IjoiMSJ9.6SPBRyAjzx798VzNLkKD3MiF0kHtecFWXq69QwyW6XIo-ZxusQgXEXo6jwHvMq8riDuY4KEI9kd5jal3W0vn_0L2A1OACtPgWVoEcN2BmSTX7RhZ9NUMzgUgPBBPB8us00GNhHpPo3NvT-LF8Ar5PLwTbVIkSEiaP91R-kGpkdpoqm4AUlVaEYHj_WrHVTVMeA8zdqehd2WnWAKOG0lWLKIMw4sOMPOh6zNBxBbjRqTKpTR7wUl_2BOuX1anRLd09q1-ozKQ9NZCHSDt6DfkEFpeznvIt0A22ihnnxvBFl0.bxRv1DbYZDZzp5a9kaa6n6Sq0_xmHRg-7P0YkwEzk5M&dib_tag=se&keywords=lamp&qid=1772351033&sprefix=lamp%2Caps%2C193&sr=8-8"
       },
       "folder": "Lights"
     },
@@ -922,9 +904,9 @@
         "height": 1.6
       },
       "shopping": {
-        "store": "IKEA",
-        "price": 60.0,
-        "url": "https://www.ikea.com/us/en/p/hektar-floor-lamp-with-led-bulb-dark-gray-70416276/"
+        "store": "Amazon",
+        "price": 18.99,
+        "url": "https://www.amazon.com/Beside-Table-Lamp-Bedroom-Nightstand/dp/B0BZXNSW5K/ref=sr_1_8?crid=2SQ3LRM4FUWVL&dib=eyJ2IjoiMSJ9.6SPBRyAjzx798VzNLkKD3MiF0kHtecFWXq69QwyW6XIo-ZxusQgXEXo6jwHvMq8riDuY4KEI9kd5jal3W0vn_0L2A1OACtPgWVoEcN2BmSTX7RhZ9NUMzgUgPBBPB8us00GNhHpPo3NvT-LF8Ar5PLwTbVIkSEiaP91R-kGpkdpoqm4AUlVaEYHj_WrHVTVMeA8zdqehd2WnWAKOG0lWLKIMw4sOMPOh6zNBxBbjRqTKpTR7wUl_2BOuX1anRLd09q1-ozKQ9NZCHSDt6DfkEFpeznvIt0A22ihnnxvBFl0.bxRv1DbYZDZzp5a9kaa6n6Sq0_xmHRg-7P0YkwEzk5M&dib_tag=se&keywords=lamp&qid=1772351033&sprefix=lamp%2Caps%2C193&sr=8-8"
       },
       "folder": "Lights"
     },
@@ -941,8 +923,8 @@
       },
       "shopping": {
         "store": "Amazon",
-        "price": 25.0,
-        "url": "https://www.amazon.com/Himalayan-Glow-601-Crystal-Natural/dp/B001892972"
+        "price": 18.99,
+        "url": "https://www.amazon.com/Beside-Table-Lamp-Bedroom-Nightstand/dp/B0BZXNSW5K/ref=sr_1_8?crid=2SQ3LRM4FUWVL&dib=eyJ2IjoiMSJ9.6SPBRyAjzx798VzNLkKD3MiF0kHtecFWXq69QwyW6XIo-ZxusQgXEXo6jwHvMq8riDuY4KEI9kd5jal3W0vn_0L2A1OACtPgWVoEcN2BmSTX7RhZ9NUMzgUgPBBPB8us00GNhHpPo3NvT-LF8Ar5PLwTbVIkSEiaP91R-kGpkdpoqm4AUlVaEYHj_WrHVTVMeA8zdqehd2WnWAKOG0lWLKIMw4sOMPOh6zNBxBbjRqTKpTR7wUl_2BOuX1anRLd09q1-ozKQ9NZCHSDt6DfkEFpeznvIt0A22ihnnxvBFl0.bxRv1DbYZDZzp5a9kaa6n6Sq0_xmHRg-7P0YkwEzk5M&dib_tag=se&keywords=lamp&qid=1772351033&sprefix=lamp%2Caps%2C193&sr=8-8"
       },
       "folder": "Lights"
     },
@@ -959,8 +941,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 40.0,
-        "url": "https://www.ikea.com/us/en/p/kallax-shelf-unit-white-20275814/"
+        "price": 89.99,
+        "url": "https://www.ikea.com/us/en/p/billy-bookcase-brown-walnut-effect-50508652/"
       },
       "folder": "Shelves"
     },
@@ -977,8 +959,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 150.0,
-        "url": "https://www.ikea.com/us/en/p/fjallbo-shelf-unit-black-70339291/"
+        "price": 89.99,
+        "url": "https://www.ikea.com/us/en/p/billy-bookcase-brown-walnut-effect-50508652/"
       },
       "folder": "Shelves"
     },
@@ -994,9 +976,9 @@
         "height": 0.8
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 30.0,
-        "url": "https://www.amazon.com/Greenco-Tier-Floating-Shelves-White/dp/B01GMS9FTE"
+        "store": "IKEA",
+        "price": 89.99,
+        "url": "https://www.ikea.com/us/en/p/billy-bookcase-brown-walnut-effect-50508652/"
       },
       "folder": "Shelves"
     },
@@ -1013,8 +995,8 @@
       },
       "shopping": {
         "store": "Home Depot",
-        "price": 100.0,
-        "url": "https://www.homedepot.com/p/HDX-5-Tier-Steel-Wire-Shelving-Unit-in-Black-36-in-W-x-72-in-H-x-14-in-D-HD361472B-5/205559612"
+        "price": 89.99,
+        "url": "https://www.ikea.com/us/en/p/billy-bookcase-brown-walnut-effect-50508652/"
       },
       "folder": "Shelves"
     },
@@ -1031,8 +1013,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 60.0,
-        "url": "https://www.ikea.com/us/en/p/eket-cabinet-combination-with-legs-white-s89221141/"
+        "price": 89.99,
+        "url": "https://www.ikea.com/us/en/p/billy-bookcase-brown-walnut-effect-50508652/"
       },
       "folder": "Shelves"
     },
@@ -1049,8 +1031,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 749.0,
-        "url": "https://www.ikea.com/us/en/p/kivik-sofa-hillared-anthracite-s59193627/"
+        "price": 1599.0,
+        "url": "https://www.ikea.com/us/en/p/stockholm-2025-3-seat-sofa-alhamn-dark-brown-s79574298/"
       },
       "folder": "Sofas"
     },
@@ -1066,9 +1048,9 @@
         "height": 0.8
       },
       "shopping": {
-        "store": "Wayfair",
-        "price": 450.0,
-        "url": "https://www.wayfair.com/furniture/pdp/mercury-row-perdue-815-velvet-square-arm-convertible-sofa-mcrw7544.html"
+        "store": "IKEA",
+        "price": 1599.0,
+        "url": "https://www.ikea.com/us/en/p/stockholm-2025-3-seat-sofa-alhamn-dark-brown-s79574298/"
       },
       "folder": "Sofas"
     },
@@ -1085,8 +1067,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 1200.0,
-        "url": "https://www.ikea.com/us/en/p/vimle-sectional-4-seat-with-chaise-hallarp-gray-s49399112/"
+        "price": 1599.0,
+        "url": "https://www.ikea.com/us/en/p/stockholm-2025-3-seat-sofa-alhamn-dark-brown-s79574298/"
       },
       "folder": "Sofas"
     },
@@ -1103,8 +1085,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 250.0,
-        "url": "https://www.ikea.com/us/en/p/glostad-loveseat-knisa-medium-blue-80489000/"
+        "price": 1599.0,
+        "url": "https://www.ikea.com/us/en/p/stockholm-2025-3-seat-sofa-alhamn-dark-brown-s79574298/"
       },
       "folder": "Sofas"
     },
@@ -1121,8 +1103,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 199.0,
-        "url": "https://www.ikea.com/us/en/p/lagkapten-alex-desk-white-s49416429/"
+        "price": 264.0,
+        "url": "https://www.ikea.com/us/en/p/lagkapten-alex-desk-gray-wood-effect-s19585450/"
       },
       "folder": "Tables"
     },
@@ -1139,8 +1121,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 200.0,
-        "url": "https://www.ikea.com/us/en/p/docksta-table-white-white-s49326616/"
+        "price": 399.0,
+        "url": "https://www.ikea.com/us/en/p/rosentorp-extendable-table-white-80568239/"
       },
       "folder": "Tables"
     },
@@ -1156,9 +1138,9 @@
         "height": 0.5
       },
       "shopping": {
-        "store": "Target",
-        "price": 100.0,
-        "url": "https://www.target.com/p/round-coffee-table-brass-project-62/-/A-52106096"
+        "store": "IKEA",
+        "price": 399.0,
+        "url": "https://www.ikea.com/us/en/p/rosentorp-extendable-table-white-80568239/"
       },
       "folder": "Tables"
     },
@@ -1174,9 +1156,9 @@
         "height": 0.55
       },
       "shopping": {
-        "store": "Amazon",
-        "price": 50.0,
-        "url": "https://www.amazon.com/Round-Side-Table-Living-Room/dp/B09V7S1D97"
+        "store": "IKEA",
+        "price": 399.0,
+        "url": "https://www.ikea.com/us/en/p/rosentorp-extendable-table-white-80568239/"
       },
       "folder": "Tables"
     },
@@ -1193,8 +1175,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 300.0,
-        "url": "https://www.ikea.com/us/en/p/lisabo-table-ash-veneer-80382439/"
+        "price": 16.99,
+        "url": "https://www.ikea.com/us/en/p/lack-side-table-black-brown-80104268/"
       },
       "folder": "Tables"
     },
@@ -1211,8 +1193,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 150.0,
-        "url": "https://www.ikea.com/us/en/p/lack-coffee-table-white-00104291/"
+        "price": 16.99,
+        "url": "https://www.ikea.com/us/en/p/lack-side-table-black-brown-80104268/"
       },
       "folder": "Tables"
     },
@@ -1229,8 +1211,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 50.0,
-        "url": "https://www.ikea.com/us/en/p/lack-side-table-white-30444445/"
+        "price": 16.99,
+        "url": "https://www.ikea.com/us/en/p/lack-side-table-black-brown-80104268/"
       },
       "folder": "Tables"
     },
@@ -1247,8 +1229,8 @@
       },
       "shopping": {
         "store": "IKEA",
-        "price": 600.0,
-        "url": "https://www.ikea.com/us/en/p/moerbylanga-table-oak-veneer-brown-stained-20293766/"
+        "price": 16.99,
+        "url": "https://www.ikea.com/us/en/p/lack-side-table-black-brown-80104268/"
       },
       "folder": "Tables"
     }

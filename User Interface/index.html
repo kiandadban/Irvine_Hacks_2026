@@ -203,7 +203,7 @@
             landing.style.opacity = '0';
             landing.style.transition = 'opacity 0.5s ease';
             setTimeout(() => {
-                let url = `../Engine/index.html?prompt=${encodeURIComponent(fullPrompt)}&roomType=${encodeURIComponent(selectedRoom)}`;
+                let url = `../Engine/engine.html?prompt=${encodeURIComponent(fullPrompt)}&roomType=${encodeURIComponent(selectedRoom)}`;
                 window.location.href = url;
             }, 300);
         }
