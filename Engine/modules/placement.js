@@ -81,7 +81,12 @@ export function createPlacer(
                         const dist = new THREE.Vector2(posX, posZ).distanceTo(new THREE.Vector2(cx, cz));
                         if (dist < bestD) { bestD = dist; best = f; }
                     }
-                    if (best) { candidateSurface = best; console.debug('[Placer] fallback surface chosen', asset.name, bestD); }
+                    if (best) { 
+                        candidateSurface = best; 
+                        console.debug('[Placer] fallback surface chosen for', asset.name, '@ distance', bestD.toFixed(2), 'surface:', best.userData.attributes?.name);
+                    } else {
+                        console.debug('[Placer] NO surfaces found for', asset.name, '— available furniture:', spawnedFurniture.map(f => f.userData.attributes?.name || 'unknown').join(', '));
+                    }
                 }
 
                 if (candidateSurface) {
@@ -93,6 +98,7 @@ export function createPlacer(
                     targetY = sBox.max.y;
                     model.rotation.y = candidateSurface.rotation.y;
                     model.userData._baseSurface = candidateSurface;
+                    console.debug('[Placer] snapped', asset.name, 'onto', candidateSurface.userData.attributes?.name, '@ height', targetY.toFixed(2));
                 } else {
                     console.warn('[Placer] No surface found for', asset.name, '— placing on floor');
                     targetY = 0;
@@ -159,9 +165,16 @@ export function createPlacer(
             const hitObj = check.collider;
             if (hitObj && model.userData && model.userData._baseSurface && hitObj === model.userData._baseSurface) {
                 isBlocked = false;
-            } else if (hitObj?.userData?.attributes?.placeable === false && !model.userData?._baseSurface) {
-                // if no specific baseSurface recorded, still allow placement atop non-placeable surfaces
+            }
+        }
+
+        // For non-placeable items (surfaces), allow minor overlaps if collision is with other non-placeable items
+        if (!asset.placeable && isBlocked) {
+            const hitObj = check.collider;
+            if (hitObj?.userData?.attributes && !hitObj.userData.attributes.placeable) {
+                // Both are surfaces; allow overlap (they're probably on the floor together)
                 isBlocked = false;
+                console.debug('[Placer] allowing surface-on-surface overlap for', asset.name, 'and', hitObj.userData.attributes.name);
             }
         }
 
@@ -169,10 +182,43 @@ export function createPlacer(
             scene.add(model);
             spawnedFurniture.push(model);
             collisionEngine.updateObstacles();
-            updateCollisionVisuals(model);
+            // DO NOT call updateCollisionVisuals() here — only update when user selects/moves
             selectObject(model);
+            console.debug('[Placer] successfully placed', asset.name);
             resolve(model);
         } else {
+            // Try random offset placement as fallback
+            const hitObj = check.collider;
+            console.warn('[Placer] placement blocked for', asset.name, '— collision with:', hitObj?.userData?.attributes?.name || 'unknown');
+            
+            // Attempt smart random repositioning
+            const rw = roomManager.roomWidth || 10;
+            const rd = roomManager.roomDepth || 10;
+            const maxAttempts = 5;
+            let placed = false;
+
+            for (let attempt = 0; attempt < maxAttempts && !placed; attempt++) {
+                const randX = (Math.random() - 0.5) * rw * 0.8;
+                const randZ = (Math.random() - 0.5) * rd * 0.8;
+                model.position.x = randX;
+                model.position.z = randZ;
+                model.updateMatrixWorld(true);
+
+                const recheck = collisionEngine.checkCollision(model);
+                if (!recheck.isColliding) {
+                    scene.add(model);
+                    spawnedFurniture.push(model);
+                    collisionEngine.updateObstacles();
+                    updateCollisionVisuals(model);
+                    selectObject(model);
+                    console.debug('[Placer] successfully placed (random offset)', asset.name, `at (${randX.toFixed(1)}, ${randZ.toFixed(1)})`);
+                    placed = true;
+                    resolve(model);
+                    return;
+                }
+            }
+
+            console.warn('[Placer] could not find placement for', asset.name, 'after random attempts');
             resolve(null);
         }
     }

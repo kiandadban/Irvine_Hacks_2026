@@ -39,10 +39,10 @@ export class CollisionEngine {
 
   /**
    * @param {THREE.Object3D} movingObject - The object being moved/placed.
-   * @returns {Object} Collision status and type.
+   * @returns {Object} Collision status, type, and colliding object reference.
    */
   checkCollision(movingObject) {
-    if (!movingObject) return { isColliding: false };
+    if (!movingObject) return { isColliding: false, collider: null };
 
     movingObject.updateMatrixWorld(true);
     this._movingBox.setFromObject(movingObject);
@@ -54,13 +54,13 @@ export class CollisionEngine {
       this._movingBox.min.z < -this.roomLimitZ || 
       this._movingBox.max.z > this.roomLimitZ
     ) {
-      return { isColliding: true, type: 'boundary' };
+      return { isColliding: true, type: 'boundary', collider: null };
     }
 
     // 2. Wall Intersections
     for (const wallBox of this.wallBoxes) {
       if (this._movingBox.intersectsBox(wallBox)) {
-        return { isColliding: true, type: 'wall' };
+        return { isColliding: true, type: 'wall', collider: null };
       }
     }
 
@@ -69,10 +69,10 @@ export class CollisionEngine {
       if (item === movingObject || item.uuid === movingObject.uuid) continue;
       this._targetBox.setFromObject(item);
       if (this._movingBox.intersectsBox(this._targetBox)) {
-        return { isColliding: true, type: 'furniture' };
+        return { isColliding: true, type: 'furniture', collider: item };
       }
     }
 
-    return { isColliding: false };
+    return { isColliding: false, collider: null };
   }
 };

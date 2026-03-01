@@ -176,8 +176,8 @@ async function initApp() {
                 try { await placeModel(item); } catch (e) { console.warn('[Main] surface placement failed', item, e); }
             }
 
-            // Then place accessories; collect failures for a retry pass
-            const failedPlaceables = [];
+            // Then place accessories; collect failures for retry passes
+            let failedPlaceables = [];
             for (const item of placeables) {
                 try {
                     const res = await placeModel(item);
@@ -187,19 +187,46 @@ async function initApp() {
                 }
             }
 
-            // Retry any failed placeables once more after surfaces are settled
-            if (failedPlaceables.length) {
-                console.debug('[Main] Retrying failed placeables', failedPlaceables.length);
-                for (const item of failedPlaceables.slice()) {
+            // Multi-pass retry: up to 3 attempts with increasing delays to let surfaces settle
+            const maxRetries = 3;
+            for (let retryPass = 0; retryPass < maxRetries && failedPlaceables.length > 0; retryPass++) {
+                const delay = 200 + (retryPass * 300); // exponential backoff
+                await new Promise(r => setTimeout(r, delay));
+                console.debug(`[Main] Retry pass ${retryPass + 1}/${maxRetries} for ${failedPlaceables.length} placeables`);
+                
+                const stillFailed = [];
+                for (const item of failedPlaceables) {
                     try {
                         const res = await placeModel(item);
-                        if (res) {
-                            const idx = failedPlaceables.indexOf(item);
-                            if (idx > -1) failedPlaceables.splice(idx, 1);
-                        }
-                    } catch (e) { /* keep in failed list */ }
+                        if (!res) stillFailed.push(item);
+                    } catch (e) {
+                        stillFailed.push(item);
+                    }
                 }
-                if (failedPlaceables.length) console.warn('[Main] Some placeables still failed to place:', failedPlaceables.map(i=>i.file));
+                failedPlaceables = stillFailed;
+            }
+
+            // Fallback: place remaining orphaned placeables on the floor at their desired (x, z)
+            if (failedPlaceables.length > 0) {
+                console.warn(`[Main] ${failedPlaceables.length} items still failed. Attempting ground placement as fallback.`);
+                const groundPlaceables = [];
+                for (const item of failedPlaceables) {
+                    try {
+                        // Clone item but force Y=0 (floor) and no surface snapping
+                        const groundItem = { ...item, y: 0 };
+                        const res = await placeModel(groundItem);
+                        if (res) {
+                            groundPlaceables.push(item.file);
+                        } else {
+                            console.error('[Main] Ground placement also failed for:', item.file);
+                        }
+                    } catch (e) {
+                        console.error('[Main] Ground placement exception for:', item.file, e);
+                    }
+                }
+                if (groundPlaceables.length > 0) {
+                    console.log(`[Main] Successfully ground-placed ${groundPlaceables.length} orphaned items:`, groundPlaceables);
+                }
             }
             window.dispatchEvent(new CustomEvent('layoutgenerated', { detail: layout }));
         } catch (e) {
