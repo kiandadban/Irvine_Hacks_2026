@@ -13,866 +13,1794 @@
     {
       "name": "Bath",
       "file": "Bath.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": false,
-      "dimensions": { "width": 1.7, "depth": 0.75, "height": 0.6 },
-      "shopping": { "store": "Wayfair", "price": 549.99, "url": "https://www.wayfair.com/home-improvement/pdp/woodbridge-67-x-32-freestanding-soaking-acrylic-bathtub-wdb1241.html" }
+      "dimensions": {
+        "width": 1.7,
+        "depth": 0.75,
+        "height": 0.6
+      },
+      "shopping": {
+        "store": "Wayfair",
+        "price": 549.99,
+        "url": "https://www.wayfair.com/home-improvement/pdp/woodbridge-67-x-32-freestanding-soaking-acrylic-bathtub-wdb1241.html"
+      }
     },
     {
       "name": "Shower",
       "file": "Shower.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.9, "height": 2.1 },
-      "shopping": { "store": "Home Depot", "price": 897.00, "url": "https://www.homedepot.com/p/Delta-Foundations-38-in-L-x-38-in-W-x-73-88-in-H-Corner-Shower-Stall-Kit-BVS3-FN263-WHPC/304663304" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.9,
+        "height": 2.1
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 897.0,
+        "url": "https://www.homedepot.com/p/Delta-Foundations-38-in-L-x-38-in-W-x-73-88-in-H-Corner-Shower-Stall-Kit-BVS3-FN263-WHPC/304663304"
+      }
     },
     {
       "name": "Sink",
       "file": "Sink.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.5, "height": 0.85 },
-      "shopping": { "store": "IKEA", "price": 160.00, "url": "https://www.ikea.com/us/en/p/rattviken-single-sink-white-40223697/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.5,
+        "height": 0.85
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 160.0,
+        "url": "https://www.ikea.com/us/en/p/rattviken-single-sink-white-40223697/"
+      }
     },
     {
       "name": "Toilet Roll Holder",
       "file": "Toilet Roll Holder.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": true,
-      "dimensions": { "width": 0.15, "depth": 0.1, "height": 0.1 },
-      "shopping": { "store": "Amazon", "price": 15.99, "url": "https://www.amazon.com/Toilet-Paper-Holder-Stand-Storage/dp/B07RRYLZZ6" }
+      "dimensions": {
+        "width": 0.15,
+        "depth": 0.1,
+        "height": 0.1
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 15.99,
+        "url": "https://www.amazon.com/Toilet-Paper-Holder-Stand-Storage/dp/B07RRYLZZ6"
+      }
     },
     {
       "name": "Toilet Rolls",
       "file": "Toilet Rolls.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": true,
-      "dimensions": { "width": 0.25, "depth": 0.12, "height": 0.12 },
-      "shopping": { "store": "Walmart", "price": 12.97, "url": "https://www.walmart.com/ip/Charmin-Ultra-Soft-Toilet-Paper-6-Mega-Rolls/15663737" }
+      "dimensions": {
+        "width": 0.25,
+        "depth": 0.12,
+        "height": 0.12
+      },
+      "shopping": {
+        "store": "Walmart",
+        "price": 12.97,
+        "url": "https://www.walmart.com/ip/Charmin-Ultra-Soft-Toilet-Paper-6-Mega-Rolls/15663737"
+      }
     },
     {
       "name": "Toilet",
       "file": "Toilet.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.7, "height": 0.75 },
-      "shopping": { "store": "Lowe's", "price": 189.00, "url": "https://www.lowes.com/pd/Kohler-Highline-White-WaterSense-Elongated-2-piece-Toilet/1000180461" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.7,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "Lowe's",
+        "price": 189.0,
+        "url": "https://www.lowes.com/pd/Kohler-Highline-White-WaterSense-Elongated-2-piece-Toilet/1000180461"
+      }
     },
     {
       "name": "Towel Holder",
       "file": "Towel Holder.fbx",
-      "category": "Bathroom",
+      "category": "bathroom",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.1, "height": 0.05 },
-      "shopping": { "store": "IKEA", "price": 16.99, "url": "https://www.ikea.com/us/en/p/skogsviken-towel-rail-black-60423822/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.1,
+        "height": 0.05
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 16.99,
+        "url": "https://www.ikea.com/us/en/p/skogsviken-towel-rail-black-60423822/"
+      }
     },
     {
       "name": "Bed Double",
       "file": "Bed Double.fbx",
-      "category": "Beds",
+      "category": "bedroom",
       "placeable": false,
-      "dimensions": { "width": 1.5, "depth": 2.0, "height": 1.1 },
-      "shopping": { "store": "IKEA", "price": 299.00, "url": "https://www.ikea.com/us/en/p/malm-high-bed-frame-black-brown-s69931169/" }
+      "dimensions": {
+        "width": 1.5,
+        "depth": 2.0,
+        "height": 1.1
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 299.0,
+        "url": "https://www.ikea.com/us/en/p/malm-high-bed-frame-black-brown-s69931169/"
+      }
     },
     {
       "name": "Bed Single",
       "file": "Bed Single.fbx",
-      "category": "Beds",
+      "category": "bedroom",
       "placeable": false,
-      "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.0 },
-      "shopping": { "store": "IKEA", "price": 149.00, "url": "https://www.ikea.com/us/en/p/neiden-bed-frame-pine-s79248606/" }
+      "dimensions": {
+        "width": 1.0,
+        "depth": 2.0,
+        "height": 1.0
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 149.0,
+        "url": "https://www.ikea.com/us/en/p/neiden-bed-frame-pine-s79248606/"
+      }
     },
     {
       "name": "Bunk Bed",
       "file": "Bunk Bed.fbx",
-      "category": "Beds",
+      "category": "bedroom",
       "placeable": false,
-      "dimensions": { "width": 1.0, "depth": 2.0, "height": 1.8 },
-      "shopping": { "store": "IKEA", "price": 349.00, "url": "https://www.ikea.com/us/en/p/mydal-bunk-bed-frame-pine-00531891/" }
+      "dimensions": {
+        "width": 1.0,
+        "depth": 2.0,
+        "height": 1.8
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 349.0,
+        "url": "https://www.ikea.com/us/en/p/mydal-bunk-bed-frame-pine-00531891/"
+      }
     },
     {
       "name": "Triple Bunk Bed",
       "file": "Triple Bunk Bed.fbx",
-      "category": "Beds",
+      "category": "bedroom",
       "placeable": false,
-      "dimensions": { "width": 1.0, "depth": 2.0, "height": 2.4 },
-      "shopping": { "store": "Wayfair", "price": 839.99, "url": "https://www.wayfair.com/baby-kids/pdp/isabelle-max-lyndon-twin-over-twin-over-twin-triple-bunk-bed-w005271842.html" }
+      "dimensions": {
+        "width": 1.0,
+        "depth": 2.0,
+        "height": 2.4
+      },
+      "shopping": {
+        "store": "Wayfair",
+        "price": 839.99,
+        "url": "https://www.wayfair.com/baby-kids/pdp/isabelle-max-lyndon-twin-over-twin-over-twin-triple-bunk-bed-w005271842.html"
+      }
     },
     {
       "name": "Carpet A",
       "file": "Carpet A.fbx",
-      "category": "Carpets",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 2.0, "depth": 3.0, "height": 0.01 },
-      "shopping": { "store": "Ruggable", "price": 199.00, "url": "https://ruggable.com/products/kamran-hazel-rug" }
+      "dimensions": {
+        "width": 2.0,
+        "depth": 3.0,
+        "height": 0.01
+      },
+      "shopping": {
+        "store": "Ruggable",
+        "price": 199.0,
+        "url": "https://ruggable.com/products/kamran-hazel-rug"
+      }
     },
     {
       "name": "Carpet B",
       "file": "Carpet B.fbx",
-      "category": "Carpets",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.5, "depth": 2.2, "height": 0.01 },
-      "shopping": { "store": "Amazon", "price": 85.00, "url": "https://www.amazon.com/SAFAVIEH-Hudson-Shag-Collection-SGH281B/dp/B00P29P680" }
+      "dimensions": {
+        "width": 1.5,
+        "depth": 2.2,
+        "height": 0.01
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 85.0,
+        "url": "https://www.amazon.com/SAFAVIEH-Hudson-Shag-Collection-SGH281B/dp/B00P29P680"
+      }
     },
     {
       "name": "Carpet C",
       "file": "Carpet C.fbx",
-      "category": "Carpets",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 2.5, "depth": 2.5, "height": 0.01 },
-      "shopping": { "store": "West Elm", "price": 399.00, "url": "https://www.westelm.com/products/sweater-rug-t4937/" }
+      "dimensions": {
+        "width": 2.5,
+        "depth": 2.5,
+        "height": 0.01
+      },
+      "shopping": {
+        "store": "West Elm",
+        "price": 399.0,
+        "url": "https://www.westelm.com/products/sweater-rug-t4937/"
+      }
     },
     {
       "name": "Chair A",
       "file": "Chair A.fbx",
-      "category": "Chairs",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.45, "depth": 0.5, "height": 0.85 },
-      "shopping": { "store": "IKEA", "price": 89.00, "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-80211089/" }
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.5,
+        "height": 0.85
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 89.0,
+        "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-80211089/"
+      }
     },
     {
       "name": "Chair B",
       "file": "Chair B.fbx",
-      "category": "Chairs",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.5, "depth": 0.55, "height": 0.9 },
-      "shopping": { "store": "Amazon", "price": 65.00, "url": "https://www.amazon.com/Amazon-Basics-Classic-Mid-Century-Furniture/dp/B07NSS9472" }
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.55,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 65.0,
+        "url": "https://www.amazon.com/Amazon-Basics-Classic-Mid-Century-Furniture/dp/B07NSS9472"
+      }
     },
     {
       "name": "Chair C",
       "file": "Chair C.fbx",
-      "category": "Chairs",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.6, "height": 0.8 },
-      "shopping": { "store": "IKEA", "price": 129.00, "url": "https://www.ikea.com/us/en/p/odger-chair-anthracite-50457313/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 0.8
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 129.0,
+        "url": "https://www.ikea.com/us/en/p/odger-chair-anthracite-50457313/"
+      }
     },
     {
       "name": "Chair D",
       "file": "Chair D.fbx",
-      "category": "Chairs",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.55, "depth": 0.6, "height": 0.95 },
-      "shopping": { "store": "West Elm", "price": 299.00, "url": "https://www.westelm.com/products/mid-century-upholstered-dining-chair-h702/" }
+      "dimensions": {
+        "width": 0.55,
+        "depth": 0.6,
+        "height": 0.95
+      },
+      "shopping": {
+        "store": "West Elm",
+        "price": 299.0,
+        "url": "https://www.westelm.com/products/mid-century-upholstered-dining-chair-h702/"
+      }
     },
     {
       "name": "Chair E",
       "file": "Chair E.fbx",
-      "category": "Chairs",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.5, "depth": 0.5, "height": 1.1 },
-      "shopping": { "store": "IKEA", "price": 159.00, "url": "https://www.ikea.com/us/en/p/nordvalla-dark-gray-wing-chair-80359844/" }
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.5,
+        "height": 1.1
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 159.0,
+        "url": "https://www.ikea.com/us/en/p/nordvalla-dark-gray-wing-chair-80359844/"
+      }
     },
     {
       "name": "Door A",
       "file": "Door A.fbx",
-      "category": "Doors",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.1, "height": 2.0 },
-      "shopping": { "store": "Home Depot", "price": 145.00, "url": "https://www.homedepot.com/p/JELD-WEN-32-in-x-80-in-6-Panel-White-Right-Hand-Hollow-Core-Textured-Composite-Prehung-Interior-Door-THDJW160700465/202036440" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.1,
+        "height": 2.0
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 145.0,
+        "url": "https://www.homedepot.com/p/JELD-WEN-32-in-x-80-in-6-Panel-White-Right-Hand-Hollow-Core-Textured-Composite-Prehung-Interior-Door-THDJW160700465/202036440"
+      }
     },
     {
       "name": "Door B",
       "file": "Door B.fbx",
-      "category": "Doors",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.8, "depth": 0.1, "height": 2.0 },
-      "shopping": { "store": "Home Depot", "price": 160.00, "url": "https://www.homedepot.com/p/JELD-WEN-30-in-x-80-in-Smooth-2-Panel-Caiman-White-Right-Hand-Molded-Composite-Interior-Door-Prehung-THDJW240600021/204856018" }
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.1,
+        "height": 2.0
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 160.0,
+        "url": "https://www.homedepot.com/p/JELD-WEN-30-in-x-80-in-Smooth-2-Panel-Caiman-White-Right-Hand-Molded-Composite-Interior-Door-Prehung-THDJW240600021/204856018"
+      }
     },
     {
       "name": "Door C",
       "file": "Door C.fbx",
-      "category": "Doors",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.15, "height": 2.1 },
-      "shopping": { "store": "Amazon", "price": 250.00, "url": "https://www.amazon.com/Barn-Door-Hardware-Kit-Wood/dp/B07P7Z8N5Y" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.15,
+        "height": 2.1
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 250.0,
+        "url": "https://www.amazon.com/Barn-Door-Hardware-Kit-Wood/dp/B07P7Z8N5Y"
+      }
     },
     {
       "name": "Drawer A",
       "file": "Drawer A.fbx",
-      "category": "Drawers",
+      "category": "bedroom",
       "placeable": false,
-      "dimensions": { "width": 0.8, "depth": 0.5, "height": 1.0 },
-      "shopping": { "store": "IKEA", "price": 199.00, "url": "https://www.ikea.com/us/en/p/malm-6-drawer-dresser-white-10360469/" }
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.5,
+        "height": 1.0
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 199.0,
+        "url": "https://www.ikea.com/us/en/p/malm-6-drawer-dresser-white-10360469/"
+      }
     },
     {
       "name": "Drawer B",
       "file": "Drawer B.fbx",
-      "category": "Drawers",
+      "category": "bedroom",
       "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.4, "height": 0.6 },
-      "shopping": { "store": "Amazon", "price": 45.00, "url": "https://www.amazon.com/Prepac-Floating-Nightstand-Drawer-White/dp/B00652Y2W6" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.4,
+        "height": 0.6
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 45.0,
+        "url": "https://www.amazon.com/Prepac-Floating-Nightstand-Drawer-White/dp/B00652Y2W6"
+      }
     },
     {
       "name": "Console A",
       "file": "Console A.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.4, "depth": 0.4, "height": 0.1 },
-      "shopping": { "store": "Best Buy", "price": 499.00, "url": "https://www.bestbuy.com/site/sony-playstation-5-console-white/6430161.p" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.4,
+        "height": 0.1
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 499.0,
+        "url": "https://www.bestbuy.com/site/sony-playstation-5-console-white/6430161.p"
+      }
     },
     {
       "name": "Console B",
       "file": "Console B.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.3, "depth": 0.3, "height": 0.08 },
-      "shopping": { "store": "Best Buy", "price": 299.00, "url": "https://www.bestbuy.com/site/nintendo-switch-with-neon-blue-and-neon-red-joy-con-console-multi/6367728.p" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 0.08
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 299.0,
+        "url": "https://www.bestbuy.com/site/nintendo-switch-with-neon-blue-and-neon-red-joy-con-console-multi/6367728.p"
+      }
     },
     {
       "name": "Console C",
       "file": "Console C.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.35, "depth": 0.35, "height": 0.12 },
-      "shopping": { "store": "Microsoft", "price": 499.00, "url": "https://www.xbox.com/en-US/consoles/xbox-series-x" }
+      "dimensions": {
+        "width": 0.35,
+        "depth": 0.35,
+        "height": 0.12
+      },
+      "shopping": {
+        "store": "Microsoft",
+        "price": 499.0,
+        "url": "https://www.xbox.com/en-US/consoles/xbox-series-x"
+      }
     },
     {
       "name": "Console D",
       "file": "Console D.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.2, "depth": 0.1, "height": 0.05 },
-      "shopping": { "store": "Amazon", "price": 40.00, "url": "https://www.amazon.com/Fire-TV-Stick-4K-Max-with-Alexa-Voice-Remote/dp/B08MQZXN1X" }
+      "dimensions": {
+        "width": 0.2,
+        "depth": 0.1,
+        "height": 0.05
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 40.0,
+        "url": "https://www.amazon.com/Fire-TV-Stick-4K-Max-with-Alexa-Voice-Remote/dp/B08MQZXN1X"
+      }
     },
     {
       "name": "Keyboard",
       "file": "Keyboard.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.45, "depth": 0.15, "height": 0.03 },
-      "shopping": { "store": "Amazon", "price": 100.00, "url": "https://www.amazon.com/Logitech-MX-Keys-Advanced-Wireless-Keyboard/dp/B07S92QBCJ" }
+      "dimensions": {
+        "width": 0.45,
+        "depth": 0.15,
+        "height": 0.03
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 100.0,
+        "url": "https://www.amazon.com/Logitech-MX-Keys-Advanced-Wireless-Keyboard/dp/B07S92QBCJ"
+      }
     },
     {
       "name": "Laptop",
       "file": "Laptop.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.35, "depth": 0.25, "height": 0.02 },
-      "shopping": { "store": "Apple", "price": 1299.00, "url": "https://www.apple.com/shop/buy-mac/macbook-air" }
+      "dimensions": {
+        "width": 0.35,
+        "depth": 0.25,
+        "height": 0.02
+      },
+      "shopping": {
+        "store": "Apple",
+        "price": 1299.0,
+        "url": "https://www.apple.com/shop/buy-mac/macbook-air"
+      }
     },
     {
       "name": "Monitor",
       "file": "Monitor.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.6, "depth": 0.2, "height": 0.45 },
-      "shopping": { "store": "Dell", "price": 300.00, "url": "https://www.dell.com/en-us/shop/dell-27-monitor-s2721hn/apd/210-axkv/monitors-monitor-accessories" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.2,
+        "height": 0.45
+      },
+      "shopping": {
+        "store": "Dell",
+        "price": 300.0,
+        "url": "https://www.dell.com/en-us/shop/dell-27-monitor-s2721hn/apd/210-axkv/monitors-monitor-accessories"
+      }
     },
     {
       "name": "Pc",
       "file": "Pc.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": false,
-      "dimensions": { "width": 0.2, "depth": 0.45, "height": 0.45 },
-      "shopping": { "store": "Newegg", "price": 1200.00, "url": "https://www.newegg.com/p/N82E16883360155" }
+      "dimensions": {
+        "width": 0.2,
+        "depth": 0.45,
+        "height": 0.45
+      },
+      "shopping": {
+        "store": "Newegg",
+        "price": 1200.0,
+        "url": "https://www.newegg.com/p/N82E16883360155"
+      }
     },
     {
       "name": "Phone",
       "file": "Phone.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.07, "depth": 0.15, "height": 0.01 },
-      "shopping": { "store": "Apple", "price": 999.00, "url": "https://www.apple.com/iphone-15-pro/" }
+      "dimensions": {
+        "width": 0.07,
+        "depth": 0.15,
+        "height": 0.01
+      },
+      "shopping": {
+        "store": "Apple",
+        "price": 999.0,
+        "url": "https://www.apple.com/iphone-15-pro/"
+      }
     },
     {
       "name": "Tablet",
       "file": "Tablet.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 0.18, "depth": 0.25, "height": 0.01 },
-      "shopping": { "store": "Apple", "price": 599.00, "url": "https://www.apple.com/ipad-air/" }
+      "dimensions": {
+        "width": 0.18,
+        "depth": 0.25,
+        "height": 0.01
+      },
+      "shopping": {
+        "store": "Apple",
+        "price": 599.0,
+        "url": "https://www.apple.com/ipad-air/"
+      }
     },
     {
       "name": "TV A",
       "file": "TV A.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 1.2, "depth": 0.1, "height": 0.7 },
-      "shopping": { "store": "Best Buy", "price": 800.00, "url": "https://www.bestbuy.com/site/lg-55-class-c3-series-oled-4k-uhd-smart-webos-tv/6535929.p" }
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.1,
+        "height": 0.7
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 800.0,
+        "url": "https://www.bestbuy.com/site/lg-55-class-c3-series-oled-4k-uhd-smart-webos-tv/6535929.p"
+      }
     },
     {
       "name": "TV B",
       "file": "TV B.fbx",
-      "category": "Electronics",
+      "category": "office",
       "placeable": true,
-      "dimensions": { "width": 1.6, "depth": 0.1, "height": 0.9 },
-      "shopping": { "store": "Amazon", "price": 1500.00, "url": "https://www.amazon.com/Samsung-75-Inch-Class-QLED-Built/dp/B0BZ8ZMTD2" }
+      "dimensions": {
+        "width": 1.6,
+        "depth": 0.1,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 1500.0,
+        "url": "https://www.amazon.com/Samsung-75-Inch-Class-QLED-Built/dp/B0BZ8ZMTD2"
+      }
     },
     {
       "name": "Blender",
       "file": "Blender.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": true,
-      "dimensions": { "width": 0.2, "depth": 0.2, "height": 0.4 },
-      "shopping": { "store": "Amazon", "price": 100.00, "url": "https://www.amazon.com/Ninja-Professional-72oz-Blender-BL610/dp/B00NGV4506" }
+      "dimensions": {
+        "width": 0.2,
+        "depth": 0.2,
+        "height": 0.4
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 100.0,
+        "url": "https://www.amazon.com/Ninja-Professional-72oz-Blender-BL610/dp/B00NGV4506"
+      }
     },
     {
       "name": "Cupboard A",
       "file": "Cupboard A.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.6, "height": 0.9 },
-      "shopping": { "store": "IKEA", "price": 250.00, "url": "https://www.ikea.com/us/en/cat/sektion-kitchen-cabinets-23598/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 250.0,
+        "url": "https://www.ikea.com/us/en/cat/sektion-kitchen-cabinets-23598/"
+      }
     },
     {
       "name": "Cupboard B",
       "file": "Cupboard B.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.6, "height": 0.9 },
-      "shopping": { "store": "Home Depot", "price": 200.00, "url": "https://www.homedepot.com/b/Kitchen-Kitchen-Cabinets/N-5yc1vZas87" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.6,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 200.0,
+        "url": "https://www.homedepot.com/b/Kitchen-Kitchen-Cabinets/N-5yc1vZas87"
+      }
     },
     {
       "name": "Cupboard C",
       "file": "Cupboard C.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.3, "height": 0.6 },
-      "shopping": { "store": "IKEA", "price": 120.00, "url": "https://www.ikea.com/us/en/p/enhet-wall-cab-with-2-shelves-white-s99320964/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.3,
+        "height": 0.6
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 120.0,
+        "url": "https://www.ikea.com/us/en/p/enhet-wall-cab-with-2-shelves-white-s99320964/"
+      }
     },
     {
       "name": "Cupboard D",
       "file": "Cupboard D.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.8, "depth": 0.3, "height": 0.8 },
-      "shopping": { "store": "Wayfair", "price": 180.00, "url": "https://www.wayfair.com/kitchen-tabletop/pdp/rebrilliant-kitchen-wall-cabinet-w005486248.html" }
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.3,
+        "height": 0.8
+      },
+      "shopping": {
+        "store": "Wayfair",
+        "price": 180.0,
+        "url": "https://www.wayfair.com/kitchen-tabletop/pdp/rebrilliant-kitchen-wall-cabinet-w005486248.html"
+      }
     },
     {
       "name": "Cupboard E",
       "file": "Cupboard E.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.6, "height": 2.1 },
-      "shopping": { "store": "Home Depot", "price": 500.00, "url": "https://www.homedepot.com/p/Hampton-Bay-Hampton-Pantry-Assembled-18x84x24-in-in-Satin-White-KP1884-SW/205334289" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 2.1
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 500.0,
+        "url": "https://www.homedepot.com/p/Hampton-Bay-Hampton-Pantry-Assembled-18x84x24-in-in-Satin-White-KP1884-SW/205334289"
+      }
     },
     {
       "name": "Cupboard F",
       "file": "Cupboard F.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.6, "height": 0.9 },
-      "shopping": { "store": "IKEA", "price": 300.00, "url": "https://www.ikea.com/us/en/p/sektion-base-cabinet-for-sink-white-80265398/" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.6,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 300.0,
+        "url": "https://www.ikea.com/us/en/p/sektion-base-cabinet-for-sink-white-80265398/"
+      }
     },
     {
       "name": "Cupboard Sink",
       "file": "Cupboard Sink.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.6, "height": 0.9 },
-      "shopping": { "store": "Home Depot", "price": 400.00, "url": "https://www.homedepot.com/p/KOHLER-Whitehaven-Farmhouse-Apron-Front-Cast-Iron-36-in-Single-Bowl-Kitchen-Sink-in-White-K-6489-0/203433601" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.6,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 400.0,
+        "url": "https://www.homedepot.com/p/KOHLER-Whitehaven-Farmhouse-Apron-Front-Cast-Iron-36-in-Single-Bowl-Kitchen-Sink-in-White-K-6489-0/203433601"
+      }
     },
     {
       "name": "Dishwasher",
       "file": "Dishwasher.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.6, "height": 0.85 },
-      "shopping": { "store": "Best Buy", "price": 600.00, "url": "https://www.bestbuy.com/site/bosch-800-series-24-top-control-built-in-dishwasher-stainless-steel/6542978.p" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 0.85
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 600.0,
+        "url": "https://www.bestbuy.com/site/bosch-800-series-24-top-control-built-in-dishwasher-stainless-steel/6542978.p"
+      }
     },
     {
       "name": "Fridge A",
       "file": "Fridge A.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.85, "height": 1.8 },
-      "shopping": { "store": "Home Depot", "price": 1498.00, "url": "https://www.homedepot.com/p/Samsung-28-cu-ft-3-Door-French-Door-Refrigerator-in-Stainless-Steel-RF28T5001SR/312904393" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.85,
+        "height": 1.8
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 1498.0,
+        "url": "https://www.homedepot.com/p/Samsung-28-cu-ft-3-Door-French-Door-Refrigerator-in-Stainless-Steel-RF28T5001SR/312904393"
+      }
     },
     {
       "name": "Fridge B",
       "file": "Fridge B.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.7, "depth": 0.7, "height": 1.7 },
-      "shopping": { "store": "Best Buy", "price": 800.00, "url": "https://www.bestbuy.com/site/insignia-18-cu-ft-top-freezer-refrigerator-stainless-steel/6168318.p" }
+      "dimensions": {
+        "width": 0.7,
+        "depth": 0.7,
+        "height": 1.7
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 800.0,
+        "url": "https://www.bestbuy.com/site/insignia-18-cu-ft-top-freezer-refrigerator-stainless-steel/6168318.p"
+      }
     },
     {
       "name": "Kettle",
       "file": "Kettle.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": true,
-      "dimensions": { "width": 0.22, "depth": 0.22, "height": 0.25 },
-      "shopping": { "store": "Amazon", "price": 40.00, "url": "https://www.amazon.com/COSORI-Electric-Kettle-Gooseneck-Filter/dp/B08P19TZZK" }
+      "dimensions": {
+        "width": 0.22,
+        "depth": 0.22,
+        "height": 0.25
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 40.0,
+        "url": "https://www.amazon.com/COSORI-Electric-Kettle-Gooseneck-Filter/dp/B08P19TZZK"
+      }
     },
     {
       "name": "Kitchen Roll",
       "file": "Kitchen Roll.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": true,
-      "dimensions": { "width": 0.12, "depth": 0.12, "height": 0.28 },
-      "shopping": { "store": "Walmart", "price": 15.00, "url": "https://www.walmart.com/ip/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls/486221598" }
+      "dimensions": {
+        "width": 0.12,
+        "depth": 0.12,
+        "height": 0.28
+      },
+      "shopping": {
+        "store": "Walmart",
+        "price": 15.0,
+        "url": "https://www.walmart.com/ip/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls/486221598"
+      }
+    },
+    {
+      "name": "Knife Block",
+      "file": "Knife Block.fbx",
+      "category": "kitchen",
+      "placeable": true,
+      "dimensions": {
+        "width": 0.12,
+        "depth": 0.18,
+        "height": 0.25
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 60.0,
+        "url": "https://www.amazon.com/Cuisinart-C77TR-15P-Triple-Rivet-Collection/dp/B00GIBKC3K"
+      }
     },
     {
       "name": "Microwave",
       "file": "Microwave.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": true,
-      "dimensions": { "width": 0.5, "depth": 0.4, "height": 0.3 },
-      "shopping": { "store": "Best Buy", "price": 150.00, "url": "https://www.bestbuy.com/site/panasonic-1-2-cu-ft-mid-size-microwave-stainless-steel/6253406.p" }
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.4,
+        "height": 0.3
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 150.0,
+        "url": "https://www.bestbuy.com/site/panasonic-1-2-cu-ft-mid-size-microwave-stainless-steel/6253406.p"
+      }
     },
     {
       "name": "Oven",
       "file": "Oven.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.76, "depth": 0.7, "height": 0.9 },
-      "shopping": { "store": "Best Buy", "price": 849.99, "url": "https://www.bestbuy.com/site/samsung-6-3-cu-ft-freestanding-electric-range-with-wifi/6421334.p" }
+      "dimensions": {
+        "width": 0.76,
+        "depth": 0.7,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 849.99,
+        "url": "https://www.bestbuy.com/site/samsung-6-3-cu-ft-freestanding-electric-range-with-wifi/6421334.p"
+      }
     },
     {
       "name": "Toaster",
       "file": "Toaster.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": true,
-      "dimensions": { "width": 0.2, "depth": 0.3, "height": 0.2 },
-      "shopping": { "store": "Amazon", "price": 40.00, "url": "https://www.amazon.com/Cuisinart-CPT-180P1-Metal-Classic-Toaster/dp/B009GQ0KI4" }
+      "dimensions": {
+        "width": 0.2,
+        "depth": 0.3,
+        "height": 0.2
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 40.0,
+        "url": "https://www.amazon.com/Cuisinart-CPT-180P1-Metal-Classic-Toaster/dp/B009GQ0KI4"
+      }
     },
     {
       "name": "Washing Machine",
       "file": "Washing Machine.fbx",
-      "category": "Kitchen",
+      "category": "kitchen",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.6, "height": 0.85 },
-      "shopping": { "store": "Home Depot", "price": 700.00, "url": "https://www.homedepot.com/p/LG-Electronics-4-5-cu-ft-Large-Capacity-High-Efficiency-Stackable-Front-Load-Washer-in-White-WM3400CW/312015505" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 0.85
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 700.0,
+        "url": "https://www.homedepot.com/p/LG-Electronics-4-5-cu-ft-Large-Capacity-High-Efficiency-Stackable-Front-Load-Washer-in-White-WM3400CW/312015505"
+      }
+    },
+    {
+      "name": "Ceiling Light",
+      "file": "Ceiling Light.fbx",
+      "category": "living room",
+      "placeable": false,
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.4,
+        "height": 0.1
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 45.0,
+        "url": "https://www.amazon.com/Flush-Mount-Ceiling-Light-Fixture/dp/B08BLKV8P1"
+      }
     },
     {
       "name": "Lamp A",
       "file": "Lamp A.fbx",
-      "category": "Lights",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.25, "depth": 0.25, "height": 0.5 },
-      "shopping": { "store": "Target", "price": 30.00, "url": "https://www.target.com/p/threshold-designed-with-studio-mcgee/-/A-80213928" }
+      "dimensions": {
+        "width": 0.25,
+        "depth": 0.25,
+        "height": 0.5
+      },
+      "shopping": {
+        "store": "Target",
+        "price": 30.0,
+        "url": "https://www.target.com/p/threshold-designed-with-studio-mcgee/-/A-80213928"
+      }
     },
     {
       "name": "Lamp B",
       "file": "Lamp B.fbx",
-      "category": "Lights",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.3, "depth": 0.3, "height": 1.6 },
-      "shopping": { "store": "IKEA", "price": 60.00, "url": "https://www.ikea.com/us/en/p/hektar-floor-lamp-with-led-bulb-dark-gray-70416276/" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 1.6
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 60.0,
+        "url": "https://www.ikea.com/us/en/p/hektar-floor-lamp-with-led-bulb-dark-gray-70416276/"
+      }
     },
     {
       "name": "Lamp C",
       "file": "Lamp C.fbx",
-      "category": "Lights",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.2, "depth": 0.2, "height": 0.4 },
-      "shopping": { "store": "Amazon", "price": 25.00, "url": "https://www.amazon.com/Himalayan-Glow-601-Crystal-Natural/dp/B001892972" }
+      "dimensions": {
+        "width": 0.2,
+        "depth": 0.2,
+        "height": 0.4
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 25.0,
+        "url": "https://www.amazon.com/Himalayan-Glow-601-Crystal-Natural/dp/B001892972"
+      }
+    },
+    {
+      "name": "Wall Light",
+      "file": "Wall Light.fbx",
+      "category": "living room",
+      "placeable": false,
+      "dimensions": {
+        "width": 0.15,
+        "depth": 0.2,
+        "height": 0.25
+      },
+      "shopping": {
+        "store": "Wayfair",
+        "price": 40.0,
+        "url": "https://www.wayfair.com/lighting/pdp/allmodern-owen-1-light-dimmable-flush-mount-w003531406.html"
+      }
     },
     {
       "name": "Alarm Clock",
       "file": "Alarm Clock.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.12, "depth": 0.05, "height": 0.12 },
-      "shopping": { "store": "Amazon", "price": 20.00, "url": "https://www.amazon.com/Peakeep-Battery-Non-Ticking-Backlight-Bedrooms/dp/B013W7N5NS" }
+      "dimensions": {
+        "width": 0.12,
+        "depth": 0.05,
+        "height": 0.12
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 20.0,
+        "url": "https://www.amazon.com/Peakeep-Battery-Non-Ticking-Backlight-Bedrooms/dp/B013W7N5NS"
+      }
     },
     {
       "name": "Bin",
       "file": "Bin.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.3, "depth": 0.3, "height": 0.45 },
-      "shopping": { "store": "Walmart", "price": 15.00, "url": "https://www.walmart.com/ip/Mainstays-Step-On-Waste-Basket-Trash-Can-13-Gallon-Black/44722881" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 0.45
+      },
+      "shopping": {
+        "store": "Walmart",
+        "price": 15.0,
+        "url": "https://www.walmart.com/ip/Mainstays-Step-On-Waste-Basket-Trash-Can-13-Gallon-Black/44722881"
+      }
     },
     {
       "name": "Books A",
       "file": "Books A.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.25, "depth": 0.15, "height": 0.2 },
-      "shopping": { "store": "Amazon", "price": 30.00, "url": "https://www.amazon.com/Decorative-Books-Home-Decor-Hardcover/dp/B08V5N4N4K" }
+      "dimensions": {
+        "width": 0.25,
+        "depth": 0.15,
+        "height": 0.2
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 30.0,
+        "url": "https://www.amazon.com/Decorative-Books-Home-Decor-Hardcover/dp/B08V5N4N4K"
+      }
     },
     {
       "name": "Books B",
       "file": "Books B.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.3, "depth": 0.2, "height": 0.25 },
-      "shopping": { "store": "Amazon", "price": 35.00, "url": "https://www.amazon.com/Modern-Decorative-Books-Set-Stackable/dp/B09Y8B9WXY" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.2,
+        "height": 0.25
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 35.0,
+        "url": "https://www.amazon.com/Modern-Decorative-Books-Set-Stackable/dp/B09Y8B9WXY"
+      }
     },
     {
       "name": "Bowl",
       "file": "Bowl.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.2, "depth": 0.2, "height": 0.1 },
-      "shopping": { "store": "IKEA", "price": 5.00, "url": "https://www.ikea.com/us/en/p/fargklar-bowl-matte-light-gray-50477189/" }
+      "dimensions": {
+        "width": 0.2,
+        "depth": 0.2,
+        "height": 0.1
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 5.0,
+        "url": "https://www.ikea.com/us/en/p/fargklar-bowl-matte-light-gray-50477189/"
+      }
     },
     {
       "name": "Broom",
       "file": "Broom.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.3, "depth": 0.05, "height": 1.4 },
-      "shopping": { "store": "Amazon", "price": 20.00, "url": "https://www.amazon.com/O-Cedar-Pet-Pro-Broom-Step-Dustpan/dp/B08P2C6X8Y" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.05,
+        "height": 1.4
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 20.0,
+        "url": "https://www.amazon.com/O-Cedar-Pet-Pro-Broom-Step-Dustpan/dp/B08P2C6X8Y"
+      }
     },
     {
       "name": "Ceiling Fan",
       "file": "Ceiling Fan.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.3, "depth": 1.3, "height": 0.4 },
-      "shopping": { "store": "Home Depot", "price": 150.00, "url": "https://www.homedepot.com/p/Hunter-Channing-52-in-LED-Indoor-Brushed-Nickel-Ceiling-Fan-with-Light-Kit-54070/300582042" }
+      "dimensions": {
+        "width": 1.3,
+        "depth": 1.3,
+        "height": 0.4
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 150.0,
+        "url": "https://www.homedepot.com/p/Hunter-Channing-52-in-LED-Indoor-Brushed-Nickel-Ceiling-Fan-with-Light-Kit-54070/300582042"
+      }
     },
     {
       "name": "Clock",
       "file": "Clock.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.3, "depth": 0.04, "height": 0.3 },
-      "shopping": { "store": "IKEA", "price": 10.00, "url": "https://www.ikea.com/us/en/p/tross-wall-clock-white-20454291/" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.04,
+        "height": 0.3
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 10.0,
+        "url": "https://www.ikea.com/us/en/p/tross-wall-clock-white-20454291/"
+      }
     },
     {
       "name": "Curtains",
       "file": "Curtains.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.4, "depth": 0.05, "height": 2.5 },
-      "shopping": { "store": "IKEA", "price": 40.00, "url": "https://www.ikea.com/us/en/p/hilja-curtains-1-pair-white-50430818/" }
+      "dimensions": {
+        "width": 1.4,
+        "depth": 0.05,
+        "height": 2.5
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 40.0,
+        "url": "https://www.ikea.com/us/en/p/hilja-curtains-1-pair-white-50430818/"
+      }
     },
     {
       "name": "Fan",
       "file": "Fan.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.3, "depth": 0.2, "height": 0.4 },
-      "shopping": { "store": "Best Buy", "price": 40.00, "url": "https://www.bestbuy.com/site/honeywell-turboforce-table-fan-black/5843403.p" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.2,
+        "height": 0.4
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 40.0,
+        "url": "https://www.bestbuy.com/site/honeywell-turboforce-table-fan-black/5843403.p"
+      }
     },
     {
       "name": "Glass",
       "file": "Glass.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.08, "depth": 0.08, "height": 0.12 },
-      "shopping": { "store": "IKEA", "price": 1.00, "url": "https://www.ikea.com/us/en/p/pokal-glass-clear-glass-10270478/" }
+      "dimensions": {
+        "width": 0.08,
+        "depth": 0.08,
+        "height": 0.12
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 1.0,
+        "url": "https://www.ikea.com/us/en/p/pokal-glass-clear-glass-10270478/"
+      }
     },
     {
       "name": "Globe",
       "file": "Globe.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.25, "depth": 0.25, "height": 0.35 },
-      "shopping": { "store": "Amazon", "price": 30.00, "url": "https://www.amazon.com/Waypoint-Geographic-Decorative-Rotating-Geopolitical/dp/B006L3L1H0" }
+      "dimensions": {
+        "width": 0.25,
+        "depth": 0.25,
+        "height": 0.35
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 30.0,
+        "url": "https://www.amazon.com/Waypoint-Geographic-Decorative-Rotating-Geopolitical/dp/B006L3L1H0"
+      }
     },
     {
       "name": "Hoover",
       "file": "Hoover.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.3, "depth": 0.3, "height": 1.2 },
-      "shopping": { "store": "Best Buy", "price": 400.00, "url": "https://www.bestbuy.com/site/dyson-v8-cordless-vacuum-silver-nickel/6525164.p" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 1.2
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 400.0,
+        "url": "https://www.bestbuy.com/site/dyson-v8-cordless-vacuum-silver-nickel/6525164.p"
+      }
     },
     {
       "name": "Ladder",
       "file": "Ladder.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.5, "depth": 0.1, "height": 2.4 },
-      "shopping": { "store": "Home Depot", "price": 100.00, "url": "https://www.homedepot.com/p/Werner-6-ft-Fiberglass-Step-Ladder-with-250-lb-Load-Capacity-Type-I-Duty-Rating-6206/100658405" }
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.1,
+        "height": 2.4
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 100.0,
+        "url": "https://www.homedepot.com/p/Werner-6-ft-Fiberglass-Step-Ladder-with-250-lb-Load-Capacity-Type-I-Duty-Rating-6206/100658405"
+      }
     },
     {
       "name": "Light Switch",
       "file": "Light Switch.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.08, "depth": 0.02, "height": 0.12 },
-      "shopping": { "store": "Home Depot", "price": 5.00, "url": "https://www.homedepot.com/p/Leviton-Decora-15-Amp-Single-Pole-Rocker-Wall-Switch-White-R52-05601-2WS/100058707" }
+      "dimensions": {
+        "width": 0.08,
+        "depth": 0.02,
+        "height": 0.12
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 5.0,
+        "url": "https://www.homedepot.com/p/Leviton-Decora-15-Amp-Single-Pole-Rocker-Wall-Switch-White-R52-05601-2WS/100058707"
+      }
     },
     {
       "name": "Mirror A",
       "file": "Mirror A.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.04, "height": 0.9 },
-      "shopping": { "store": "IKEA", "price": 50.00, "url": "https://www.ikea.com/us/en/p/hovet-mirror-aluminum-80178419/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.04,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 50.0,
+        "url": "https://www.ikea.com/us/en/p/hovet-mirror-aluminum-80178419/"
+      }
     },
     {
       "name": "Mirror B",
       "file": "Mirror B.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.5, "depth": 0.5, "height": 0.04 },
-      "shopping": { "store": "Target", "price": 40.00, "url": "https://www.target.com/p/round-mirror-brass-project-62/-/A-52106096" }
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.5,
+        "height": 0.04
+      },
+      "shopping": {
+        "store": "Target",
+        "price": 40.0,
+        "url": "https://www.target.com/p/round-mirror-brass-project-62/-/A-52106096"
+      }
     },
     {
       "name": "Mug",
       "file": "Mug.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.12, "depth": 0.08, "height": 0.1 },
-      "shopping": { "store": "IKEA", "price": 2.00, "url": "https://www.ikea.com/us/en/p/fargklar-mug-matte-light-gray-00478186/" }
+      "dimensions": {
+        "width": 0.12,
+        "depth": 0.08,
+        "height": 0.1
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 2.0,
+        "url": "https://www.ikea.com/us/en/p/fargklar-mug-matte-light-gray-00478186/"
+      }
     },
     {
       "name": "Pan",
       "file": "Pan.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.28, "depth": 0.45, "height": 0.05 },
-      "shopping": { "store": "Amazon", "price": 30.00, "url": "https://www.amazon.com/T-fal-Hard-Anodized-Nonstick-Fry-Pan/dp/B000GWG0YQ" }
+      "dimensions": {
+        "width": 0.28,
+        "depth": 0.45,
+        "height": 0.05
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 30.0,
+        "url": "https://www.amazon.com/T-fal-Hard-Anodized-Nonstick-Fry-Pan/dp/B000GWG0YQ"
+      }
     },
     {
       "name": "Plant A",
       "file": "Plant A.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.4, "height": 0.5 },
-      "shopping": { "store": "IKEA", "price": 20.00, "url": "https://www.ikea.com/us/en/p/fejka-artificial-potted-plant-indoor-outdoor-monstera-40395288/" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.4,
+        "height": 0.5
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 20.0,
+        "url": "https://www.ikea.com/us/en/p/fejka-artificial-potted-plant-indoor-outdoor-monstera-40395288/"
+      }
     },
     {
       "name": "Plant B",
       "file": "Plant B.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.3, "depth": 0.3, "height": 0.4 },
-      "shopping": { "store": "Amazon", "price": 15.00, "url": "https://www.amazon.com/Small-Artificial-Plants-Indoor-Decor/dp/B09V7S1D97" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 0.4
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 15.0,
+        "url": "https://www.amazon.com/Small-Artificial-Plants-Indoor-Decor/dp/B09V7S1D97"
+      }
     },
     {
       "name": "Plate",
       "file": "Plate.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.26, "depth": 0.26, "height": 0.02 },
-      "shopping": { "store": "IKEA", "price": 3.00, "url": "https://www.ikea.com/us/en/p/fargklar-plate-matte-light-gray-30477171/" }
+      "dimensions": {
+        "width": 0.26,
+        "depth": 0.26,
+        "height": 0.02
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 3.0,
+        "url": "https://www.ikea.com/us/en/p/fargklar-plate-matte-light-gray-30477171/"
+      }
     },
     {
       "name": "Pot",
       "file": "Pot.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.24, "depth": 0.24, "height": 0.15 },
-      "shopping": { "store": "Amazon", "price": 40.00, "url": "https://www.amazon.com/Cuisinart-766-24-Classic-Stockpot-Cover/dp/B00008CM6K" }
+      "dimensions": {
+        "width": 0.24,
+        "depth": 0.24,
+        "height": 0.15
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 40.0,
+        "url": "https://www.amazon.com/Cuisinart-766-24-Classic-Stockpot-Cover/dp/B00008CM6K"
+      }
     },
     {
       "name": "Radiator A",
       "file": "Radiator A.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.8, "depth": 0.1, "height": 0.6 },
-      "shopping": { "store": "Lowes", "price": 150.00, "url": "https://www.lowes.com/pl/Radiators-Heaters-Heating-cooling/4294506587" }
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.1,
+        "height": 0.6
+      },
+      "shopping": {
+        "store": "Lowes",
+        "price": 150.0,
+        "url": "https://www.lowes.com/pl/Radiators-Heaters-Heating-cooling/4294506587"
+      }
     },
     {
       "name": "Radiator B",
       "file": "Radiator B.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.1, "height": 0.6 },
-      "shopping": { "store": "Home Depot", "price": 100.00, "url": "https://www.homedepot.com/b/Heating-Venting-Cooling-Heaters-Baseboard-Heaters/N-5yc1vZc4m8" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.1,
+        "height": 0.6
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 100.0,
+        "url": "https://www.homedepot.com/b/Heating-Venting-Cooling-Heaters-Baseboard-Heaters/N-5yc1vZc4m8"
+      }
     },
     {
       "name": "Safe A",
       "file": "Safe A.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.4, "height": 0.5 },
-      "shopping": { "store": "Amazon", "price": 100.00, "url": "https://www.amazon.com/SentrySafe-SFW123DSB-Fireproof-Waterproof-Safe/dp/B005P12F2K" }
+      "dimensions": {
+        "width": 0.4,
+        "depth": 0.4,
+        "height": 0.5
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 100.0,
+        "url": "https://www.amazon.com/SentrySafe-SFW123DSB-Fireproof-Waterproof-Safe/dp/B005P12F2K"
+      }
     },
     {
       "name": "Safe B",
       "file": "Safe B.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.3, "depth": 0.3, "height": 0.35 },
-      "shopping": { "store": "Amazon", "price": 70.00, "url": "https://www.amazon.com/SentrySafe-X055-Security-Small-Inches/dp/B000Z8P5Z6" }
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.3,
+        "height": 0.35
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 70.0,
+        "url": "https://www.amazon.com/SentrySafe-X055-Security-Small-Inches/dp/B000Z8P5Z6"
+      }
     },
     {
       "name": "Socket",
       "file": "Socket.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.08, "depth": 0.02, "height": 0.12 },
-      "shopping": { "store": "Home Depot", "price": 3.00, "url": "https://www.homedepot.com/p/Leviton-15-Amp-Duplex-Outlet-White-R52-16252-0WW/202066670" }
+      "dimensions": {
+        "width": 0.08,
+        "depth": 0.02,
+        "height": 0.12
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 3.0,
+        "url": "https://www.homedepot.com/p/Leviton-15-Amp-Duplex-Outlet-White-R52-16252-0WW/202066670"
+      }
     },
     {
       "name": "Speaker",
       "file": "Speaker.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.15, "depth": 0.15, "height": 0.25 },
-      "shopping": { "store": "Best Buy", "price": 200.00, "url": "https://www.bestbuy.com/site/sonos-era-100-wireless-speaker-white/6533038.p" }
+      "dimensions": {
+        "width": 0.15,
+        "depth": 0.15,
+        "height": 0.25
+      },
+      "shopping": {
+        "store": "Best Buy",
+        "price": 200.0,
+        "url": "https://www.bestbuy.com/site/sonos-era-100-wireless-speaker-white/6533038.p"
+      }
     },
     {
       "name": "Vase",
       "file": "Vase.fbx",
-      "category": "Miscellaneous",
+      "category": "living room",
       "placeable": true,
-      "dimensions": { "width": 0.15, "depth": 0.15, "height": 0.3 },
-      "shopping": { "store": "IKEA", "price": 10.00, "url": "https://www.ikea.com/us/en/p/padrag-vase-clear-glass-60471012/" }
+      "dimensions": {
+        "width": 0.15,
+        "depth": 0.15,
+        "height": 0.3
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 10.0,
+        "url": "https://www.ikea.com/us/en/p/padrag-vase-clear-glass-60471012/"
+      }
+    },
+    {
+      "name": "Vent",
+      "file": "Vent.fbx",
+      "category": "living room",
+      "placeable": false,
+      "dimensions": {
+        "width": 0.3,
+        "depth": 0.05,
+        "height": 0.15
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 15.0,
+        "url": "https://www.homedepot.com/p/Everbilt-10-in-x-6-in-2-Way-Steel-Wall-Ceiling-Register-in-White-E102M-10X06/202230752"
+      }
     },
     {
       "name": "Shelf A",
       "file": "Shelf A.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.8, "depth": 0.3, "height": 1.0 },
-      "shopping": { "store": "IKEA", "price": 40.00, "url": "https://www.ikea.com/us/en/p/kallax-shelf-unit-white-20275814/" }
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.3,
+        "height": 1.0
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 40.0,
+        "url": "https://www.ikea.com/us/en/p/kallax-shelf-unit-white-20275814/"
+      }
     },
     {
       "name": "Shelf B",
       "file": "Shelf B.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.0, "depth": 0.35, "height": 2.0 },
-      "shopping": { "store": "IKEA", "price": 150.00, "url": "https://www.ikea.com/us/en/p/fjallbo-shelf-unit-black-70339291/" }
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.35,
+        "height": 2.0
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 150.0,
+        "url": "https://www.ikea.com/us/en/p/fjallbo-shelf-unit-black-70339291/"
+      }
     },
     {
       "name": "Shelf C",
       "file": "Shelf C.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.25, "height": 0.8 },
-      "shopping": { "store": "Amazon", "price": 30.00, "url": "https://www.amazon.com/Greenco-Tier-Floating-Shelves-White/dp/B01GMS9FTE" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.25,
+        "height": 0.8
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 30.0,
+        "url": "https://www.amazon.com/Greenco-Tier-Floating-Shelves-White/dp/B01GMS9FTE"
+      }
     },
     {
       "name": "Shelf D",
       "file": "Shelf D.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.2, "depth": 0.4, "height": 1.8 },
-      "shopping": { "store": "Home Depot", "price": 100.00, "url": "https://www.homedepot.com/p/HDX-5-Tier-Steel-Wire-Shelving-Unit-in-Black-36-in-W-x-72-in-H-x-14-in-D-HD361472B-5/205559612" }
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.4,
+        "height": 1.8
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 100.0,
+        "url": "https://www.homedepot.com/p/HDX-5-Tier-Steel-Wire-Shelving-Unit-in-Black-36-in-W-x-72-in-H-x-14-in-D-HD361472B-5/205559612"
+      }
     },
     {
       "name": "Shelf E",
       "file": "Shelf E.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.3, "height": 0.9 },
-      "shopping": { "store": "IKEA", "price": 60.00, "url": "https://www.ikea.com/us/en/p/eket-cabinet-combination-with-legs-white-s89221141/" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.3,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 60.0,
+        "url": "https://www.ikea.com/us/en/p/eket-cabinet-combination-with-legs-white-s89221141/"
+      }
     },
     {
       "name": "Wall Shelf A",
       "file": "Wall Shelf A.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.0, "depth": 0.2, "height": 0.05 },
-      "shopping": { "store": "IKEA", "price": 20.00, "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282177/" }
+      "dimensions": {
+        "width": 1.0,
+        "depth": 0.2,
+        "height": 0.05
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 20.0,
+        "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282177/"
+      }
     },
     {
       "name": "Wall Shelf B",
       "file": "Wall Shelf B.fbx",
-      "category": "Shelves",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.15, "height": 0.05 },
-      "shopping": { "store": "IKEA", "price": 12.00, "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282182/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.15,
+        "height": 0.05
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 12.0,
+        "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282182/"
+      }
     },
     {
       "name": "Sofa A",
       "file": "Sofa A.fbx",
-      "category": "Sofas",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 2.4, "depth": 1.0, "height": 0.8 },
-      "shopping": { "store": "IKEA", "price": 749.00, "url": "https://www.ikea.com/us/en/p/kivik-sofa-hillared-anthracite-s59193627/" }
+      "dimensions": {
+        "width": 2.4,
+        "depth": 1.0,
+        "height": 0.8
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 749.0,
+        "url": "https://www.ikea.com/us/en/p/kivik-sofa-hillared-anthracite-s59193627/"
+      }
     },
     {
       "name": "Sofa B",
       "file": "Sofa B.fbx",
-      "category": "Sofas",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.8, "depth": 0.9, "height": 0.8 },
-      "shopping": { "store": "Wayfair", "price": 450.00, "url": "https://www.wayfair.com/furniture/pdp/mercury-row-perdue-815-velvet-square-arm-convertible-sofa-mcrw7544.html" }
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.9,
+        "height": 0.8
+      },
+      "shopping": {
+        "store": "Wayfair",
+        "price": 450.0,
+        "url": "https://www.wayfair.com/furniture/pdp/mercury-row-perdue-815-velvet-square-arm-convertible-sofa-mcrw7544.html"
+      }
     },
     {
       "name": "Sofa C",
       "file": "Sofa C.fbx",
-      "category": "Sofas",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 2.8, "depth": 1.6, "height": 0.8 },
-      "shopping": { "store": "IKEA", "price": 1200.00, "url": "https://www.ikea.com/us/en/p/vimle-sectional-4-seat-with-chaise-hallarp-gray-s49399112/" }
+      "dimensions": {
+        "width": 2.8,
+        "depth": 1.6,
+        "height": 0.8
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 1200.0,
+        "url": "https://www.ikea.com/us/en/p/vimle-sectional-4-seat-with-chaise-hallarp-gray-s49399112/"
+      }
     },
     {
       "name": "Sofa D",
       "file": "Sofa D.fbx",
-      "category": "Sofas",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.5, "depth": 0.8, "height": 0.75 },
-      "shopping": { "store": "IKEA", "price": 250.00, "url": "https://www.ikea.com/us/en/p/glostad-loveseat-knisa-medium-blue-80489000/" }
+      "dimensions": {
+        "width": 1.5,
+        "depth": 0.8,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 250.0,
+        "url": "https://www.ikea.com/us/en/p/glostad-loveseat-knisa-medium-blue-80489000/"
+      }
     },
     {
       "name": "Desk",
       "file": "Desk.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.4, "depth": 0.7, "height": 0.75 },
-      "shopping": { "store": "IKEA", "price": 199.00, "url": "https://www.ikea.com/us/en/p/lagkapten-alex-desk-white-s49416429/" }
+      "dimensions": {
+        "width": 1.4,
+        "depth": 0.7,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 199.0,
+        "url": "https://www.ikea.com/us/en/p/lagkapten-alex-desk-white-s49416429/"
+      }
     },
     {
       "name": "Rounded Table A",
       "file": "Rounded Table A.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.0, "depth": 1.0, "height": 0.75 },
-      "shopping": { "store": "IKEA", "price": 200.00, "url": "https://www.ikea.com/us/en/p/docksta-table-white-white-s49326616/" }
+      "dimensions": {
+        "width": 1.0,
+        "depth": 1.0,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 200.0,
+        "url": "https://www.ikea.com/us/en/p/docksta-table-white-white-s49326616/"
+      }
     },
     {
       "name": "Rounded Table B",
       "file": "Rounded Table B.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.8, "depth": 0.8, "height": 0.5 },
-      "shopping": { "store": "Target", "price": 100.00, "url": "https://www.target.com/p/round-coffee-table-brass-project-62/-/A-52106096" }
+      "dimensions": {
+        "width": 0.8,
+        "depth": 0.8,
+        "height": 0.5
+      },
+      "shopping": {
+        "store": "Target",
+        "price": 100.0,
+        "url": "https://www.target.com/p/round-coffee-table-brass-project-62/-/A-52106096"
+      }
     },
     {
       "name": "Rounded Table C",
       "file": "Rounded Table C.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.5, "depth": 0.5, "height": 0.55 },
-      "shopping": { "store": "Amazon", "price": 50.00, "url": "https://www.amazon.com/Round-Side-Table-Living-Room/dp/B09V7S1D97" }
+      "dimensions": {
+        "width": 0.5,
+        "depth": 0.5,
+        "height": 0.55
+      },
+      "shopping": {
+        "store": "Amazon",
+        "price": 50.0,
+        "url": "https://www.amazon.com/Round-Side-Table-Living-Room/dp/B09V7S1D97"
+      }
     },
     {
       "name": "Table A",
       "file": "Table A.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.8, "depth": 0.9, "height": 0.75 },
-      "shopping": { "store": "IKEA", "price": 300.00, "url": "https://www.ikea.com/us/en/p/lisabo-table-ash-veneer-80382439/" }
+      "dimensions": {
+        "width": 1.8,
+        "depth": 0.9,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 300.0,
+        "url": "https://www.ikea.com/us/en/p/lisabo-table-ash-veneer-80382439/"
+      }
     },
     {
       "name": "Table B",
       "file": "Table B.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.2, "depth": 0.6, "height": 0.45 },
-      "shopping": { "store": "IKEA", "price": 150.00, "url": "https://www.ikea.com/us/en/p/lack-coffee-table-white-00104291/" }
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.6,
+        "height": 0.45
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 150.0,
+        "url": "https://www.ikea.com/us/en/p/lack-coffee-table-white-00104291/"
+      }
     },
     {
       "name": "Table C",
       "file": "Table C.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.6, "height": 0.75 },
-      "shopping": { "store": "IKEA", "price": 50.00, "url": "https://www.ikea.com/us/en/p/lack-side-table-white-30444445/" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.6,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 50.0,
+        "url": "https://www.ikea.com/us/en/p/lack-side-table-white-30444445/"
+      }
     },
     {
       "name": "Table D",
       "file": "Table D.fbx",
-      "category": "Tables",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 2.2, "depth": 1.0, "height": 0.75 },
-      "shopping": { "store": "IKEA", "price": 600.00, "url": "https://www.ikea.com/us/en/p/moerbylanga-table-oak-veneer-brown-stained-20293766/" }
+      "dimensions": {
+        "width": 2.2,
+        "depth": 1.0,
+        "height": 0.75
+      },
+      "shopping": {
+        "store": "IKEA",
+        "price": 600.0,
+        "url": "https://www.ikea.com/us/en/p/moerbylanga-table-oak-veneer-brown-stained-20293766/"
+      }
     },
     {
       "name": "Window A",
       "file": "Window A.fbx",
-      "category": "Windows",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.9, "depth": 0.15, "height": 1.2 },
-      "shopping": { "store": "Lowe's", "price": 215.00, "url": "https://www.lowes.com/pl/Windows-Windows-doors/4294858074" }
+      "dimensions": {
+        "width": 0.9,
+        "depth": 0.15,
+        "height": 1.2
+      },
+      "shopping": {
+        "store": "Lowe's",
+        "price": 215.0,
+        "url": "https://www.lowes.com/pl/Windows-Windows-doors/4294858074"
+      }
     },
     {
       "name": "Window B",
       "file": "Window B.fbx",
-      "category": "Windows",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 1.2, "depth": 0.15, "height": 1.2 },
-      "shopping": { "store": "Home Depot", "price": 300.00, "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87" }
+      "dimensions": {
+        "width": 1.2,
+        "depth": 0.15,
+        "height": 1.2
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 300.0,
+        "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87"
+      }
     },
     {
       "name": "Window C",
       "file": "Window C.fbx",
-      "category": "Windows",
+      "category": "living room",
       "placeable": false,
-      "dimensions": { "width": 0.6, "depth": 0.15, "height": 0.9 },
-      "shopping": { "store": "Home Depot", "price": 150.00, "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87" }
+      "dimensions": {
+        "width": 0.6,
+        "depth": 0.15,
+        "height": 0.9
+      },
+      "shopping": {
+        "store": "Home Depot",
+        "price": 150.0,
+        "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87"
+      }
     }
   ]
 }
