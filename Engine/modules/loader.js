@@ -9,6 +9,12 @@ export async function loadFurnitureLibrary(jsonPath = '../models/furniture_attri
 
     const data           = await resp.json();
     const furnitureLibrary = data.furniture_library ?? [];
+    // make sure each entry has a folder; this helps path building later
+    furnitureLibrary.forEach(a => {
+        if (!a.folder) {
+            a.folder = a.category; // fallback when not provided
+        }
+    });
     const assetMap       = furnitureLibrary.reduce((m, a) => { m[a.file] = a; return m; }, {});
 
     return { furnitureLibrary, assetMap };

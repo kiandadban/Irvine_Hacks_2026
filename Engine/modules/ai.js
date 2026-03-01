@@ -23,7 +23,7 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
     if (!apiKey) return { runGeneration: async () => null };
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite' });
+    const aiModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
 
 

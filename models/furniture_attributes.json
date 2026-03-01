@@ -24,7 +24,8 @@
         "store": "Wayfair",
         "price": 549.99,
         "url": "https://www.wayfair.com/home-improvement/pdp/woodbridge-67-x-32-freestanding-soaking-acrylic-bathtub-wdb1241.html"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Shower",
@@ -40,7 +41,8 @@
         "store": "Home Depot",
         "price": 897.0,
         "url": "https://www.homedepot.com/p/Delta-Foundations-38-in-L-x-38-in-W-x-73-88-in-H-Corner-Shower-Stall-Kit-BVS3-FN263-WHPC/304663304"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Sink",
@@ -56,7 +58,8 @@
         "store": "IKEA",
         "price": 160.0,
         "url": "https://www.ikea.com/us/en/p/rattviken-single-sink-white-40223697/"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Toilet Roll Holder",
@@ -72,7 +75,8 @@
         "store": "Amazon",
         "price": 15.99,
         "url": "https://www.amazon.com/Toilet-Paper-Holder-Stand-Storage/dp/B07RRYLZZ6"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Toilet Rolls",
@@ -88,7 +92,8 @@
         "store": "Walmart",
         "price": 12.97,
         "url": "https://www.walmart.com/ip/Charmin-Ultra-Soft-Toilet-Paper-6-Mega-Rolls/15663737"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Toilet",
@@ -104,7 +109,8 @@
         "store": "Lowe's",
         "price": 189.0,
         "url": "https://www.lowes.com/pd/Kohler-Highline-White-WaterSense-Elongated-2-piece-Toilet/1000180461"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Towel Holder",
@@ -120,7 +126,8 @@
         "store": "IKEA",
         "price": 16.99,
         "url": "https://www.ikea.com/us/en/p/skogsviken-towel-rail-black-60423822/"
-      }
+      },
+      "folder": "Bathroom"
     },
     {
       "name": "Bed Double",
@@ -136,7 +143,8 @@
         "store": "IKEA",
         "price": 299.0,
         "url": "https://www.ikea.com/us/en/p/malm-high-bed-frame-black-brown-s69931169/"
-      }
+      },
+      "folder": "Beds"
     },
     {
       "name": "Bed Single",
@@ -152,7 +160,8 @@
         "store": "IKEA",
         "price": 149.0,
         "url": "https://www.ikea.com/us/en/p/neiden-bed-frame-pine-s79248606/"
-      }
+      },
+      "folder": "Beds"
     },
     {
       "name": "Bunk Bed",
@@ -168,7 +177,8 @@
         "store": "IKEA",
         "price": 349.0,
         "url": "https://www.ikea.com/us/en/p/mydal-bunk-bed-frame-pine-00531891/"
-      }
+      },
+      "folder": "Beds"
     },
     {
       "name": "Triple Bunk Bed",
@@ -184,7 +194,8 @@
         "store": "Wayfair",
         "price": 839.99,
         "url": "https://www.wayfair.com/baby-kids/pdp/isabelle-max-lyndon-twin-over-twin-over-twin-triple-bunk-bed-w005271842.html"
-      }
+      },
+      "folder": "Beds"
     },
     {
       "name": "Carpet A",
@@ -200,7 +211,8 @@
         "store": "Ruggable",
         "price": 199.0,
         "url": "https://ruggable.com/products/kamran-hazel-rug"
-      }
+      },
+      "folder": "Carpets"
     },
     {
       "name": "Carpet B",
@@ -216,7 +228,8 @@
         "store": "Amazon",
         "price": 85.0,
         "url": "https://www.amazon.com/SAFAVIEH-Hudson-Shag-Collection-SGH281B/dp/B00P29P680"
-      }
+      },
+      "folder": "Carpets"
     },
     {
       "name": "Carpet C",
@@ -232,7 +245,8 @@
         "store": "West Elm",
         "price": 399.0,
         "url": "https://www.westelm.com/products/sweater-rug-t4937/"
-      }
+      },
+      "folder": "Carpets"
     },
     {
       "name": "Chair A",
@@ -248,7 +262,8 @@
         "store": "IKEA",
         "price": 89.0,
         "url": "https://www.ikea.com/us/en/p/stefan-chair-brown-black-80211089/"
-      }
+      },
+      "folder": "Chairs"
     },
     {
       "name": "Chair B",
@@ -264,7 +279,8 @@
         "store": "Amazon",
         "price": 65.0,
         "url": "https://www.amazon.com/Amazon-Basics-Classic-Mid-Century-Furniture/dp/B07NSS9472"
-      }
+      },
+      "folder": "Chairs"
     },
     {
       "name": "Chair C",
@@ -280,7 +296,8 @@
         "store": "IKEA",
         "price": 129.0,
         "url": "https://www.ikea.com/us/en/p/odger-chair-anthracite-50457313/"
-      }
+      },
+      "folder": "Chairs"
     },
     {
       "name": "Chair D",
@@ -296,7 +313,8 @@
         "store": "West Elm",
         "price": 299.0,
         "url": "https://www.westelm.com/products/mid-century-upholstered-dining-chair-h702/"
-      }
+      },
+      "folder": "Chairs"
     },
     {
       "name": "Chair E",
@@ -312,7 +330,8 @@
         "store": "IKEA",
         "price": 159.0,
         "url": "https://www.ikea.com/us/en/p/nordvalla-dark-gray-wing-chair-80359844/"
-      }
+      },
+      "folder": "Chairs"
     },
     {
       "name": "Door A",
@@ -328,7 +347,8 @@
         "store": "Home Depot",
         "price": 145.0,
         "url": "https://www.homedepot.com/p/JELD-WEN-32-in-x-80-in-6-Panel-White-Right-Hand-Hollow-Core-Textured-Composite-Prehung-Interior-Door-THDJW160700465/202036440"
-      }
+      },
+      "folder": "Doors"
     },
     {
       "name": "Door B",
@@ -344,7 +364,8 @@
         "store": "Home Depot",
         "price": 160.0,
         "url": "https://www.homedepot.com/p/JELD-WEN-30-in-x-80-in-Smooth-2-Panel-Caiman-White-Right-Hand-Molded-Composite-Interior-Door-Prehung-THDJW240600021/204856018"
-      }
+      },
+      "folder": "Doors"
     },
     {
       "name": "Door C",
@@ -360,7 +381,8 @@
         "store": "Amazon",
         "price": 250.0,
         "url": "https://www.amazon.com/Barn-Door-Hardware-Kit-Wood/dp/B07P7Z8N5Y"
-      }
+      },
+      "folder": "Doors"
     },
     {
       "name": "Drawer A",
@@ -376,7 +398,8 @@
         "store": "IKEA",
         "price": 199.0,
         "url": "https://www.ikea.com/us/en/p/malm-6-drawer-dresser-white-10360469/"
-      }
+      },
+      "folder": "Drawers"
     },
     {
       "name": "Drawer B",
@@ -392,7 +415,8 @@
         "store": "Amazon",
         "price": 45.0,
         "url": "https://www.amazon.com/Prepac-Floating-Nightstand-Drawer-White/dp/B00652Y2W6"
-      }
+      },
+      "folder": "Drawers"
     },
     {
       "name": "Console A",
@@ -408,7 +432,8 @@
         "store": "Best Buy",
         "price": 499.0,
         "url": "https://www.bestbuy.com/site/sony-playstation-5-console-white/6430161.p"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Console B",
@@ -424,7 +449,8 @@
         "store": "Best Buy",
         "price": 299.0,
         "url": "https://www.bestbuy.com/site/nintendo-switch-with-neon-blue-and-neon-red-joy-con-console-multi/6367728.p"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Console C",
@@ -440,7 +466,8 @@
         "store": "Microsoft",
         "price": 499.0,
         "url": "https://www.xbox.com/en-US/consoles/xbox-series-x"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Console D",
@@ -456,7 +483,8 @@
         "store": "Amazon",
         "price": 40.0,
         "url": "https://www.amazon.com/Fire-TV-Stick-4K-Max-with-Alexa-Voice-Remote/dp/B08MQZXN1X"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Keyboard",
@@ -472,7 +500,8 @@
         "store": "Amazon",
         "price": 100.0,
         "url": "https://www.amazon.com/Logitech-MX-Keys-Advanced-Wireless-Keyboard/dp/B07S92QBCJ"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Laptop",
@@ -488,7 +517,8 @@
         "store": "Apple",
         "price": 1299.0,
         "url": "https://www.apple.com/shop/buy-mac/macbook-air"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Monitor",
@@ -504,7 +534,8 @@
         "store": "Dell",
         "price": 300.0,
         "url": "https://www.dell.com/en-us/shop/dell-27-monitor-s2721hn/apd/210-axkv/monitors-monitor-accessories"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Pc",
@@ -520,7 +551,8 @@
         "store": "Newegg",
         "price": 1200.0,
         "url": "https://www.newegg.com/p/N82E16883360155"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Phone",
@@ -536,7 +568,8 @@
         "store": "Apple",
         "price": 999.0,
         "url": "https://www.apple.com/iphone-15-pro/"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Tablet",
@@ -552,7 +585,8 @@
         "store": "Apple",
         "price": 599.0,
         "url": "https://www.apple.com/ipad-air/"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "TV A",
@@ -568,7 +602,8 @@
         "store": "Best Buy",
         "price": 800.0,
         "url": "https://www.bestbuy.com/site/lg-55-class-c3-series-oled-4k-uhd-smart-webos-tv/6535929.p"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "TV B",
@@ -584,7 +619,8 @@
         "store": "Amazon",
         "price": 1500.0,
         "url": "https://www.amazon.com/Samsung-75-Inch-Class-QLED-Built/dp/B0BZ8ZMTD2"
-      }
+      },
+      "folder": "Electronics"
     },
     {
       "name": "Blender",
@@ -600,7 +636,8 @@
         "store": "Amazon",
         "price": 100.0,
         "url": "https://www.amazon.com/Ninja-Professional-72oz-Blender-BL610/dp/B00NGV4506"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard A",
@@ -616,7 +653,8 @@
         "store": "IKEA",
         "price": 250.0,
         "url": "https://www.ikea.com/us/en/cat/sektion-kitchen-cabinets-23598/"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard B",
@@ -632,7 +670,8 @@
         "store": "Home Depot",
         "price": 200.0,
         "url": "https://www.homedepot.com/b/Kitchen-Kitchen-Cabinets/N-5yc1vZas87"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard C",
@@ -648,7 +687,8 @@
         "store": "IKEA",
         "price": 120.0,
         "url": "https://www.ikea.com/us/en/p/enhet-wall-cab-with-2-shelves-white-s99320964/"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard D",
@@ -664,7 +704,8 @@
         "store": "Wayfair",
         "price": 180.0,
         "url": "https://www.wayfair.com/kitchen-tabletop/pdp/rebrilliant-kitchen-wall-cabinet-w005486248.html"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard E",
@@ -680,7 +721,8 @@
         "store": "Home Depot",
         "price": 500.0,
         "url": "https://www.homedepot.com/p/Hampton-Bay-Hampton-Pantry-Assembled-18x84x24-in-in-Satin-White-KP1884-SW/205334289"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard F",
@@ -696,7 +738,8 @@
         "store": "IKEA",
         "price": 300.0,
         "url": "https://www.ikea.com/us/en/p/sektion-base-cabinet-for-sink-white-80265398/"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Cupboard Sink",
@@ -712,7 +755,8 @@
         "store": "Home Depot",
         "price": 400.0,
         "url": "https://www.homedepot.com/p/KOHLER-Whitehaven-Farmhouse-Apron-Front-Cast-Iron-36-in-Single-Bowl-Kitchen-Sink-in-White-K-6489-0/203433601"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Dishwasher",
@@ -728,7 +772,8 @@
         "store": "Best Buy",
         "price": 600.0,
         "url": "https://www.bestbuy.com/site/bosch-800-series-24-top-control-built-in-dishwasher-stainless-steel/6542978.p"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Fridge A",
@@ -744,7 +789,8 @@
         "store": "Home Depot",
         "price": 1498.0,
         "url": "https://www.homedepot.com/p/Samsung-28-cu-ft-3-Door-French-Door-Refrigerator-in-Stainless-Steel-RF28T5001SR/312904393"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Fridge B",
@@ -760,7 +806,8 @@
         "store": "Best Buy",
         "price": 800.0,
         "url": "https://www.bestbuy.com/site/insignia-18-cu-ft-top-freezer-refrigerator-stainless-steel/6168318.p"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Kettle",
@@ -776,7 +823,8 @@
         "store": "Amazon",
         "price": 40.0,
         "url": "https://www.amazon.com/COSORI-Electric-Kettle-Gooseneck-Filter/dp/B08P19TZZK"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Kitchen Roll",
@@ -792,7 +840,8 @@
         "store": "Walmart",
         "price": 15.0,
         "url": "https://www.walmart.com/ip/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls/486221598"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Knife Block",
@@ -824,7 +873,8 @@
         "store": "Best Buy",
         "price": 150.0,
         "url": "https://www.bestbuy.com/site/panasonic-1-2-cu-ft-mid-size-microwave-stainless-steel/6253406.p"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Oven",
@@ -840,7 +890,8 @@
         "store": "Best Buy",
         "price": 849.99,
         "url": "https://www.bestbuy.com/site/samsung-6-3-cu-ft-freestanding-electric-range-with-wifi/6421334.p"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Toaster",
@@ -856,7 +907,8 @@
         "store": "Amazon",
         "price": 40.0,
         "url": "https://www.amazon.com/Cuisinart-CPT-180P1-Metal-Classic-Toaster/dp/B009GQ0KI4"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Washing Machine",
@@ -872,7 +924,8 @@
         "store": "Home Depot",
         "price": 700.0,
         "url": "https://www.homedepot.com/p/LG-Electronics-4-5-cu-ft-Large-Capacity-High-Efficiency-Stackable-Front-Load-Washer-in-White-WM3400CW/312015505"
-      }
+      },
+      "folder": "Kitchen"
     },
     {
       "name": "Ceiling Light",
@@ -904,7 +957,8 @@
         "store": "Target",
         "price": 30.0,
         "url": "https://www.target.com/p/threshold-designed-with-studio-mcgee/-/A-80213928"
-      }
+      },
+      "folder": "Lights"
     },
     {
       "name": "Lamp B",
@@ -920,7 +974,8 @@
         "store": "IKEA",
         "price": 60.0,
         "url": "https://www.ikea.com/us/en/p/hektar-floor-lamp-with-led-bulb-dark-gray-70416276/"
-      }
+      },
+      "folder": "Lights"
     },
     {
       "name": "Lamp C",
@@ -936,7 +991,8 @@
         "store": "Amazon",
         "price": 25.0,
         "url": "https://www.amazon.com/Himalayan-Glow-601-Crystal-Natural/dp/B001892972"
-      }
+      },
+      "folder": "Lights"
     },
     {
       "name": "Wall Light",
@@ -968,7 +1024,8 @@
         "store": "Amazon",
         "price": 20.0,
         "url": "https://www.amazon.com/Peakeep-Battery-Non-Ticking-Backlight-Bedrooms/dp/B013W7N5NS"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Bin",
@@ -984,7 +1041,8 @@
         "store": "Walmart",
         "price": 15.0,
         "url": "https://www.walmart.com/ip/Mainstays-Step-On-Waste-Basket-Trash-Can-13-Gallon-Black/44722881"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Books A",
@@ -1000,7 +1058,8 @@
         "store": "Amazon",
         "price": 30.0,
         "url": "https://www.amazon.com/Decorative-Books-Home-Decor-Hardcover/dp/B08V5N4N4K"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Books B",
@@ -1016,7 +1075,8 @@
         "store": "Amazon",
         "price": 35.0,
         "url": "https://www.amazon.com/Modern-Decorative-Books-Set-Stackable/dp/B09Y8B9WXY"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Bowl",
@@ -1032,7 +1092,8 @@
         "store": "IKEA",
         "price": 5.0,
         "url": "https://www.ikea.com/us/en/p/fargklar-bowl-matte-light-gray-50477189/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Broom",
@@ -1048,7 +1109,8 @@
         "store": "Amazon",
         "price": 20.0,
         "url": "https://www.amazon.com/O-Cedar-Pet-Pro-Broom-Step-Dustpan/dp/B08P2C6X8Y"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Ceiling Fan",
@@ -1064,7 +1126,8 @@
         "store": "Home Depot",
         "price": 150.0,
         "url": "https://www.homedepot.com/p/Hunter-Channing-52-in-LED-Indoor-Brushed-Nickel-Ceiling-Fan-with-Light-Kit-54070/300582042"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Clock",
@@ -1080,7 +1143,8 @@
         "store": "IKEA",
         "price": 10.0,
         "url": "https://www.ikea.com/us/en/p/tross-wall-clock-white-20454291/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Curtains",
@@ -1096,7 +1160,8 @@
         "store": "IKEA",
         "price": 40.0,
         "url": "https://www.ikea.com/us/en/p/hilja-curtains-1-pair-white-50430818/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Fan",
@@ -1112,7 +1177,8 @@
         "store": "Best Buy",
         "price": 40.0,
         "url": "https://www.bestbuy.com/site/honeywell-turboforce-table-fan-black/5843403.p"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Glass",
@@ -1128,7 +1194,8 @@
         "store": "IKEA",
         "price": 1.0,
         "url": "https://www.ikea.com/us/en/p/pokal-glass-clear-glass-10270478/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Globe",
@@ -1144,7 +1211,8 @@
         "store": "Amazon",
         "price": 30.0,
         "url": "https://www.amazon.com/Waypoint-Geographic-Decorative-Rotating-Geopolitical/dp/B006L3L1H0"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Hoover",
@@ -1160,7 +1228,8 @@
         "store": "Best Buy",
         "price": 400.0,
         "url": "https://www.bestbuy.com/site/dyson-v8-cordless-vacuum-silver-nickel/6525164.p"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Ladder",
@@ -1176,7 +1245,8 @@
         "store": "Home Depot",
         "price": 100.0,
         "url": "https://www.homedepot.com/p/Werner-6-ft-Fiberglass-Step-Ladder-with-250-lb-Load-Capacity-Type-I-Duty-Rating-6206/100658405"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Light Switch",
@@ -1192,7 +1262,8 @@
         "store": "Home Depot",
         "price": 5.0,
         "url": "https://www.homedepot.com/p/Leviton-Decora-15-Amp-Single-Pole-Rocker-Wall-Switch-White-R52-05601-2WS/100058707"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Mirror A",
@@ -1208,7 +1279,8 @@
         "store": "IKEA",
         "price": 50.0,
         "url": "https://www.ikea.com/us/en/p/hovet-mirror-aluminum-80178419/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Mirror B",
@@ -1224,7 +1296,8 @@
         "store": "Target",
         "price": 40.0,
         "url": "https://www.target.com/p/round-mirror-brass-project-62/-/A-52106096"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Mug",
@@ -1240,7 +1313,8 @@
         "store": "IKEA",
         "price": 2.0,
         "url": "https://www.ikea.com/us/en/p/fargklar-mug-matte-light-gray-00478186/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Pan",
@@ -1256,7 +1330,8 @@
         "store": "Amazon",
         "price": 30.0,
         "url": "https://www.amazon.com/T-fal-Hard-Anodized-Nonstick-Fry-Pan/dp/B000GWG0YQ"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Plant A",
@@ -1272,7 +1347,8 @@
         "store": "IKEA",
         "price": 20.0,
         "url": "https://www.ikea.com/us/en/p/fejka-artificial-potted-plant-indoor-outdoor-monstera-40395288/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Plant B",
@@ -1288,7 +1364,8 @@
         "store": "Amazon",
         "price": 15.0,
         "url": "https://www.amazon.com/Small-Artificial-Plants-Indoor-Decor/dp/B09V7S1D97"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Plate",
@@ -1304,7 +1381,8 @@
         "store": "IKEA",
         "price": 3.0,
         "url": "https://www.ikea.com/us/en/p/fargklar-plate-matte-light-gray-30477171/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Pot",
@@ -1320,7 +1398,8 @@
         "store": "Amazon",
         "price": 40.0,
         "url": "https://www.amazon.com/Cuisinart-766-24-Classic-Stockpot-Cover/dp/B00008CM6K"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Radiator A",
@@ -1336,7 +1415,8 @@
         "store": "Lowes",
         "price": 150.0,
         "url": "https://www.lowes.com/pl/Radiators-Heaters-Heating-cooling/4294506587"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Radiator B",
@@ -1352,7 +1432,8 @@
         "store": "Home Depot",
         "price": 100.0,
         "url": "https://www.homedepot.com/b/Heating-Venting-Cooling-Heaters-Baseboard-Heaters/N-5yc1vZc4m8"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Safe A",
@@ -1368,7 +1449,8 @@
         "store": "Amazon",
         "price": 100.0,
         "url": "https://www.amazon.com/SentrySafe-SFW123DSB-Fireproof-Waterproof-Safe/dp/B005P12F2K"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Safe B",
@@ -1384,7 +1466,8 @@
         "store": "Amazon",
         "price": 70.0,
         "url": "https://www.amazon.com/SentrySafe-X055-Security-Small-Inches/dp/B000Z8P5Z6"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Socket",
@@ -1400,7 +1483,8 @@
         "store": "Home Depot",
         "price": 3.0,
         "url": "https://www.homedepot.com/p/Leviton-15-Amp-Duplex-Outlet-White-R52-16252-0WW/202066670"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Speaker",
@@ -1416,7 +1500,8 @@
         "store": "Best Buy",
         "price": 200.0,
         "url": "https://www.bestbuy.com/site/sonos-era-100-wireless-speaker-white/6533038.p"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Vase",
@@ -1432,7 +1517,8 @@
         "store": "IKEA",
         "price": 10.0,
         "url": "https://www.ikea.com/us/en/p/padrag-vase-clear-glass-60471012/"
-      }
+      },
+      "folder": "Miscellaneous"
     },
     {
       "name": "Vent",
@@ -1464,7 +1550,8 @@
         "store": "IKEA",
         "price": 40.0,
         "url": "https://www.ikea.com/us/en/p/kallax-shelf-unit-white-20275814/"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Shelf B",
@@ -1480,7 +1567,8 @@
         "store": "IKEA",
         "price": 150.0,
         "url": "https://www.ikea.com/us/en/p/fjallbo-shelf-unit-black-70339291/"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Shelf C",
@@ -1496,7 +1584,8 @@
         "store": "Amazon",
         "price": 30.0,
         "url": "https://www.amazon.com/Greenco-Tier-Floating-Shelves-White/dp/B01GMS9FTE"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Shelf D",
@@ -1512,7 +1601,8 @@
         "store": "Home Depot",
         "price": 100.0,
         "url": "https://www.homedepot.com/p/HDX-5-Tier-Steel-Wire-Shelving-Unit-in-Black-36-in-W-x-72-in-H-x-14-in-D-HD361472B-5/205559612"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Shelf E",
@@ -1528,7 +1618,8 @@
         "store": "IKEA",
         "price": 60.0,
         "url": "https://www.ikea.com/us/en/p/eket-cabinet-combination-with-legs-white-s89221141/"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Wall Shelf A",
@@ -1544,7 +1635,8 @@
         "store": "IKEA",
         "price": 20.0,
         "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282177/"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Wall Shelf B",
@@ -1560,7 +1652,8 @@
         "store": "IKEA",
         "price": 12.0,
         "url": "https://www.ikea.com/us/en/p/lack-wall-shelf-white-50282182/"
-      }
+      },
+      "folder": "Shelves"
     },
     {
       "name": "Sofa A",
@@ -1576,7 +1669,8 @@
         "store": "IKEA",
         "price": 749.0,
         "url": "https://www.ikea.com/us/en/p/kivik-sofa-hillared-anthracite-s59193627/"
-      }
+      },
+      "folder": "Sofas"
     },
     {
       "name": "Sofa B",
@@ -1592,7 +1686,8 @@
         "store": "Wayfair",
         "price": 450.0,
         "url": "https://www.wayfair.com/furniture/pdp/mercury-row-perdue-815-velvet-square-arm-convertible-sofa-mcrw7544.html"
-      }
+      },
+      "folder": "Sofas"
     },
     {
       "name": "Sofa C",
@@ -1608,7 +1703,8 @@
         "store": "IKEA",
         "price": 1200.0,
         "url": "https://www.ikea.com/us/en/p/vimle-sectional-4-seat-with-chaise-hallarp-gray-s49399112/"
-      }
+      },
+      "folder": "Sofas"
     },
     {
       "name": "Sofa D",
@@ -1624,7 +1720,8 @@
         "store": "IKEA",
         "price": 250.0,
         "url": "https://www.ikea.com/us/en/p/glostad-loveseat-knisa-medium-blue-80489000/"
-      }
+      },
+      "folder": "Sofas"
     },
     {
       "name": "Desk",
@@ -1640,7 +1737,8 @@
         "store": "IKEA",
         "price": 199.0,
         "url": "https://www.ikea.com/us/en/p/lagkapten-alex-desk-white-s49416429/"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Rounded Table A",
@@ -1656,7 +1754,8 @@
         "store": "IKEA",
         "price": 200.0,
         "url": "https://www.ikea.com/us/en/p/docksta-table-white-white-s49326616/"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Rounded Table B",
@@ -1672,7 +1771,8 @@
         "store": "Target",
         "price": 100.0,
         "url": "https://www.target.com/p/round-coffee-table-brass-project-62/-/A-52106096"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Rounded Table C",
@@ -1688,7 +1788,8 @@
         "store": "Amazon",
         "price": 50.0,
         "url": "https://www.amazon.com/Round-Side-Table-Living-Room/dp/B09V7S1D97"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Table A",
@@ -1704,7 +1805,8 @@
         "store": "IKEA",
         "price": 300.0,
         "url": "https://www.ikea.com/us/en/p/lisabo-table-ash-veneer-80382439/"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Table B",
@@ -1720,7 +1822,8 @@
         "store": "IKEA",
         "price": 150.0,
         "url": "https://www.ikea.com/us/en/p/lack-coffee-table-white-00104291/"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Table C",
@@ -1736,7 +1839,8 @@
         "store": "IKEA",
         "price": 50.0,
         "url": "https://www.ikea.com/us/en/p/lack-side-table-white-30444445/"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Table D",
@@ -1752,7 +1856,8 @@
         "store": "IKEA",
         "price": 600.0,
         "url": "https://www.ikea.com/us/en/p/moerbylanga-table-oak-veneer-brown-stained-20293766/"
-      }
+      },
+      "folder": "Tables"
     },
     {
       "name": "Window A",
@@ -1768,7 +1873,8 @@
         "store": "Lowe's",
         "price": 215.0,
         "url": "https://www.lowes.com/pl/Windows-Windows-doors/4294858074"
-      }
+      },
+      "folder": "Windows"
     },
     {
       "name": "Window B",
@@ -1784,7 +1890,8 @@
         "store": "Home Depot",
         "price": 300.0,
         "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87"
-      }
+      },
+      "folder": "Windows"
     },
     {
       "name": "Window C",
@@ -1800,7 +1907,8 @@
         "store": "Home Depot",
         "price": 150.0,
         "url": "https://www.homedepot.com/b/Doors-Windows-Windows/N-5yc1vZas87"
-      }
+      },
+      "folder": "Windows"
     }
   ]
 }

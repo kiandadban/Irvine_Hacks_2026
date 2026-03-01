@@ -11,7 +11,12 @@ export function createPlacer(
         const asset = assetMap[itemConfig.file];
         if (!asset) return null;
 
-        const path = `../models/${asset.category}/${asset.file}`;
+        // Prefer explicit folder property (added when categories were renamed); fallback to category
+        const folder = asset.folder || asset.category;
+        // encode spaces for URL safety if using direct paths in browser
+        const safeFolder = encodeURIComponent(folder);
+        const safeFile = encodeURIComponent(asset.file);
+        const path = `../models/${safeFolder}/${safeFile}`;
 
         return new Promise((resolve) => {
             loader.load(path, (model) => {
