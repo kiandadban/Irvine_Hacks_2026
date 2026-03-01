@@ -403,14 +403,6 @@
       "shopping": { "store": "Walmart", "price": 15.00, "url": "https://www.walmart.com/ip/Bounty-Select-A-Size-Paper-Towels-White-8-Double-Plus-Rolls/486221598" }
     },
     {
-      "name": "Knife Block",
-      "file": "Knife Block.fbx",
-      "category": "Kitchen",
-      "placeable": true,
-      "dimensions": { "width": 0.12, "depth": 0.18, "height": 0.25 },
-      "shopping": { "store": "Amazon", "price": 60.00, "url": "https://www.amazon.com/Cuisinart-C77TR-15P-Triple-Rivet-Collection/dp/B00GIBKC3K" }
-    },
-    {
       "name": "Microwave",
       "file": "Microwave.fbx",
       "category": "Kitchen",
@@ -443,14 +435,6 @@
       "shopping": { "store": "Home Depot", "price": 700.00, "url": "https://www.homedepot.com/p/LG-Electronics-4-5-cu-ft-Large-Capacity-High-Efficiency-Stackable-Front-Load-Washer-in-White-WM3400CW/312015505" }
     },
     {
-      "name": "Ceiling Light",
-      "file": "Ceiling Light.fbx",
-      "category": "Lights",
-      "placeable": false,
-      "dimensions": { "width": 0.4, "depth": 0.4, "height": 0.1 },
-      "shopping": { "store": "Amazon", "price": 45.00, "url": "https://www.amazon.com/Flush-Mount-Ceiling-Light-Fixture/dp/B08BLKV8P1" }
-    },
-    {
       "name": "Lamp A",
       "file": "Lamp A.fbx",
       "category": "Lights",
@@ -473,14 +457,6 @@
       "placeable": true,
       "dimensions": { "width": 0.2, "depth": 0.2, "height": 0.4 },
       "shopping": { "store": "Amazon", "price": 25.00, "url": "https://www.amazon.com/Himalayan-Glow-601-Crystal-Natural/dp/B001892972" }
-    },
-    {
-      "name": "Wall Light",
-      "file": "Wall Light.fbx",
-      "category": "Lights",
-      "placeable": false,
-      "dimensions": { "width": 0.15, "depth": 0.2, "height": 0.25 },
-      "shopping": { "store": "Wayfair", "price": 40.00, "url": "https://www.wayfair.com/lighting/pdp/allmodern-owen-1-light-dimmable-flush-mount-w003531406.html" }
     },
     {
       "name": "Alarm Clock",
@@ -721,14 +697,6 @@
       "placeable": true,
       "dimensions": { "width": 0.15, "depth": 0.15, "height": 0.3 },
       "shopping": { "store": "IKEA", "price": 10.00, "url": "https://www.ikea.com/us/en/p/padrag-vase-clear-glass-60471012/" }
-    },
-    {
-      "name": "Vent",
-      "file": "Vent.fbx",
-      "category": "Miscellaneous",
-      "placeable": false,
-      "dimensions": { "width": 0.3, "depth": 0.05, "height": 0.15 },
-      "shopping": { "store": "Home Depot", "price": 15.00, "url": "https://www.homedepot.com/p/Everbilt-10-in-x-6-in-2-Way-Steel-Wall-Ceiling-Register-in-White-E102M-10X06/202230752" }
     },
     {
       "name": "Shelf A",
