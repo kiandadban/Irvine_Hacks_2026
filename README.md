@@ -57,7 +57,3 @@ Instead of manually dragging furniture around and guessing what works, users inp
 3. The layout renders in a fully interactive 3D scene.
 
 4. Users can manually refine the arrangement and export the final floor plan.
-
-
-## 👥 Built At
-**IrvineHacks 2026**
