@@ -8,6 +8,7 @@ import { initControls }       from './modules/controls.js';
 import { createPlacer }       from './modules/placement.js';
 import { createAI }           from './modules/ai.js';
 import { createInfoPanel }    from './modules/infoPanel.js';
+import { setObjectColor }     from './modules/materials.js';
 
 /**
  * Optional local dev key. engine/config.js is gitignored and absent in
@@ -20,6 +21,56 @@ async function loadLocalApiKey() {
         return mod.API_KEY || '';
     } catch {
         return '';
+    }
+}
+
+const priceOf = (assetMap, item) => {
+    const asset = assetMap.find ? assetMap.find(item.file) : assetMap[item.file];
+    return Number(asset?.shopping?.price) || 0;
+};
+
+/**
+ * Walks the layout in placement order and keeps every item that still fits
+ * under the budget, skipping (not stopping at) the ones that don't — a cheap
+ * accessory after an unaffordable sofa can still make it in.
+ *
+ * A budget of 0 or less is treated as "no limit" so an accidental slider drag
+ * to the bottom doesn't silently produce an empty room.
+ */
+function enforceBudget(layout, assetMap, budget) {
+    const limit = Number(budget);
+    const kept = [], dropped = [];
+    let total = 0, droppedCost = 0;
+
+    for (const item of layout) {
+        const price = priceOf(assetMap, item);
+        if (!Number.isFinite(limit) || limit <= 0 || total + price <= limit) {
+            kept.push(item);
+            total += price;
+        } else {
+            dropped.push(item);
+            droppedCost += price;
+        }
+    }
+
+    return {
+        budget: Number.isFinite(limit) && limit > 0 ? limit : null,
+        kept, dropped, total, droppedCost,
+    };
+}
+
+function updateBudgetSummary({ budget, kept, dropped, total }) {
+    const el = document.getElementById('budget-summary');
+    if (!el) return;
+
+    const money = (n) => `$${n.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+
+    if (!kept.length && dropped.length) {
+        el.textContent = `Nothing in the library fits ${money(budget)}.`;
+    } else if (dropped.length) {
+        el.textContent = `${money(total)} across ${kept.length} items · ${dropped.length} dropped to stay under ${money(budget)}`;
+    } else {
+        el.textContent = `${money(total)} across ${kept.length} items`;
     }
 }
 
@@ -86,7 +137,7 @@ async function initApp() {
     // ── 8. UI ──
     const ui = initUI(
         () => {},
-        (hex) => { transform.object?.traverse(n => { if (n.isMesh) n.material.color.set(hex); }); },
+        (hex) => { if (transform.object) setObjectColor(transform.object, hex); },
         () => {
             const obj = transform.object;
             if (!obj) return;
@@ -109,7 +160,8 @@ async function initApp() {
         if (aiBtn) { aiBtn.disabled = true; }
 
         try {
-            const budgetParam = window.initialBudget || document.getElementById('budgetSlider')?.value;
+            // The live slider wins; the URL value is only the starting point.
+            const budgetParam = document.getElementById('budgetSlider')?.value ?? window.initialBudget;
             const layout = await ai.runGeneration(userText, {
                 useRoomContext,
                 roomType,
@@ -148,6 +200,18 @@ async function initApp() {
             } catch (e) {
                 console.warn('[Main] Failed to reorder layout for surface-first placement', e);
             }
+
+            // Budget is enforced here, not just requested in the prompt — the
+            // model routinely overshoots. The surface-first sort above means
+            // accessories are trimmed before the furniture they sit on.
+            const spend = enforceBudget(layout, assetMap, budgetParam);
+            if (spend.dropped.length) {
+                console.warn(`[Main] Budget $${spend.budget}: dropped ${spend.dropped.length} item(s) totalling $${spend.droppedCost.toFixed(2)}`,
+                    spend.dropped.map(i => i.file));
+            }
+            updateBudgetSummary(spend);
+            layout.length = 0;
+            layout.push(...spend.kept);
 
             // Clear existing furniture for new AI layout
             wrappedDeselect();

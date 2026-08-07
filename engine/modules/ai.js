@@ -100,15 +100,18 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
         const hw = (rw / 2).toFixed(2);
         const hd = (rd / 2).toFixed(2);
 
-        const cacheKey = `${userText.trim().toLowerCase()}::${rw}x${rd}::${roomType || 'general'}`;
+        // budget belongs in the key — otherwise moving the slider replays a
+        // cached layout priced for the old budget
+        const cacheKey = `${userText.trim().toLowerCase()}::${rw}x${rd}::${roomType || 'general'}::$${budget ?? 'any'}`;
         const cached = getCached(cacheKey);
         if (cached) return cached;
 
         if (onStatus) onStatus('Architecting...');
 
         const filteredLibrary = furnitureLibrary.filter(a => !a.file.toLowerCase().includes('door'));
-        const fileList = filteredLibrary.map(a => 
-            `- ${a.file} [PlaceableOnFurniture: ${a.placeable && !a.file.toLowerCase().includes('shelf')}, H: ${a.dimensions.height}m]`
+        // Price is part of the listing: without it the model cannot honour a budget.
+        const fileList = filteredLibrary.map(a =>
+            `- ${a.file} [PlaceableOnFurniture: ${a.placeable && !a.file.toLowerCase().includes('shelf')}, H: ${a.dimensions.height}m, $${a.shopping?.price ?? 0}]`
         ).join('\n');
 
         const roomRequirements = {
@@ -122,7 +125,12 @@ export function createAI(apiKey, furnitureLibrary, roomManager) {
 
         const currentRequirements = roomRequirements[roomType?.toLowerCase()] || "Apply general professional standards.";
 
-        const budgetClause = budget != null && budget !== '' ? `BUDGET: items should cost no more than $${budget}. Prioritize lower-cost items when possible.\n\n` : '';
+        const budgetClause = budget != null && budget !== ''
+            ? `HARD BUDGET: $${budget} for the WHOLE room.\n` +
+              `- Each asset below is listed with its price. The prices of every item you return must SUM to $${budget} or less.\n` +
+              `- Add the prices up as you build the list and stop adding items before you cross it.\n` +
+              `- Prefer cheaper alternatives over dropping essential furniture. A sparse room within budget beats a full room over it.\n\n`
+            : '';
         const prompt = `
 ROLE: Master Interior Architect.
 TASK: Generate a valid JSON array of furniture placement objects.

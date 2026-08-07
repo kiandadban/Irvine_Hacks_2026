@@ -130,6 +130,14 @@ input[type=range] {
 }
 #ai-generate-btn:hover { background: #165050; }
 
+#budget-summary {
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--ink3);
+    letter-spacing: 0.02em;
+    min-height: 12px;
+}
+
 /* Room Grid — styled via Tailwind in index.html */
 
 /* ── 5. FLOATING PROPERTIES PANEL (Animated) ── */

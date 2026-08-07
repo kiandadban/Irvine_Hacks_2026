@@ -1,6 +1,8 @@
 /**
  * ui.js - Handles DOM elements and event listeners
  */
+import { getObjectColor } from './modules/materials.js';
+
 export function initUI(onSpawn, onColor, onDelete, onLoad) {
     const aiBtn = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
@@ -38,14 +40,8 @@ export function initUI(onSpawn, onColor, onDelete, onLoad) {
         showProps: (obj) => {
             propsPanel.style.display = 'block';
             
-            // For GLB models, we find the first mesh child to get the current color
-            let targetColor = "#00ff88"; 
-            obj.traverse((node) => {
-                if (node.isMesh && node.material.color) {
-                    targetColor = `#${node.material.color.getHexString()}`;
-                }
-            });
-            colorInput.value = targetColor;
+            // Show the model's current tint (materials are arrays on these FBX meshes)
+            colorInput.value = getObjectColor(obj) ?? '#ffffff';
         },
         hideProps: () => {
             propsPanel.style.display = 'none';

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { SpatialRules } from './spatialRules.js';
+import { isolateMaterials } from './materials.js';
 
 const loader = new FBXLoader();
 // Simple in-memory cache for loaded FBX scenes. Keyed by asset.file
@@ -151,6 +152,9 @@ export function createPlacer(
                     const clone = cached.clone(true);
                     clone.userData = { ...cached.userData };
                     clone.userData.attributes = asset;
+                    // clone(true) shares materials with the cache — give this
+                    // instance its own so the colour picker only affects it
+                    isolateMaterials(clone);
                     computePlacementForModel(clone);
                     finalizeAndAdd(clone, asset, itemConfig, resolve);
                     return;
@@ -162,6 +166,7 @@ export function createPlacer(
             loader.load(path, (model) => {
                 // cache a deep clone (original loaded root) for reuse
                 try { modelCache.set(asset.file, model.clone(true)); } catch (e) { /* cache best-effort */ }
+                isolateMaterials(model);
                 computePlacementForModel(model);
                 finalizeAndAdd(model, asset, itemConfig, resolve);
             }, undefined, (err) => {

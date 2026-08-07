@@ -27,15 +27,51 @@ export function initControls(
     transform.setTranslationSnap(0.5);
     scene.add(transform);
 
-    transform.addEventListener('change', () => {
-        // Collision visuals removed per user request
+    // ── Keep dragged objects inside the room ──
+    // The last transform known to be clear of the walls. Restored whenever a
+    // drag pushes the object through one, which stops it at the wall instead
+    // of letting it pass. Furniture-vs-furniture overlap is deliberately NOT
+    // blocked: accessories legitimately intersect the surface they sit on.
+    let lastValid = null;
+
+    const snapshot = (obj) => ({
+        position: obj.position.clone(),
+        scale: obj.scale.clone(),
+        quaternion: obj.quaternion.clone(),
+    });
+
+    const restore = (obj, snap) => {
+        obj.position.copy(snap.position);
+        obj.scale.copy(snap.scale);
+        obj.quaternion.copy(snap.quaternion);
+        obj.updateMatrixWorld(true);
+    };
+
+    const hitsRoomShell = (obj) => {
+        const { isColliding, type } = collisionEngine.checkCollision(obj);
+        return isColliding && (type === 'boundary' || type === 'wall');
+    };
+
+    transform.addEventListener('objectChange', () => {
+        const obj = transform.object;
+        if (!obj) return;
+
+        if (hitsRoomShell(obj)) {
+            // Without a known-good transform (object spawned overlapping a
+            // wall) let the user drag freely rather than freezing it.
+            if (lastValid) restore(obj, lastValid);
+        } else {
+            lastValid = snapshot(obj);
+        }
     });
 
     transform.addEventListener('dragging-changed', (e) => {
         orbit.enabled = !e.value;
-        if (!e.value) {
+        if (e.value) {
+            const obj = transform.object;
+            lastValid = obj && !hitsRoomShell(obj) ? snapshot(obj) : null;
+        } else {
             collisionEngine.updateObstacles();
-            // updateCollisionVisuals removed
         }
     });
 
