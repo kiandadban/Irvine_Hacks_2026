@@ -1,7 +1,8 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
 const CACHE_KEY = 'spatial_ai_layout_cache';
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24;
+
+const MODEL = 'gemini-2.5-flash-lite';
+const PROXY_ENDPOINT = '/api/generate';
 
 function getCached(key) {
     try {
@@ -19,25 +20,72 @@ function setCache(key, layout) {
     } catch { /* ignore */ }
 }
 
+/**
+ * @param {string} apiKey - Optional local dev key (engine/config.js). When empty,
+ *                          requests go through the /api/generate serverless proxy,
+ *                          which holds the key in GEMINI_API_KEY server-side.
+ */
 export function createAI(apiKey, furnitureLibrary, roomManager) {
-    if (!apiKey) return { runGeneration: async () => null };
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    
     // FORCED JSON MODE: This eliminates the need for regex parsing or cleaning comments
-    const aiModel = genAI.getGenerativeModel({ 
-        model: 'gemini-2.5-flash-lite',
-        generationConfig: {
-            responseMimeType: "application/json",
+    const generationConfig = { responseMimeType: 'application/json' };
+
+    async function callDirect(prompt) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const resp = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                generationConfig,
+            }),
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok) {
+            const err = new Error(data?.error?.message || `Gemini request failed (${resp.status})`);
+            err.status = resp.status;
+            throw err;
         }
-    });
+        return (data?.candidates?.[0]?.content?.parts ?? []).map(p => p.text ?? '').join('');
+    }
+
+    async function callProxy(prompt) {
+        const resp = await fetch(PROXY_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt }),
+        });
+
+        let data;
+        try {
+            data = await resp.json();
+        } catch {
+            // A plain static server has no /api route, so it answers with HTML.
+            const err = new Error(
+                `AI backend unavailable: ${PROXY_ENDPOINT} returned ${resp.status} (not JSON). ` +
+                `Run the site on Vercel, or set a key in engine/config.js for local use.`
+            );
+            err.status = resp.status;
+            throw err;
+        }
+
+        if (!resp.ok) {
+            const err = new Error(data?.error || `AI request failed (${resp.status})`);
+            err.status = resp.status;
+            throw err;
+        }
+        return data.text ?? '';
+    }
+
+    const callModel = (prompt) => (apiKey ? callDirect(prompt) : callProxy(prompt));
 
     async function callWithRetry(prompt, retries = 3) {
         for (let attempt = 0; attempt < retries; attempt++) {
             try {
-                return await aiModel.generateContent(prompt);
+                return await callModel(prompt);
             } catch (e) {
-                if (e?.message?.includes('429') && attempt < retries - 1) {
+                const rateLimited = e?.status === 429 || e?.message?.includes('429');
+                if (rateLimited && attempt < retries - 1) {
                     await new Promise(r => setTimeout(r, 2500));
                 } else throw e;
             }
@@ -115,27 +163,15 @@ OUTPUT FORMAT (JSON ARRAY ONLY):
 
 Format: [{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":1.5708}]`;
 
+        let raw;
         try {
-            const result = await callWithRetry(prompt);
+            raw = await callWithRetry(prompt);
+        } catch (e) {
+            console.error('[AI] Request failed:', e);
+            throw new Error(e.message || 'The AI request failed.');
+        }
 
-            // Be robust: response might be available as JSON, text, or wrapped.
-            let raw = null;
-            try {
-                if (result && result.response) {
-                    const resp = result.response;
-                    if (typeof resp.json === 'function') {
-                        try { raw = await resp.json(); } catch (e) { console.warn('[AI] resp.json() failed', e); }
-                    }
-                    if (raw == null && typeof resp.text === 'function') {
-                        try { raw = await resp.text(); } catch (e) { console.warn('[AI] resp.text() failed', e); }
-                    }
-                }
-            } catch (innerErr) {
-                console.warn('[AI] response read failed, falling back:', innerErr);
-            }
-
-            if (raw == null) raw = result;
-
+        try {
             let layout = null;
 
             if (typeof raw === 'string') {
@@ -177,26 +213,17 @@ Format: [{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":1.5708}]`;
                     return null;
                 }
 
-                layout = attemptParse(raw);
-                if (layout == null) {
+                const parsed = attemptParse(raw);
+                if (parsed == null) {
                     // parsing failed entirely; throw to be caught below
                     throw new Error('Unable to parse AI string response');
                 }
-            } else if (Array.isArray(raw)) {
-                layout = raw;
-            } else if (raw && typeof raw === 'object') {
-                // Common provider shapes: { outputs: [...] } or top-level array under a key
-                if (Array.isArray(raw.outputs)) {
-                    // try to pull textual content from outputs
-                    const outText = raw.outputs.map(o => (o.text || (o.content && o.content[0] && o.content[0].text) || '')).join('\n');
-                    if (outText) {
-                        try { layout = JSON.parse(outText); } catch (_) { /* ignore */ }
-                    }
-                }
 
-                if (!layout) {
-                    // look for first array value in object
-                    for (const v of Object.values(raw)) {
+                if (Array.isArray(parsed)) {
+                    layout = parsed;
+                } else if (typeof parsed === 'object') {
+                    // The model occasionally wraps the array, e.g. { "layout": [...] }
+                    for (const v of Object.values(parsed)) {
                         if (Array.isArray(v)) { layout = v; break; }
                     }
                 }
@@ -210,8 +237,8 @@ Format: [{"file":"filename.fbx", "x":0.0, "y":0.0, "z":0.0, "rotate":1.5708}]`;
             setCache(cacheKey, layout);
             return layout;
         } catch (e) {
-            console.error('[AI] Generation Error:', e);
-            throw new Error("Failed to parse layout. Please try a different request. See console for details.");
+            console.error('[AI] Generation Error:', e, '\nRaw response:', raw);
+            throw new Error('Failed to parse the layout the AI returned. Please try a different request. See console for details.');
         }
     }
 

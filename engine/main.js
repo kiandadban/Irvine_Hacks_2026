@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { API_KEY }            from './config.js';
 import { initUI }             from './ui.js';
 import { CollisionEngine }    from './collision.js';
 import { loadFurnitureLibrary } from './modules/loader.js';
@@ -9,6 +8,20 @@ import { initControls }       from './modules/controls.js';
 import { createPlacer }       from './modules/placement.js';
 import { createAI }           from './modules/ai.js';
 import { createInfoPanel }    from './modules/infoPanel.js';
+
+/**
+ * Optional local dev key. engine/config.js is gitignored and absent in
+ * deployments, so this must never be a static import — a missing file would
+ * abort the whole module. Without it, ai.js uses the /api/generate proxy.
+ */
+async function loadLocalApiKey() {
+    try {
+        const mod = await import('./config.js');
+        return mod.API_KEY || '';
+    } catch {
+        return '';
+    }
+}
 
 async function initApp() {
     // ── 1. DATA LOADING ──
@@ -87,7 +100,7 @@ async function initApp() {
     );
 
     // ── 9. AI GENERATION LOGIC ──
-    const ai = createAI(API_KEY, furnitureLibrary, roomManager);
+    const ai = createAI(await loadLocalApiKey(), furnitureLibrary, roomManager);
     const aiBtn   = document.getElementById('ai-generate-btn');
     const aiInput = document.getElementById('ai-prompt');
 
@@ -221,21 +234,20 @@ async function initApp() {
 
     // ── 10. EVENT LISTENERS ──
 
-    // Capture the selected Room Type from the UI when clicking Generate
-    aiBtn?.addEventListener('click', () => {
-        // Look for the active button in the sidebar
+    // The sidebar cards keep window.selectedRoomType in sync (see engine.html)
+    const currentRoomType = () => {
         const activeBtn = document.querySelector('.room-type-btn.active span');
-        const selectedRoomType = activeBtn ? activeBtn.innerText.trim() : 'Living Room';
-        
-        handleGenerate(aiInput?.value, true, selectedRoomType);
+        return window.selectedRoomType || activeBtn?.innerText.trim() || 'Living Room';
+    };
+
+    aiBtn?.addEventListener('click', () => {
+        handleGenerate(aiInput?.value, true, currentRoomType());
     });
 
-    // Auto-generate layout if prompt was passed from front page
+    // Auto-generate layout if a prompt was passed from the front page
     if (window.initialPrompt) {
-        aiInput.value = window.initialPrompt;
-        const activeBtn = document.querySelector('.room-type-btn.active span');
-        const selectedRoomType = activeBtn ? activeBtn.innerText.trim() : 'Living Room';
-        handleGenerate(window.initialPrompt, true, selectedRoomType);
+        if (aiInput) aiInput.value = window.initialPrompt;
+        handleGenerate(window.initialPrompt, true, currentRoomType());
     }
 
     // Load layout from JSON file (dispatched by download.js)
@@ -317,10 +329,10 @@ async function initApp() {
         renderer.render(scene, camera);
     })();
 
-    document.getElementById('cart-btn').addEventListener('click', () => {
+    document.getElementById('cart-btn')?.addEventListener('click', () => {
     // 1. Map the Three.js objects back to their data attributes
     const shoppingItems = spawnedFurniture.map(model => {
-        const attr = model.userData.attributes;
+        const attr = model.userData.attributes ?? {};
         return {
             name: attr.name,
             price: attr.shopping?.price || 0,
@@ -333,7 +345,7 @@ async function initApp() {
     localStorage.setItem('spatial_ai_cart', JSON.stringify(shoppingItems));
 
     // 3. Navigate
-    window.location.href = "../User Interface/shopping-list.html";
+    window.location.href = "/ui/shopping-list.html";
 });
 }
 

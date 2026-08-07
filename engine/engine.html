@@ -199,18 +199,25 @@
             if (bv) bv.innerText = initialBudget;
         }
 
-        // if a room type passed, trigger selection after DOM loads
+        // Tracks the sidebar selection; main.js reads this when generating.
+        window.selectedRoomType = initialRoom || 'Living Room';
+
+        // Prefill the AI textarea and highlight the room type once the DOM exists.
+        // Done here (not in main.js) so it still works if the 3D engine fails.
         window.addEventListener('DOMContentLoaded', () => {
-            if (initialRoom) {
-                const btn = Array.from(document.querySelectorAll('.room-type-btn')).find(b => b.getAttribute('data-room') === initialRoom);
-                if (btn) btn.click();
-            }
+            const promptBox = document.getElementById('ai-prompt');
+            if (promptBox && window.initialPrompt) promptBox.value = window.initialPrompt;
+
+            const target = initialRoom || 'Living Room';
+            const btn = Array.from(document.querySelectorAll('.room-type-btn'))
+                .find(b => b.getAttribute('data-room') === target);
+            if (btn) selectRoom(btn);
         });
 
         function selectRoom(el) {
             document.querySelectorAll('.room-type-btn').forEach(b => {
                 // Reset to inactive state
-                b.classList.remove('border-2', 'border-[#1F6060]', 'bg-[#E8F2F2]');
+                b.classList.remove('active', 'active-card', 'border-2', 'border-[#1F6060]', 'bg-[#E8F2F2]');
                 b.classList.add('border', 'border-[#E4DDD3]', 'bg-[#EFE9E0]');
                 const svg = b.querySelector('svg');
                 const span = b.querySelector('span');
@@ -219,11 +226,13 @@
             });
             // Set active state
             el.classList.remove('border', 'border-[#E4DDD3]', 'bg-[#EFE9E0]');
-            el.classList.add('border-2', 'border-[#1F6060]', 'bg-[#E8F2F2]');
+            el.classList.add('active', 'active-card', 'border-2', 'border-[#1F6060]', 'bg-[#E8F2F2]');
             const svg = el.querySelector('svg');
             const span = el.querySelector('span');
             if (svg) { svg.classList.remove('stroke-[#8A847A]'); svg.classList.add('stroke-[#1F6060]'); }
             if (span) { span.classList.remove('text-[#8A847A]'); span.classList.add('text-[#1F6060]', 'font-medium'); }
+
+            window.selectedRoomType = el.getAttribute('data-room') || window.selectedRoomType;
         }
 
         document.getElementById('budgetSlider').addEventListener('input', function () {
@@ -234,8 +243,7 @@
     {
         "imports": {
             "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
-            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
         }
     }
     </script>

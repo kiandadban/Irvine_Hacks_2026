@@ -1,7 +1,4 @@
 {
   "buildCommand": "",
-  "outputDirectory": ".",
-  "rewrites": [
-    { "source": "/", "destination": "/ui/index.html" }
-  ]
+  "outputDirectory": "."
 }
