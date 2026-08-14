@@ -5,6 +5,8 @@ Spatial-AI is an interactive 3D interior design platform that uses AI-driven opt
 
 Instead of manually dragging furniture around and guessing what works, users input their room specifications — and Spatial-AI produces an optimized layout in real time.
 
+<img width="1289" height="896" alt="image" src="https://github.com/user-attachments/assets/e7641613-2c7b-4f2a-9388-3077e752669c" />
+
 ---
 
 ## ✨ Features
